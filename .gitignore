@@ -43,3 +43,6 @@ Merchant_Side_Specifications.md
 User_Side_Specifications.md
 repo_sync_blueprint.md
 analysis_results.md
+git-permissions.md
+.agents/
+logs/
