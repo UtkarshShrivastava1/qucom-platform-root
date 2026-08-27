@@ -34,3 +34,12 @@ coverage/
 
 # Misc
 *.tsbuildinfo
+
+# Internal planning & spec docs (local only — never push to remote)
+AGENTS.md
+APP_ARCHITECTURE.md.md
+BACKEND_ARCHITECTURE.md
+Merchant_Side_Specifications.md
+User_Side_Specifications.md
+repo_sync_blueprint.md
+analysis_results.md
