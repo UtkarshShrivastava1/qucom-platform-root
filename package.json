@@ -1,0 +1,20 @@
+{
+  "name": "platform-root",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@11.24.0",
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "dev:backend": "turbo run dev --filter=@repo/backend",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "clean": "turbo run clean && rimraf node_modules"
+  },
+  "devDependencies": {
+    "turbo": "^2.4.4",
+    "prettier": "^3.5.2",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.7.3"
+  }
+}
