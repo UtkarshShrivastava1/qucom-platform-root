@@ -1,12 +1,7 @@
-/**
- * White-Label Platform Branding Configuration
- * Reads from runtime environment variables with clean, generic defaults.
- * Never hardcode any specific client brand name.
- */
-
 const getEnv = (key: string): string | undefined => {
-  if (typeof process !== 'undefined' && process?.env) {
-    return process.env[key];
+  const proc = (globalThis as unknown as { process?: { env?: Record<string, string | undefined> } }).process;
+  if (proc?.env) {
+    return proc.env[key];
   }
   return undefined;
 };

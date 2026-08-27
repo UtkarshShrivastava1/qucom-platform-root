@@ -4,16 +4,59 @@ import {
   updateStoreSchema,
   nearbyStoresQuerySchema,
   approveStoreSchema,
+  completeOnboardingSchema,
   UserRole,
 } from '@repo/shared-types';
 import { validateRequest } from '../../shared/middlewares/validateRequest.js';
 import { authGuard } from '../../shared/middlewares/authGuard.js';
 import { roleGuard } from '../../shared/middlewares/roleGuard.js';
 import * as storeController from './store.controller.js';
+import * as onboardingController from './onboarding.controller.js';
 
 const router = Router();
 
+// ==========================================
+// Merchant 6-Step Onboarding Pipeline
+// ==========================================
+router.post(
+  '/onboarding/verify-gstin',
+  onboardingController.verifyGstin,
+);
+
+router.post(
+  '/onboarding/submit',
+  authGuard,
+  roleGuard(UserRole.MERCHANT, UserRole.ADMIN),
+  validateRequest({ body: completeOnboardingSchema }),
+  onboardingController.submitOnboarding,
+);
+
+router.get(
+  '/onboarding/status',
+  authGuard,
+  onboardingController.getOnboardingStatus,
+);
+
+// ==========================================
+// Super Admin Queue & Review Endpoints
+// ==========================================
+router.get(
+  '/admin/pending',
+  authGuard,
+  roleGuard(UserRole.ADMIN),
+  onboardingController.getPendingQueue,
+);
+
+router.patch(
+  '/admin/:id/review',
+  authGuard,
+  roleGuard(UserRole.ADMIN),
+  onboardingController.reviewStore,
+);
+
+// ==========================================
 // Public Store Discovery Endpoints
+// ==========================================
 router.get(
   '/nearby',
   validateRequest({ query: nearbyStoresQuerySchema }),
@@ -30,7 +73,9 @@ router.get(
   storeController.getStoreBySlug,
 );
 
-// Merchant Authenticated Endpoints
+// ==========================================
+// Merchant Authenticated Store Management
+// ==========================================
 router.get(
   '/mine',
   authGuard,
@@ -54,7 +99,7 @@ router.patch(
   storeController.updateStore,
 );
 
-// Admin Approval Endpoint
+// Admin Direct Approval
 router.patch(
   '/:id/approve',
   authGuard,
