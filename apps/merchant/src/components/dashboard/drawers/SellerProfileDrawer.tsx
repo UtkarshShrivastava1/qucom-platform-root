@@ -82,7 +82,7 @@ export const SellerProfileDrawer: React.FC<SellerProfileDrawerProps> = ({
               <span className="flex items-center gap-2 text-slate-500">
                 <User className="w-3.5 h-3.5" /> Seller ID
               </span>
-              <span className="font-semibold text-slate-800 font-mono">VZT-SLR-10245</span>
+              <span className="font-semibold text-slate-800 font-mono">SLR-10245</span>
             </div>
 
             <div className="flex items-center justify-between py-1 border-b border-slate-50">

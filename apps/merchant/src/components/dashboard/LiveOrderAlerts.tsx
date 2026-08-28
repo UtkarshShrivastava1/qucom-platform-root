@@ -14,11 +14,11 @@ interface OrderRow {
 }
 
 const mockOrders: OrderRow[] = [
-  { id: '#VZT10325', customer: 'Rohan Verma', itemsCount: 3, amount: '₹2,799', time: 'Just now' },
-  { id: '#VZT10324', customer: 'Sneha Kapoor', itemsCount: 2, amount: '₹1,649', time: '5 min ago' },
-  { id: '#VZT10323', customer: 'Arjun Mehta', itemsCount: 1, amount: '₹899', time: '15 min ago' },
-  { id: '#VZT10322', customer: 'Neha Singh', itemsCount: 4, amount: '₹3,499', time: '25 min ago' },
-  { id: '#VZT10321', customer: 'Rahul Sharma', itemsCount: 2, amount: '₹3,897', time: '35 min ago' },
+  { id: '#ORD-10325', customer: 'Rohan Verma', itemsCount: 3, amount: '₹2,799', time: 'Just now' },
+  { id: '#ORD-10324', customer: 'Sneha Kapoor', itemsCount: 2, amount: '₹1,649', time: '5 min ago' },
+  { id: '#ORD-10323', customer: 'Arjun Mehta', itemsCount: 1, amount: '₹899', time: '15 min ago' },
+  { id: '#ORD-10322', customer: 'Neha Singh', itemsCount: 4, amount: '₹3,499', time: '25 min ago' },
+  { id: '#ORD-10321', customer: 'Rahul Sharma', itemsCount: 2, amount: '₹3,897', time: '35 min ago' },
 ];
 
 export const LiveOrderAlerts: React.FC<LiveOrderAlertsProps> = ({ onNavigateOrders }) => {
