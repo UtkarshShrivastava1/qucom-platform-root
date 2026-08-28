@@ -1,107 +1,92 @@
 import React from 'react';
-import { Card } from '../ui/Card.js';
-import { Badge } from '../ui/Badge.js';
-import { Button } from '../ui/Button.js';
-import { Clock, MapPin, Check, ArrowRight } from 'lucide-react';
+import { ChevronRight, ShoppingCart } from 'lucide-react';
 
-interface OrderItem {
-  id: string;
-  customerName: string;
-  distance: string;
-  itemsSummary: string;
-  totalAmount: number;
-  timeAgo: string;
-  mode: 'deliver' | 'pickup' | 'reserve';
+interface LiveOrderAlertsProps {
+  onNavigateOrders?: () => void;
 }
 
-const recentOrders: OrderItem[] = [
-  {
-    id: 'ORD-8942',
-    customerName: 'Ananya Deshmukh',
-    distance: '1.2 km away',
-    itemsSummary: 'Cotton Polo Shirt (M) x 2, Chinos (32) x 1',
-    totalAmount: 2450,
-    timeAgo: '4 mins ago',
-    mode: 'deliver',
-  },
-  {
-    id: 'ORD-8941',
-    customerName: 'Vikram Mehta',
-    distance: '0.8 km away',
-    itemsSummary: 'Running Shoes (UK 9) x 1',
-    totalAmount: 3200,
-    timeAgo: '12 mins ago',
-    mode: 'pickup',
-  },
-  {
-    id: 'ORD-8940',
-    customerName: 'Pooja Iyer',
-    distance: '2.4 km away',
-    itemsSummary: 'Embroidered Kurti (L) x 1, Dupatta x 1',
-    totalAmount: 1890,
-    timeAgo: '25 mins ago',
-    mode: 'deliver',
-  },
+interface OrderRow {
+  id: string;
+  customer: string;
+  itemsCount: number;
+  amount: string;
+  time: string;
+}
+
+const mockOrders: OrderRow[] = [
+  { id: '#VZT10325', customer: 'Rohan Verma', itemsCount: 3, amount: '₹2,799', time: 'Just now' },
+  { id: '#VZT10324', customer: 'Sneha Kapoor', itemsCount: 2, amount: '₹1,649', time: '5 min ago' },
+  { id: '#VZT10323', customer: 'Arjun Mehta', itemsCount: 1, amount: '₹899', time: '15 min ago' },
+  { id: '#VZT10322', customer: 'Neha Singh', itemsCount: 4, amount: '₹3,499', time: '25 min ago' },
+  { id: '#VZT10321', customer: 'Rahul Sharma', itemsCount: 2, amount: '₹3,897', time: '35 min ago' },
 ];
 
-export const LiveOrderAlerts: React.FC<{ onNavigateOrders: () => void }> = ({ onNavigateOrders }) => {
+export const LiveOrderAlerts: React.FC<LiveOrderAlertsProps> = ({ onNavigateOrders }) => {
   return (
-    <Card className="p-5">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-          <h3 className="text-base font-bold text-slate-100">Live Incoming Orders</h3>
+    <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-2xs flex flex-col justify-between h-full">
+      <div>
+        {/* Header */}
+        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div className="flex items-center gap-2">
+            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+              <span>🔥</span>
+              <span>New Orders</span>
+            </h3>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200/60">
+              5 New Orders
+            </span>
+          </div>
+
+          {/* 3D Basket illustration or icon */}
+          <div className="w-8 h-8 rounded-xl bg-orange-50 text-orange-500 flex items-center justify-center">
+            <ShoppingCart className="w-4 h-4" />
+          </div>
         </div>
+
+        {/* Orders Table */}
+        <div className="divide-y divide-slate-100 text-xs">
+          {/* Table Header */}
+          <div className="grid grid-cols-12 py-2 text-[11px] font-semibold text-slate-400">
+            <span className="col-span-3">Order ID</span>
+            <span className="col-span-3">Customer</span>
+            <span className="col-span-2">Items</span>
+            <span className="col-span-2 text-right">Amount</span>
+            <span className="col-span-2 text-right">Time</span>
+          </div>
+
+          {/* Table Rows */}
+          {mockOrders.map((order) => (
+            <div
+              key={order.id}
+              onClick={onNavigateOrders}
+              className="grid grid-cols-12 py-2.5 items-center hover:bg-slate-50 rounded-lg cursor-pointer transition-colors px-1"
+            >
+              <span className="col-span-3 font-semibold text-blue-600 truncate">{order.id}</span>
+              <span className="col-span-3 text-slate-700 font-medium truncate">{order.customer}</span>
+              <span className="col-span-2 text-slate-500 truncate">{order.itemsCount} items</span>
+              <span className="col-span-2 text-right font-bold text-slate-900">{order.amount}</span>
+              <div className="col-span-2 flex items-center justify-end gap-1">
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-100 whitespace-nowrap">
+                  {order.time}
+                </span>
+                <ChevronRight className="w-3 h-3 text-slate-400 shrink-0" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Full-width Solid Orange Action Button */}
+      <div className="pt-3">
         <button
+          type="button"
           onClick={onNavigateOrders}
-          className="text-xs text-brand-400 hover:text-brand-300 font-semibold inline-flex items-center gap-1"
+          className="w-full py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors shadow-xs"
         >
-          <span>View All</span>
-          <ArrowRight className="w-3.5 h-3.5" />
+          <span>View All Orders</span>
+          <ChevronRight className="w-4 h-4" />
         </button>
       </div>
-
-      <div className="space-y-3">
-        {recentOrders.map((order) => (
-          <div
-            key={order.id}
-            className="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800 hover:border-slate-700 transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
-          >
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-slate-200">{order.id}</span>
-                <Badge variant={order.mode === 'deliver' ? 'brand' : 'info'} size="sm">
-                  {order.mode === 'deliver' ? 'Home Delivery' : 'Store Pickup'}
-                </Badge>
-                <span className="text-[11px] text-slate-500 flex items-center gap-1">
-                  <Clock className="w-3 h-3" />
-                  {order.timeAgo}
-                </span>
-              </div>
-              <p className="text-xs text-slate-300 font-medium">{order.itemsSummary}</p>
-              <div className="flex items-center gap-3 text-[11px] text-slate-400">
-                <span>Customer: <strong className="text-slate-300">{order.customerName}</strong></span>
-                <span>•</span>
-                <span className="flex items-center gap-0.5">
-                  <MapPin className="w-3 h-3 text-slate-500" />
-                  {order.distance}
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2.5 w-full sm:w-auto justify-between sm:justify-end shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-800">
-              <div className="text-left sm:text-right">
-                <span className="text-xs text-slate-500 block">Total</span>
-                <span className="text-sm font-bold text-slate-100">₹ {order.totalAmount.toLocaleString('en-IN')}</span>
-              </div>
-              <Button size="sm" variant="primary">
-                <Check className="w-3.5 h-3.5 mr-1" />
-                <span>Accept</span>
-              </Button>
-            </div>
-          </div>
-        ))}
-      </div>
-    </Card>
+    </div>
   );
 };

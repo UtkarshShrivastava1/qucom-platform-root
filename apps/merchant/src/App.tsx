@@ -55,7 +55,7 @@ export const App: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+    <div className="min-h-screen bg-[#f8fafc] text-slate-800 flex flex-col">
       {/* Desktop & Mobile Sidebar */}
       <div className={`${isMobileMenuOpen ? 'block' : 'hidden sm:block'}`}>
         <Sidebar
@@ -97,11 +97,11 @@ export const App: React.FC = () => {
 
           {/* Fallback placeholder for other 9 modules in development */}
           {!['overview', 'orders', 'catalog', 'store'].includes(currentTab) && (
-            <div className="p-8 text-center bg-slate-900/40 rounded-2xl border border-slate-800">
-              <h3 className="text-lg font-bold text-slate-200 capitalize">
+            <div className="p-8 text-center bg-white rounded-2xl border border-slate-200/80 shadow-2xs max-w-xl mx-auto mt-8">
+              <h3 className="text-base font-bold text-slate-800 capitalize">
                 {currentTab.replace(/_/g, ' ')} Module
               </h3>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-slate-500 mt-1">
                 Operational analytics and live controls active for this merchant vertical.
               </p>
             </div>

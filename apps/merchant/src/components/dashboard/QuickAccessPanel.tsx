@@ -1,6 +1,15 @@
 import React from 'react';
-import { Card } from '../ui/Card.js';
-import { Plus, Upload, Megaphone, ReceiptText } from 'lucide-react';
+import {
+  FileText,
+  PlusCircle,
+  Boxes,
+  Receipt,
+  HardDrive,
+  BarChart3,
+  ShoppingCart,
+  UserPlus,
+  Settings,
+} from 'lucide-react';
 import { DashboardTab } from './Sidebar.js';
 
 interface QuickAccessPanelProps {
@@ -12,58 +21,130 @@ interface QuickAccessPanelProps {
 export const QuickAccessPanel: React.FC<QuickAccessPanelProps> = ({
   onNavigate,
   onOpenAddProduct,
-  onOpenBulkUpload,
 }) => {
-  const quickActions = [
+  const actions = [
     {
-      title: 'Add Single Product',
-      desc: 'Create new SKU with price & variants',
-      icon: Plus,
-      color: 'bg-brand-600/10 text-brand-400 border-brand-500/20 hover:border-brand-500',
-      action: onOpenAddProduct,
+      label: 'Create New Bill',
+      sublabel: 'Tax Invoice / GST Invoice',
+      icon: FileText,
+      color: 'bg-blue-600 text-white',
+      borderColor: 'border-blue-600',
+      isPrimary: true,
+      onClick: () => onNavigate('billing'),
     },
     {
-      title: 'Bulk Catalog Upload',
-      desc: 'Import hundreds of products via CSV/Excel',
-      icon: Upload,
-      color: 'bg-emerald-600/10 text-emerald-400 border-emerald-500/20 hover:border-emerald-500',
-      action: onOpenBulkUpload,
+      label: 'Add Product',
+      sublabel: 'Add new product',
+      icon: PlusCircle,
+      color: 'text-emerald-600 bg-emerald-50',
+      borderColor: 'border-emerald-200',
+      onClick: onOpenAddProduct,
     },
     {
-      title: 'Launch Localized Ad',
-      desc: 'Promote store in 3–4km customer feed',
-      icon: Megaphone,
-      color: 'bg-amber-600/10 text-amber-400 border-amber-500/20 hover:border-amber-500',
-      action: () => onNavigate('marketing'),
+      label: 'Adjust Stock',
+      sublabel: 'Update inventory',
+      icon: Boxes,
+      color: 'text-amber-600 bg-amber-50',
+      borderColor: 'border-amber-200',
+      onClick: () => onNavigate('inventory'),
     },
     {
-      title: 'Generate POS Invoice',
-      desc: 'Counter checkout with GST breakdown',
-      icon: ReceiptText,
-      color: 'bg-sky-600/10 text-sky-400 border-sky-500/20 hover:border-sky-500',
-      action: () => onNavigate('pos'),
+      label: 'Add Expense',
+      sublabel: 'Record new expense',
+      icon: Receipt,
+      color: 'text-rose-600 bg-rose-50',
+      borderColor: 'border-rose-200',
+      onClick: () => onNavigate('expenses'),
+    },
+    {
+      label: 'Add Asset',
+      sublabel: 'Add new asset',
+      icon: HardDrive,
+      color: 'text-purple-600 bg-purple-50',
+      borderColor: 'border-purple-200',
+      onClick: () => onNavigate('assets'),
+    },
+    {
+      label: 'View Reports',
+      sublabel: 'Business insights',
+      icon: BarChart3,
+      color: 'text-blue-600 bg-blue-50',
+      borderColor: 'border-blue-200',
+      onClick: () => onNavigate('analytics'),
+    },
+    {
+      label: 'Create Order',
+      sublabel: 'Manual order',
+      icon: ShoppingCart,
+      color: 'text-cyan-600 bg-cyan-50',
+      borderColor: 'border-cyan-200',
+      onClick: () => onNavigate('orders'),
+    },
+    {
+      label: 'Add Customer',
+      sublabel: 'Add new customer',
+      icon: UserPlus,
+      color: 'text-blue-600 bg-blue-50',
+      borderColor: 'border-blue-200',
+      onClick: () => onNavigate('customers'),
+    },
+    {
+      label: 'Store Settings',
+      sublabel: 'Manage store',
+      icon: Settings,
+      color: 'text-purple-600 bg-purple-50',
+      borderColor: 'border-purple-200',
+      onClick: () => onNavigate('store'),
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {quickActions.map((action) => {
-        const Icon = action.icon;
-        return (
-          <button
-            key={action.title}
-            type="button"
-            onClick={action.action}
-            className={`p-4 rounded-2xl border text-left bg-slate-900/60 backdrop-blur-md transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${action.color}`}
-          >
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3 bg-slate-950 border border-slate-800">
-              <Icon className="w-4 h-4" />
-            </div>
-            <h4 className="text-sm font-bold text-slate-100">{action.title}</h4>
-            <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">{action.desc}</p>
-          </button>
-        );
-      })}
+    <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-2xs space-y-3">
+      <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+        <h3 className="text-sm font-bold text-slate-900">Quick Actions</h3>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+        {actions.slice(0, 8).map((action) => {
+          const Icon = action.icon;
+          return (
+            <button
+              key={action.label}
+              type="button"
+              onClick={action.onClick}
+              className={`p-2.5 rounded-xl border text-left flex items-center gap-2.5 transition-all hover:shadow-2xs group ${
+                action.isPrimary
+                  ? 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700'
+                  : `bg-white hover:bg-slate-50 ${action.borderColor}`
+              }`}
+            >
+              <div
+                className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
+                  action.isPrimary ? 'bg-white/20 text-white' : action.color
+                }`}
+              >
+                <Icon className="w-3.5 h-3.5" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <span
+                  className={`text-[11px] font-bold block truncate leading-tight ${
+                    action.isPrimary ? 'text-white' : 'text-slate-900'
+                  }`}
+                >
+                  {action.label}
+                </span>
+                <span
+                  className={`text-[9px] block truncate leading-tight mt-0.5 ${
+                    action.isPrimary ? 'text-blue-100' : 'text-slate-400'
+                  }`}
+                >
+                  {action.sublabel}
+                </span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 };

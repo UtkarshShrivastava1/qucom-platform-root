@@ -29,7 +29,9 @@ interface OnboardingStore {
   nextStep: () => void;
   prevStep: () => void;
   updateDraft: <K extends keyof OnboardingDraft>(stepKey: K, data: OnboardingDraft[K]) => void;
+  updateStep: (stepNumber: 1 | 2 | 3 | 4 | 5 | 6, data: any) => void;
   setUnderReview: (underReview: boolean, storeId?: string) => void;
+  setIsUnderReview: (underReview: boolean, storeId?: string) => void;
   resetOnboarding: () => void;
 }
 
@@ -51,7 +53,7 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
   draft: {
     step5: defaultStep5,
     step4: {
-      location: { type: 'Point', coordinates: [77.5946, 12.9716] }, // Default Bangalore center for initial pin
+      location: { type: 'Point', coordinates: [77.5946, 12.9716] },
       deliveryRadiusKm: 4,
     },
   },
@@ -74,7 +76,24 @@ export const useOnboardingStore = create<OnboardingStore>((set) => ({
       },
     })),
 
+  updateStep: (stepNumber, data) =>
+    set((state) => {
+      const key = `step${stepNumber}` as keyof OnboardingDraft;
+      return {
+        draft: {
+          ...state.draft,
+          [key]: {
+            ...state.draft[key],
+            ...data,
+          },
+        },
+      };
+    }),
+
   setUnderReview: (underReview, storeId) =>
+    set({ isUnderReview: underReview, storeId }),
+
+  setIsUnderReview: (underReview, storeId) =>
     set({ isUnderReview: underReview, storeId }),
 
   resetOnboarding: () =>

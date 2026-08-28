@@ -1,13 +1,14 @@
-import React from 'react';
-import { useOnboardingStore } from '../stores/onboardingStore.js';
-import { StepProgressBar } from '../components/onboarding/StepProgressBar.js';
-import { Step1Account } from '../components/onboarding/Step1Account.js';
-import { Step2Legal } from '../components/onboarding/Step2Legal.js';
-import { Step3Signature } from '../components/onboarding/Step3Signature.js';
-import { Step4StoreLocation } from '../components/onboarding/Step4StoreLocation.js';
-import { Step5Operations } from '../components/onboarding/Step5Operations.js';
-import { Step6Financials } from '../components/onboarding/Step6Financials.js';
+import React, { useState } from 'react';
+import { SellerNavbar } from '../components/layout/SellerNavbar.js';
+import { OnboardingSidebar, OnboardingMainStep } from '../components/onboarding/OnboardingSidebar.js';
+import { Step1MobileEmail } from '../components/onboarding/Step1MobileEmail.js';
+import { Step2IdVerification } from '../components/onboarding/Step2IdVerification.js';
+import { Step2Signature } from '../components/onboarding/Step2Signature.js';
+import { Step3StoreDetails } from '../components/onboarding/Step3StoreDetails.js';
+import { Step3BusinessInfo } from '../components/onboarding/Step3BusinessInfo.js';
+import { Step4BankAccount } from '../components/onboarding/Step4BankAccount.js';
 import { ReviewWaitingRoom } from '../components/onboarding/ReviewWaitingRoom.js';
+import { useOnboardingStore } from '../stores/onboardingStore.js';
 import { branding } from '../lib/branding.js';
 
 interface OnboardingPageProps {
@@ -15,62 +16,106 @@ interface OnboardingPageProps {
   onGoToLogin: () => void;
 }
 
+export type SubStepKey = '1_account' | '2_id' | '2_signature' | '3_store' | '3_business' | '4_bank';
+
 export const OnboardingPage: React.FC<OnboardingPageProps> = ({
   onEnterDashboard,
   onGoToLogin,
 }) => {
-  const { currentStep, setStep, isUnderReview } = useOnboardingStore();
+  const { isUnderReview } = useOnboardingStore();
+  const [subStep, setSubStep] = useState<SubStepKey>('1_account');
+
+  // Derive active main step (1, 2, 3, 4) for the sidebar indicator
+  const getActiveMainStep = (): OnboardingMainStep => {
+    if (subStep.startsWith('1_')) return 1;
+    if (subStep.startsWith('2_')) return 2;
+    if (subStep.startsWith('3_')) return 3;
+    return 4;
+  };
+
+  const activeMainStep = getActiveMainStep();
 
   if (isUnderReview) {
     return (
-      <div className="min-h-screen bg-slate-950 py-12 px-4 sm:px-6 flex items-center justify-center">
-        <ReviewWaitingRoom onEnterDashboard={onEnterDashboard} />
+      <div className="min-h-screen bg-slate-50 flex flex-col justify-between">
+        <SellerNavbar onGoToLogin={onGoToLogin} onGoToSignup={() => setSubStep('1_account')} />
+        <div className="flex-1 py-12 px-4 sm:px-6 flex items-center justify-center">
+          <ReviewWaitingRoom onEnterDashboard={onEnterDashboard} />
+        </div>
+        <footer className="py-4 border-t border-slate-200 text-center text-xs text-slate-500 bg-white">
+          &copy; {new Date().getFullYear()} {branding.appName}. Hyperlocal Retail Commerce Infrastructure.
+        </footer>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between">
-      {/* Top Header */}
-      <header className="h-16 border-b border-slate-800/80 px-4 sm:px-8 flex items-center justify-between bg-slate-900/60 backdrop-blur-md sticky top-0 z-20">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-white font-bold text-base shadow-lg shadow-brand-500/20">
-            {branding.appName.charAt(0)}
+    <div className="min-h-screen bg-slate-50/50 flex flex-col justify-between font-sans">
+      {/* Top Seller Navigation Bar */}
+      <SellerNavbar onGoToLogin={onGoToLogin} onGoToSignup={() => setSubStep('1_account')} />
+
+      {/* Main Split-Screen Onboarding Section */}
+      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-8 lg:p-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Left Column: Progress Sidebar & Trust Badges */}
+          <div className="lg:col-span-5">
+            <OnboardingSidebar
+              activeMainStep={activeMainStep}
+              onSelectStep={(step) => {
+                if (step === 1) setSubStep('1_account');
+                if (step === 2) setSubStep('2_id');
+                if (step === 3) setSubStep('3_store');
+                if (step === 4) setSubStep('4_bank');
+              }}
+            />
           </div>
-          <div>
-            <h1 className="font-bold text-sm text-slate-100">{branding.appName}</h1>
-            <span className="text-[10px] text-brand-400 font-semibold uppercase tracking-wider">Merchant Partner Portal</span>
+
+          {/* Right Column: Step Form Content */}
+          <div className="lg:col-span-7">
+            {subStep === '1_account' && (
+              <Step1MobileEmail
+                onContinue={() => setSubStep('2_id')}
+                onGoToLogin={onGoToLogin}
+              />
+            )}
+
+            {subStep === '2_id' && (
+              <Step2IdVerification onContinue={() => setSubStep('2_signature')} />
+            )}
+
+            {subStep === '2_signature' && (
+              <Step2Signature
+                onContinue={() => setSubStep('3_store')}
+                onBack={() => setSubStep('2_id')}
+              />
+            )}
+
+            {subStep === '3_store' && (
+              <Step3StoreDetails
+                onContinue={() => setSubStep('3_business')}
+                onBack={() => setSubStep('2_signature')}
+              />
+            )}
+
+            {subStep === '3_business' && (
+              <Step3BusinessInfo
+                onContinue={() => setSubStep('4_bank')}
+                onBack={() => setSubStep('3_store')}
+              />
+            )}
+
+            {subStep === '4_bank' && (
+              <Step4BankAccount
+                onBack={() => setSubStep('3_business')}
+                onComplete={() => {}}
+              />
+            )}
           </div>
-        </div>
-
-        <div className="flex items-center gap-3 text-xs">
-          <span className="text-slate-400 hidden sm:inline">Already registered?</span>
-          <button
-            type="button"
-            onClick={onGoToLogin}
-            className="text-brand-400 hover:text-brand-300 font-semibold transition-colors"
-          >
-            Log In
-          </button>
-        </div>
-      </header>
-
-      {/* Main Wizard Area */}
-      <main className="flex-1 max-w-4xl w-full mx-auto py-8 px-4 sm:px-6">
-        <StepProgressBar currentStep={currentStep} onStepClick={(step) => setStep(step)} />
-
-        <div className="transition-all duration-300">
-          {currentStep === 1 && <Step1Account />}
-          {currentStep === 2 && <Step2Legal />}
-          {currentStep === 3 && <Step3Signature />}
-          {currentStep === 4 && <Step4StoreLocation />}
-          {currentStep === 5 && <Step5Operations />}
-          {currentStep === 6 && <Step6Financials />}
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="py-4 border-t border-slate-900 text-center text-xs text-slate-500">
+      <footer className="py-4 border-t border-slate-200 text-center text-xs text-slate-500 bg-white">
         &copy; {new Date().getFullYear()} {branding.appName}. Hyperlocal Retail Commerce Infrastructure.
       </footer>
     </div>

@@ -13,6 +13,7 @@ import { logger } from './shared/utils/logger.js';
 // Import domain module routes
 import { authRouter } from './modules/auth/auth.routes.js';
 import { storeRouter } from './modules/stores/store.routes.js';
+import { catalogRouter } from './modules/catalog/catalog.routes.js';
 
 export function createApp(): Express {
   const app: Express = express();
@@ -95,6 +96,7 @@ export function createApp(): Express {
   const apiV1 = express.Router();
   apiV1.use('/auth', authRouter);
   apiV1.use('/stores', storeRouter);
+  apiV1.use('/catalog', catalogRouter);
 
   app.use(`/api/${env.API_VERSION}`, apiV1);
 

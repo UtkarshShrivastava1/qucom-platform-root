@@ -7,7 +7,7 @@ const getEnv = (key: string): string | undefined => {
 };
 
 export const branding = {
-  appName: getEnv('NEXT_PUBLIC_APP_NAME') || 'LocalStore',
+  appName: getEnv('NEXT_PUBLIC_APP_NAME') || 'Viztore',
   tagline: getEnv('NEXT_PUBLIC_APP_TAGLINE') || 'Shop Local. Shop Smart.',
   domain: getEnv('NEXT_PUBLIC_APP_DOMAIN') || 'localhost',
   supportEmail: getEnv('NEXT_PUBLIC_SUPPORT_EMAIL') || 'support@example.com',
