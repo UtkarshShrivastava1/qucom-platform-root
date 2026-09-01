@@ -1,0 +1,18 @@
+# Global Default Owner: Everything requires approval from Lead Architect
+* @UtkarshShrivastava1
+
+# Core Infrastructure, Backend & Shared Contracts (Lead Architect Only)
+/apps/backend/ @UtkarshShrivastava1
+/packages/shared-types/ @UtkarshShrivastava1
+/packages/config/ @UtkarshShrivastava1
+/turbo.json @UtkarshShrivastava1
+/package.json @UtkarshShrivastava1
+/pnpm-workspace.yaml @UtkarshShrivastava1
+/pnpm-lock.yaml @UtkarshShrivastava1
+/.github/ @UtkarshShrivastava1
+
+# Customer Web Storefront: Vinay Kumar (@VVinaykumar003)
+/apps/web/ @UtkarshShrivastava1 @VVinaykumar003
+
+# Merchant & Admin Panel: Abhay (@Abhay0410)
+/apps/merchant/ @UtkarshShrivastava1 @Abhay0410
