@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { branding } from '@repo/shared-types';
 import { Providers } from './providers';
+import { CartDrawer } from '../components/cart/CartDrawer';
 import './globals.css';
 
 const inter = Inter({
@@ -40,6 +41,7 @@ export default function RootLayout({
       <body className="font-sans bg-surface-950 text-surface-100 antialiased min-h-screen">
         <Providers>
           {children}
+          <CartDrawer />
         </Providers>
       </body>
     </html>

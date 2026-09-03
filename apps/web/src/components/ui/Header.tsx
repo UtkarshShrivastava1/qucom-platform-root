@@ -5,12 +5,16 @@ import Link from 'next/link';
 import { MapPin, Search, Heart, ShoppingBag, Bell, User, ChevronDown } from 'lucide-react';
 import { branding } from '@repo/shared-types';
 
+import { useCartStore } from '../../stores/cart.store';
+
 interface HeaderProps {
   address?: string;
   cartCount?: number;
 }
 
-export function Header({ address = 'New Delhi, India', cartCount = 0 }: HeaderProps) {
+export function Header({ address = 'New Delhi, India', cartCount }: HeaderProps) {
+  const { openCart, getItemCount } = useCartStore();
+  const liveCount = cartCount !== undefined ? cartCount : getItemCount();
   return (
     <header className="sticky top-0 z-50 glass border-b border-surface-800/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -47,14 +51,18 @@ export function Header({ address = 'New Delhi, India', cartCount = 0 }: HeaderPr
               <Heart className="w-5 h-5 text-surface-400 group-hover:text-brand-400 transition-colors" />
             </Link>
 
-            <Link href="/cart" className="p-2.5 rounded-xl hover:bg-surface-800/60 transition-colors relative group">
+            <button
+              onClick={openCart}
+              className="p-2.5 rounded-xl hover:bg-surface-800/60 transition-colors relative group"
+              aria-label="Open shopping cart"
+            >
               <ShoppingBag className="w-5 h-5 text-surface-400 group-hover:text-brand-400 transition-colors" />
-              {cartCount > 0 && (
+              {liveCount > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-brand-500 text-[10px] font-bold text-white flex items-center justify-center">
-                  {cartCount}
+                  {liveCount}
                 </span>
               )}
-            </Link>
+            </button>
 
             <button className="p-2.5 rounded-xl hover:bg-surface-800/60 transition-colors relative group">
               <Bell className="w-5 h-5 text-surface-400 group-hover:text-brand-400 transition-colors" />
