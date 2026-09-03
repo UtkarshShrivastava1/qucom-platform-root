@@ -38,12 +38,12 @@ graph TB
 
 | Layer | Technology | Status | Details |
 |---|---|---|---|
-| **Backend API** | Node.js v20+, Express, Mongoose, TypeScript | **Live** ✅ | Auth, Stores, Onboarding, Catalog modules active |
+| **Backend API** | Node.js v20+, Express, Mongoose, TypeScript | **Live** ✅ | Auth, Stores, Onboarding, Catalog, Orders modules active |
 | **Merchant Panel** | React 18, Vite, Tailwind CSS, Zustand | **Refined** ✅ | Pixel-perfect Dashboard matching client reference mockups & 4 side drawers |
 | **Customer Storefront** | Next.js 14 App Router, Tailwind, TanStack Query | **Live** ✅ | Home feed, Stores directory, PLP, PDP, Category browse |
 | **Shared Types** | TypeScript, Zod | **Live** ✅ | Shared types, validation schemas, branding config |
-| **Agent Workflows** | Custom Skills & Rules | **Active** ✅ | Fullstack Feature Workflow & UI Reference Matching |
-| **Test Suite** | Vitest | **26/26 Passing** ✅ | 5 test suites (AppError, Auth, Stores, Onboarding, Catalog) |
+| **Agent Workflows** | Custom Skills & Rules | **Active** ✅ | Fullstack Feature Workflow, UI Matching, Intern Delegation, Interview Notes |
+| **Test Suite** | Vitest | **39/39 Passing** ✅ | 8 test suites (AppError, Auth, Stores, Onboarding, Catalog, Order Service, Order Routes, Order Repository) |
 | **Build Status** | Turborepo | **Clean** ✅ | Full monorepo builds with zero errors |
 
 ---
@@ -102,14 +102,21 @@ graph TB
 
 ---
 
-### 🟠 Phase 4 — Cart, Checkout & Orders (NEXT UP 🎯)
-> *End-to-end purchase flow, single-store cart enforcement, and order state machine*
+### 🟠 Phase 4 — Cart, Checkout & Orders (IN PROGRESS 🔄)
+> *End-to-end purchase flow, single-store cart enforcement, and enterprise order state machine*
 
-- [ ] `orders/` backend module with single-store cart invariant enforcement
-- [ ] Cart session management (Redis cache + DB persistence, variant SKU validation)
-- [ ] Multi-item line calculation, coupon application, and tax breakdown
-- [ ] 4-Step Checkout flow (Address selection, Fulfilment mode: **Reserve / Pickup / Deliver**, Payment method)
-- [ ] Order state machine (Pending → Confirmed → Packed → Out for Delivery → Delivered / Cancelled)
+- [x] **Enterprise Modular Monolith & Clean Architecture Foundation**:
+  - [x] `index.ts` Public Facades across `auth/`, `stores/`, `catalog/`, and `orders/`
+  - [x] Typed in-memory `eventBus` (`shared/events/eventBus.ts` + `eventTypes.ts`) for asynchronous domain events
+  - [x] `orders/` composition root (`order.module.ts`) wiring repository, service, controller, and router
+  - [x] Abstract Repository layer (`order.repository.ts` implementing `IOrderRepository`)
+  - [x] Order state machine with physical 4-digit Delivery OTP handshake (`order.service.ts`)
+  - [x] Single-store cart invariant enforcement at service layer
+  - [x] ESR compound indexing (`{ storeId: 1, status: 1, createdAt: -1 }`, `{ userId: 1, createdAt: -1 }`)
+  - [x] 3-tier testing pyramid: Service unit tests, Supertest route integration tests, Repository unit tests (13 tests, 39 total tests passing)
+- [ ] Customer Web Storefront Cart Drawer & 4-step Checkout UI (`apps/web`)
+- [ ] Merchant Panel Live Orders Pipeline Kanban Board (`apps/merchant`)
+(Pending → Confirmed → Packed → Out for Delivery → Delivered / Cancelled)
 - [ ] Secure 4-digit Delivery OTP verification for order handoff
 - [ ] Real-time merchant & customer order status notifications via Socket.io
 

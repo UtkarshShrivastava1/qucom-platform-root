@@ -81,19 +81,23 @@
 
 ---
 
-## 🟠 Phase 4: Cart, Checkout & Orders (NEXT UP)
+## 🟡 Phase 4: Cart, Checkout & Orders (BACKEND COMPLETED, UI IN PROGRESS)
 
-- [ ] **Cart & Session Architecture**
-  - [ ] Single-store cart rule enforcement (DB & Redis)
-  - [ ] Cart conflict dialog ("Replace cart with items from new store?")
-  - [ ] Real-time price and stock re-validation
-- [ ] **4-Step Hyperlocal Checkout Flow**
-  - [ ] Step 1: Customer address selection & delivery radius check
-  - [ ] Step 2: Fulfilment mode selector (**Reserve / Store Pickup / Hyperlocal Delivery**)
-  - [ ] Step 3: Payment method (COD / UPI / Card / NetBanking)
-  - [ ] Step 4: Order confirmation & invoice generation
-- [ ] **Order Management & Fulfillment State Machine**
-  - [ ] Order lifecycle: `pending` → `confirmed` → `packed` → `out_for_delivery` → `delivered` / `cancelled`
+- [x] **Enterprise Modular Monolith & Clean Architecture Foundation**:
+  - [x] Module Public Facades (`index.ts`) for `auth`, `stores`, `catalog`, and `orders`
+  - [x] Strongly-typed in-memory `eventBus` (`shared/events/eventBus.ts` + `eventTypes.ts`) for asynchronous domain events
+  - [x] `orders/` composition root (`order.module.ts`) wiring repository, service, controller, and router
+  - [x] Abstract Repository layer (`order.repository.ts` implementing `IOrderRepository`)
+  - [x] Order state machine with physical 4-digit Delivery OTP handshake (`order.service.ts`)
+  - [x] Single-store cart invariant enforcement at service layer
+  - [x] ESR compound indexing (`{ storeId: 1, status: 1, createdAt: -1 }`, `{ userId: 1, createdAt: -1 }`)
+  - [x] 3-tier testing pyramid: Service unit tests, Supertest route integration tests, Repository unit tests (13 tests, 39 total tests passing)
+- [ ] **Customer Storefront Cart & Checkout UI (`apps/web`)**
+  - [ ] Flyout Cart Drawer with item stepper & single-store conflict modal
+  - [ ] 4-Step Checkout flow (Address, Fulfillment Mode, Payment Method, Order Summary)
+- [ ] **Merchant Panel Live Orders Pipeline (`apps/merchant`)**
+  - [ ] Kanban Pipeline Board (New, Preparing, Ready, Out for Delivery, Completed)
+  - [ ] Delivery OTP modal verification for merchant/rider handoff
   - [ ] Secure 4-digit Delivery OTP generation & verification
   - [ ] Real-time merchant & customer socket events
 

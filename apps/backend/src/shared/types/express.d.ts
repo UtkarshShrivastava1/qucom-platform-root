@@ -7,7 +7,8 @@ declare module 'mongo-sanitize' {
 declare global {
   namespace Express {
     interface Request {
-      user?: JwtTokenPayload;
+      user?: JwtTokenPayload & { id?: string };
+      correlationId?: string;
     }
   }
 }

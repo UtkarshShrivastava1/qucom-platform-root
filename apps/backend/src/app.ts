@@ -11,9 +11,10 @@ import { ApiResponse } from './shared/utils/ApiResponse.js';
 import { logger } from './shared/utils/logger.js';
 
 // Import domain module routes
-import { authRouter } from './modules/auth/auth.routes.js';
-import { storeRouter } from './modules/stores/store.routes.js';
-import { catalogRouter } from './modules/catalog/catalog.routes.js';
+import { authRouter } from './modules/auth/index.js';
+import { storeRouter } from './modules/stores/index.js';
+import { catalogRouter } from './modules/catalog/index.js';
+import { orderRouter } from './modules/orders/index.js';
 
 export function createApp(): Express {
   const app: Express = express();
@@ -97,6 +98,7 @@ export function createApp(): Express {
   apiV1.use('/auth', authRouter);
   apiV1.use('/stores', storeRouter);
   apiV1.use('/catalog', catalogRouter);
+  apiV1.use('/orders', orderRouter);
 
   app.use(`/api/${env.API_VERSION}`, apiV1);
 
