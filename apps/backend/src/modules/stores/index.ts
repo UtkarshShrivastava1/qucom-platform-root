@@ -2,20 +2,14 @@
  * STORES MODULE — Public Facade
  * ONLY file other modules and app.ts may import from stores/
  */
-import { storeRouter } from './store.routes.js';
+import { createStoreModule } from './store.module.js';
 import * as storeService from './store.service.js';
+import type { IStoreFacade } from './store.types.js';
 
-export interface IStoreFacade {
-  getStoreById(id: string): Promise<{
-    id: string;
-    name: string;
-    isActive: boolean;
-    ownerId: string;
-    city: string;
-  } | null>;
-  isStoreActive(id: string): Promise<boolean>;
-  verifyStoreExists(id: string): Promise<boolean>;
-}
+const defaultStoreModule = createStoreModule();
+
+export const storeRouter = defaultStoreModule.router;
+export const storeRepository = defaultStoreModule.repository;
 
 export const storeModule: IStoreFacade = {
   getStoreById: async (id: string) => {
@@ -51,5 +45,7 @@ export const storeModule: IStoreFacade = {
   },
 };
 
-export { storeRouter, storeService };
-export * from './store.model.js';
+export { createStoreModule, storeService };
+export * from './store.types.js';
+export * from './store.validator.js';
+export { StoreModel } from './store.model.js';

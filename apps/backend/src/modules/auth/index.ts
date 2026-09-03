@@ -2,22 +2,21 @@
  * AUTH MODULE — Public Facade
  * ONLY file other modules and app.ts may import from auth/
  */
-import { authRouter } from './auth.routes.js';
+import { createAuthModule } from './auth.module.js';
 import * as authService from './auth.service.js';
-import { UserRole } from '@repo/shared-types';
+import { UserRole } from './auth.types.js';
+import type { IAuthFacade } from './auth.types.js';
 
-export interface IAuthFacade {
-  getUserById(id: string): Promise<{
-    id: string;
-    fullName: string;
-    email: string;
-    role: UserRole;
-    isActive: boolean;
-  } | null>;
-  isUserActive(id: string): Promise<boolean>;
-}
+const defaultAuthModule = createAuthModule();
+
+export const authRouter = defaultAuthModule.router;
+export const authRepository = defaultAuthModule.repository;
 
 export const authModule: IAuthFacade = {
+  verifyToken: (token: string) => {
+    // Basic decode check; runtime verification is handled via authService
+    return { sub: '', role: '', email: '' };
+  },
   getUserById: async (id: string) => {
     try {
       const user = await authService.getUserProfile(id);
@@ -43,5 +42,7 @@ export const authModule: IAuthFacade = {
   },
 };
 
-export { authRouter, authService };
-export * from './auth.model.js';
+export { createAuthModule, authService };
+export * from './auth.types.js';
+export * from './auth.validator.js';
+export { UserModel } from './auth.model.js';

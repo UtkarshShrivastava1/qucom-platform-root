@@ -2,35 +2,14 @@
  * CATALOG MODULE — Public Facade
  * ONLY file other modules and app.ts may import from catalog/
  */
-import { catalogRouter } from './catalog.routes.js';
+import { createCatalogModule } from './catalog.module.js';
 import * as catalogService from './catalog.service.js';
+import type { ICatalogFacade, CheckStockItem, StockCheckResult } from './catalog.types.js';
 
-export interface CheckStockItem {
-  productId: string;
-  sku?: string;
-  quantity: number;
-}
+const defaultCatalogModule = createCatalogModule();
 
-export interface StockCheckResult {
-  available: boolean;
-  unavailableItems?: {
-    productId: string;
-    requested: number;
-    available: number;
-  }[];
-}
-
-export interface ICatalogFacade {
-  getProductById(id: string): Promise<{
-    id: string;
-    name: string;
-    price: number;
-    storeId: string;
-    isActive: boolean;
-  } | null>;
-  checkStock(items: CheckStockItem[]): Promise<StockCheckResult>;
-  deductStock(items: CheckStockItem[]): Promise<void>;
-}
+export const catalogRouter = defaultCatalogModule.router;
+export const catalogRepository = defaultCatalogModule.repository;
 
 export const catalogModule: ICatalogFacade = {
   getProductById: async (id: string) => {
@@ -50,7 +29,6 @@ export const catalogModule: ICatalogFacade = {
   },
   checkStock: async (items: CheckStockItem[]): Promise<StockCheckResult> => {
     try {
-      // In this Phase, verify each product exists and is active
       const unavailable: StockCheckResult['unavailableItems'] = [];
       for (const item of items) {
         const p = await catalogService.getProductById(item.productId).catch(() => null);
@@ -71,9 +49,11 @@ export const catalogModule: ICatalogFacade = {
     }
   },
   deductStock: async (_items: CheckStockItem[]): Promise<void> => {
-    // Inventory deduction hook (will decrement stock counts in inventory ledger)
+    // Inventory deduction hook
   },
 };
 
-export { catalogRouter, catalogService };
-export * from './product.model.js';
+export { createCatalogModule, catalogService };
+export * from './catalog.types.js';
+export * from './catalog.validator.js';
+export { ProductModel } from './product.model.js';
