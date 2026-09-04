@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Edit2 } from 'lucide-react';
+import { X, Edit2, CheckCircle2 } from 'lucide-react';
 import { useAuthStore } from '../../../stores/authStore.js';
 
 interface ProfileInformationDrawerProps {
@@ -19,17 +19,26 @@ export const ProfileInformationDrawer: React.FC<ProfileInformationDrawerProps> =
   const email = user?.email || 'support@fashionhub.com';
   const phone = user?.phone || '+91 98765 43210';
 
-  const categories = ['Fashion', 'Apparel', "Men's Wear", "Women's Wear", 'Accessories'];
+  const categories = [
+    { name: 'Fashion', active: true },
+    { name: 'Apparel', active: false },
+    { name: "Men's Wear", active: false },
+    { name: "Women's Wear", active: false },
+    { name: 'Accessories', active: false },
+  ];
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
       {/* Backdrop */}
-      <div className="fixed inset-0 bg-slate-900/30 backdrop-blur-xs transition-opacity" onClick={onClose} />
+      <div
+        className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs transition-opacity duration-300"
+        onClick={onClose}
+      />
 
       {/* Slide-out Panel */}
-      <div className="relative w-full max-w-md bg-white text-slate-800 h-full shadow-2xl flex flex-col z-10 animate-in slide-in-from-right duration-200">
+      <div className="relative w-full max-w-[420px] bg-white text-slate-800 h-full shadow-2xl flex flex-col z-10 animate-in slide-in-from-right duration-300 border-l border-slate-200">
         {/* Header */}
-        <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+        <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
           <h2 className="text-base font-bold text-slate-900">Profile Information</h2>
           <button
             type="button"
@@ -41,9 +50,25 @@ export const ProfileInformationDrawer: React.FC<ProfileInformationDrawerProps> =
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-6">
+        <div className="flex-1 overflow-y-auto p-5 space-y-5">
+          {/* Avatar & Verified Banner */}
+          <div className="flex items-center gap-3.5 pb-3 border-b border-slate-100">
+            <div className="w-14 h-14 rounded-full bg-blue-600 text-white font-bold text-xl flex items-center justify-center shadow-md shrink-0">
+              {storeName.slice(0, 2).toUpperCase()}
+            </div>
+            <div>
+              <div className="flex items-center gap-1.5">
+                <h3 className="text-base font-bold text-slate-900">{storeName}</h3>
+                <CheckCircle2 className="w-4 h-4 fill-blue-600 text-white" />
+              </div>
+              <span className="inline-block mt-1 text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100">
+                Verified Seller
+              </span>
+            </div>
+          </div>
+
           {/* Section 1: Basic Information */}
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             <div className="flex items-center justify-between">
               <h3 className="text-xs font-bold text-slate-900">Basic Information</h3>
               <button
@@ -57,22 +82,23 @@ export const ProfileInformationDrawer: React.FC<ProfileInformationDrawerProps> =
             </div>
 
             <div className="space-y-2 text-xs">
-              <div className="flex items-center justify-between py-1">
+              <div className="flex items-center justify-between py-0.5">
                 <span className="text-slate-500">Store Name</span>
                 <span className="font-semibold text-slate-800">{storeName}</span>
               </div>
-              <div className="flex items-center justify-between py-1">
+              <div className="flex items-center justify-between py-0.5">
                 <span className="text-slate-500">Business Email</span>
                 <span className="font-medium text-slate-800">{email}</span>
               </div>
-              <div className="flex items-center justify-between py-1">
+              <div className="flex items-center justify-between py-0.5">
                 <span className="text-slate-500">Phone Number</span>
                 <span className="font-medium text-slate-800">{phone}</span>
               </div>
-              <div className="flex items-start justify-between py-1">
+              <div className="flex items-start justify-between py-0.5">
                 <span className="text-slate-500 shrink-0">Business Address</span>
-                <span className="font-medium text-slate-800 text-right max-w-[220px] leading-relaxed">
-                  123, MG Road, Andheri West, Mumbai, Maharashtra - 400058
+                <span className="font-medium text-slate-800 text-right max-w-[220px] text-[11px] leading-tight">
+                  123, MG Road, Andheri West,<br />
+                  Mumbai, Maharashtra - 400058
                 </span>
               </div>
             </div>
@@ -81,7 +107,7 @@ export const ProfileInformationDrawer: React.FC<ProfileInformationDrawerProps> =
           <div className="h-px bg-slate-100" />
 
           {/* Section 2: Bank Details */}
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             <div className="flex items-center justify-between">
               <h3 className="text-xs font-bold text-slate-900">Bank Details</h3>
               <button
@@ -95,19 +121,19 @@ export const ProfileInformationDrawer: React.FC<ProfileInformationDrawerProps> =
             </div>
 
             <div className="space-y-2 text-xs">
-              <div className="flex items-center justify-between py-1">
+              <div className="flex items-center justify-between py-0.5">
                 <span className="text-slate-500">Bank Name</span>
                 <span className="font-semibold text-slate-800">HDFC Bank</span>
               </div>
-              <div className="flex items-center justify-between py-1">
+              <div className="flex items-center justify-between py-0.5">
                 <span className="text-slate-500">Account Holder Name</span>
                 <span className="font-semibold text-slate-800">{storeName}</span>
               </div>
-              <div className="flex items-center justify-between py-1">
+              <div className="flex items-center justify-between py-0.5">
                 <span className="text-slate-500">Account Number</span>
                 <span className="font-mono text-slate-800 font-semibold">50200012345678</span>
               </div>
-              <div className="flex items-center justify-between py-1">
+              <div className="flex items-center justify-between py-0.5">
                 <span className="text-slate-500">IFSC Code</span>
                 <span className="font-mono text-slate-800 font-semibold">HDFC0001234</span>
               </div>
@@ -133,39 +159,46 @@ export const ProfileInformationDrawer: React.FC<ProfileInformationDrawerProps> =
             <div className="space-y-3 text-xs">
               <div className="flex items-start justify-between">
                 <span className="text-slate-500 shrink-0">Store Description</span>
-                <span className="font-medium text-slate-800 text-right max-w-[220px] leading-relaxed">
+                <span className="font-medium text-slate-800 text-right max-w-[220px] text-[11px] leading-tight">
                   We bring you the latest fashion collection with best quality and affordable prices.
                 </span>
               </div>
 
               <div>
-                <span className="text-slate-500 block mb-2">Store Category</span>
+                <span className="text-slate-500 block mb-2 font-medium">Store Category</span>
                 <div className="flex flex-wrap gap-1.5">
                   {categories.map((cat) => (
                     <span
-                      key={cat}
-                      className="px-2.5 py-1 rounded-lg bg-blue-50/60 text-blue-700 border border-blue-100 text-[11px] font-medium"
+                      key={cat.name}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-colors ${
+                        cat.active
+                          ? 'bg-blue-600 text-white shadow-xs'
+                          : 'bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100'
+                      }`}
                     >
-                      {cat}
+                      {cat.name}
                     </span>
                   ))}
                 </div>
               </div>
 
-              <div className="flex items-center justify-between pt-2">
+              <div className="flex items-center justify-between pt-1">
                 <span className="text-slate-500">Store Logo</span>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#081028] text-white flex flex-col items-center justify-center text-[8px] font-black uppercase leading-tight tracking-tight shadow-sm">
+                  <div className="w-10 h-10 rounded-full bg-[#081028] text-white flex flex-col items-center justify-center text-[7px] font-black uppercase leading-tight tracking-tight shadow-sm shrink-0">
                     <span>FASHION</span>
                     <span>HUB</span>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => alert('Change Logo')}
-                    className="text-[11px] font-semibold text-blue-600 hover:underline"
-                  >
-                    View / Change
-                  </button>
+                  <div>
+                    <span className="text-xs font-semibold text-slate-800 block leading-tight">{storeName}</span>
+                    <button
+                      type="button"
+                      onClick={() => alert('Change Logo')}
+                      className="text-[11px] font-medium text-blue-600 hover:underline mt-0.5 block"
+                    >
+                      View / Change
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

@@ -33,26 +33,28 @@ export const AnnouncementsBar: React.FC = () => {
   ];
 
   return (
-    <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-2xs space-y-3">
-      <div className="flex items-center justify-between pb-1">
-        <h3 className="text-sm font-bold text-slate-900">Announcements</h3>
+    <div className="p-3.5 sm:p-4 rounded-2xl bg-white border border-slate-200/80 shadow-2xs space-y-2">
+      <div className="flex items-center justify-between pb-0.5">
+        <h3 className="text-xs sm:text-sm font-bold text-slate-900">Announcements</h3>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
         {announcements.map((item) => {
           const Icon = item.icon;
           return (
             <div
               key={item.id}
-              className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-3 hover:bg-slate-100/60 transition-colors"
+              className="p-2.5 rounded-xl bg-slate-50/70 border border-slate-100 flex items-start gap-2.5 hover:bg-slate-100/60 transition-colors"
             >
-              <div className={`w-8 h-8 rounded-lg ${item.iconBg} ${item.iconColor} flex items-center justify-center shrink-0`}>
-                <Icon className="w-4 h-4" />
+              <div className={`w-7 h-7 rounded-lg ${item.iconBg} ${item.iconColor} flex items-center justify-center shrink-0`}>
+                <Icon className="w-3.5 h-3.5" />
               </div>
               <div className="flex-1 min-w-0">
-                <h4 className="text-xs font-bold text-slate-900 truncate leading-snug">{item.title}</h4>
-                <p className="text-[11px] text-slate-500 leading-snug line-clamp-2 mt-0.5">{item.description}</p>
-                <span className="text-[10px] text-slate-400 font-medium block mt-1.5">{item.date}</span>
+                <div className="flex items-start justify-between gap-1.5">
+                  <h4 className="text-[11px] font-bold text-slate-900 truncate leading-snug">{item.title}</h4>
+                  <span className="text-[9px] text-slate-400 font-medium shrink-0 whitespace-nowrap">{item.date}</span>
+                </div>
+                <p className="text-[10px] text-slate-500 leading-tight line-clamp-1 mt-0.5">{item.description}</p>
               </div>
             </div>
           );

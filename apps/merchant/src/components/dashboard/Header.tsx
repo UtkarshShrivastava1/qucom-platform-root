@@ -68,23 +68,26 @@ export const Header: React.FC<HeaderProps> = ({ isCollapsed, onToggleMobileMenu 
           <button
             type="button"
             onClick={() => alert('Wallet & Payouts: ₹32,450')}
-            className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl border border-blue-200/60 bg-blue-50/50 hover:bg-blue-50 text-blue-700 text-xs font-semibold transition-all shadow-2xs"
+            className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl border border-blue-200/80 bg-white hover:bg-blue-50/50 text-slate-800 text-xs font-medium transition-all shadow-2xs"
           >
             <Wallet className="w-3.5 h-3.5 text-blue-600" />
-            <span className="font-normal text-slate-600">Wallet</span>
-            <span className="font-bold text-slate-900">₹32,450</span>
+            <span>Wallet</span>
           </button>
 
           {/* Notifications Bell with Badge */}
           <button
             type="button"
             onClick={() => setIsNotificationsOpen(true)}
-            className="relative p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+            className={`relative p-2 rounded-xl transition-colors ${
+              isNotificationsOpen
+                ? 'bg-blue-600 text-white'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+            }`}
             title="Notifications"
           >
             <Bell className="w-5 h-5" />
             <span className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center border-2 border-white">
-              8
+              5
             </span>
           </button>
 

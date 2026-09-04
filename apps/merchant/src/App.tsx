@@ -77,7 +77,7 @@ export const App: React.FC = () => {
         />
 
         <main
-          className={`flex-1 p-4 sm:p-6 transition-all duration-300 ${
+          className={`flex-1 p-3 sm:p-4 transition-all duration-300 ${
             isSidebarCollapsed ? 'sm:ml-20' : 'sm:ml-64'
           }`}
         >

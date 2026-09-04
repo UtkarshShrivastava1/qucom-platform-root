@@ -5,10 +5,7 @@ import {
   ChevronRight,
   ChevronDown,
   Headphones,
-  Phone,
-  Mail,
 } from 'lucide-react';
-import { branding } from '../../../lib/branding.js';
 
 interface HelpSupportDrawerProps {
   isOpen: boolean;
@@ -64,8 +61,8 @@ const faqItems: FaqItem[] = [
   },
   {
     id: '9',
-    question: `How can I contact ${branding.appName} support?`,
-    answer: `Reach our merchant support team 24/7 via phone at 1800-123-4567 or email at ${branding.supportEmail}.`,
+    question: 'How can I contact Viztore support?',
+    answer: 'Reach our merchant support team 24/7 via phone at 1800-123-4567 or email at support@viztore.com.',
   },
 ];
 
@@ -83,12 +80,15 @@ export const HelpSupportDrawer: React.FC<HelpSupportDrawerProps> = ({ isOpen, on
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
       {/* Backdrop */}
-      <div className="fixed inset-0 bg-slate-900/30 backdrop-blur-xs transition-opacity" onClick={onClose} />
+      <div
+        className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs transition-opacity duration-300"
+        onClick={onClose}
+      />
 
       {/* Slide-out Panel */}
-      <div className="relative w-full max-w-md bg-white text-slate-800 h-full shadow-2xl flex flex-col z-10 animate-in slide-in-from-right duration-200">
+      <div className="relative w-full max-w-[420px] bg-white text-slate-800 h-full shadow-2xl flex flex-col z-10 animate-in slide-in-from-right duration-300 border-l border-slate-200">
         {/* Header */}
-        <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+        <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
           <h2 className="text-base font-bold text-slate-900">Help & Support</h2>
           <button
             type="button"
@@ -100,10 +100,10 @@ export const HelpSupportDrawer: React.FC<HelpSupportDrawerProps> = ({ isOpen, on
         </div>
 
         {/* Content Body */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        <div className="flex-1 overflow-y-auto p-5 space-y-4">
           {/* Greeting */}
           <div>
-            <h3 className="text-sm font-bold text-slate-900">Hi! How can we help you?</h3>
+            <h3 className="text-xs sm:text-sm font-bold text-slate-900">Hi! How can we help you?</h3>
             <p className="text-xs text-slate-500 mt-0.5">
               Find quick answers to common questions below.
             </p>
@@ -117,22 +117,26 @@ export const HelpSupportDrawer: React.FC<HelpSupportDrawerProps> = ({ isOpen, on
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search for help topics..."
-              className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+              className="w-full pl-9 pr-9 py-2 bg-slate-50/80 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all shadow-2xs"
             />
+            <Search className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 opacity-70" />
           </div>
 
-          {/* FAQ Accordion List */}
-          <div className="divide-y divide-slate-100 border border-slate-100 rounded-xl overflow-hidden">
+          {/* FAQ Accordion List - Individual Rounded Cards */}
+          <div className="space-y-2">
             {filteredFaqs.map((faq) => {
               const isExpanded = expandedId === faq.id;
               return (
-                <div key={faq.id} className="bg-white">
+                <div
+                  key={faq.id}
+                  className="rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition-all overflow-hidden"
+                >
                   <button
                     type="button"
                     onClick={() => setExpandedId(isExpanded ? null : faq.id)}
-                    className="w-full px-3.5 py-3 flex items-center justify-between text-left hover:bg-slate-50 transition-colors"
+                    className="w-full px-3.5 py-3 flex items-center justify-between text-left hover:bg-slate-50/50 transition-colors"
                   >
-                    <span className="text-xs font-semibold text-slate-800">{faq.question}</span>
+                    <span className="text-xs font-semibold text-slate-800 leading-snug">{faq.question}</span>
                     {isExpanded ? (
                       <ChevronDown className="w-4 h-4 text-slate-500 shrink-0 ml-2" />
                     ) : (
@@ -140,7 +144,7 @@ export const HelpSupportDrawer: React.FC<HelpSupportDrawerProps> = ({ isOpen, on
                     )}
                   </button>
                   {isExpanded && (
-                    <div className="px-3.5 pb-3 text-xs text-slate-600 bg-slate-50/60 leading-relaxed border-t border-slate-100">
+                    <div className="px-3.5 pb-3 text-xs text-slate-600 bg-slate-50/40 leading-relaxed border-t border-slate-100">
                       {faq.answer}
                     </div>
                   )}
@@ -150,26 +154,22 @@ export const HelpSupportDrawer: React.FC<HelpSupportDrawerProps> = ({ isOpen, on
           </div>
 
           {/* Still need help? Card */}
-          <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-100 text-center space-y-2.5">
+          <div className="pt-4 pb-2 text-center space-y-2.5">
             <h4 className="text-xs font-bold text-slate-900">Still need help?</h4>
-            <p className="text-[11px] text-slate-600">Our support team is here for you.</p>
+            <p className="text-[11px] text-slate-500">Our support team is here for you.</p>
+
             <button
               type="button"
-              onClick={() => alert(`Contacting ${branding.appName} support...`)}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-sm transition-colors"
+              onClick={() => alert('Contacting Viztore support...')}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-200 hover:border-slate-300 hover:bg-slate-50 bg-white text-blue-600 text-xs font-semibold shadow-2xs transition-all"
             >
-              <Headphones className="w-4 h-4" />
+              <Headphones className="w-4 h-4 text-blue-600" />
               <span>Contact Support</span>
             </button>
+
             <div className="text-[11px] text-slate-500 space-y-0.5 pt-1">
-              <p className="flex items-center justify-center gap-1.5">
-                <Phone className="w-3 h-3 text-slate-400" />
-                <span>Call us: 1800-123-4567</span>
-              </p>
-              <p className="flex items-center justify-center gap-1.5">
-                <Mail className="w-3 h-3 text-slate-400" />
-                <span>Email: {branding.supportEmail}</span>
-              </p>
+              <p>Call us: <span className="font-semibold text-slate-700">1800-123-4567</span></p>
+              <p>Email: <span className="font-semibold text-blue-600 hover:underline cursor-pointer">support@viztore.com</span></p>
             </div>
           </div>
         </div>

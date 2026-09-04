@@ -67,7 +67,6 @@ const menuItems: MenuItem[] = [
   { id: 'customers', label: 'Customers', icon: Users },
   { id: 'wallet', label: 'Wallet', icon: Wallet, badge: '₹32,450', badgeColor: 'dark' },
   { id: 'expenses', label: 'Expenses', icon: ReceiptText },
-  { id: 'assets', label: 'Asset Management', icon: HardDrive },
   { id: 'returns', label: 'Returns & Refunds', icon: RotateCcw, badge: 7, badgeColor: 'muted' },
   { id: 'payouts', label: 'Payouts / Settlements', icon: Landmark },
   { id: 'analytics', label: 'Reports & Analytics', icon: BarChart3 },
@@ -104,7 +103,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 {branding.appName}
               </h1>
               <span className="text-[9px] text-slate-400 font-medium block mt-1 tracking-tight">
-                Making Local Stores Visible.
+                Making Local Stores Viable.
               </span>
             </div>
           </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { SalesOverview } from '../components/dashboard/SalesOverview.js';
+import { GreetingHeader, KpiCards } from '../components/dashboard/SalesOverview.js';
 import { LiveOrderAlerts } from '../components/dashboard/LiveOrderAlerts.js';
 import { RevenueChart } from '../components/dashboard/RevenueChart.js';
 import { CreateNewBillCard } from '../components/dashboard/CreateNewBillCard.js';
@@ -22,43 +22,44 @@ export const DashboardOverviewPage: React.FC<DashboardOverviewPageProps> = ({
   onOpenBulkUpload,
 }) => {
   return (
-    <div className="space-y-6 max-w-7xl mx-auto">
-      {/* 1. Greeting & Top 3 KPI Cards */}
-      <SalesOverview />
+    <div className="space-y-3.5 max-w-[1600px] mx-auto">
+      {/* 1. Greeting & Date Filter */}
+      <GreetingHeader />
 
-      {/* 2. Middle 3-Column Grid: New Orders (Col 1) | Sales Overview (Col 2) | Create Bill + Order Summary (Col 3) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Col 1: New Orders (approx 3.8 cols) */}
-        <div className="lg:col-span-4 flex flex-col">
-          <LiveOrderAlerts onNavigateOrders={() => onNavigate('orders')} />
+      {/* 2. Top Level: Left 9 cols (KPIs + New Orders + Sales Overview) | Right 3 cols (Create New Bill + Order Summary) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 items-stretch">
+        {/* Left Section (approx 75% width) */}
+        <div className="lg:col-span-9 space-y-3.5 flex flex-col justify-between">
+          {/* Top 3 KPI Cards */}
+          <KpiCards />
+
+          {/* New Orders & Sales Overview Chart */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 flex-1 items-stretch">
+            <div className="lg:col-span-6 flex flex-col">
+              <LiveOrderAlerts onNavigateOrders={() => onNavigate('orders')} />
+            </div>
+            <div className="lg:col-span-6 flex flex-col">
+              <RevenueChart />
+            </div>
+          </div>
         </div>
 
-        {/* Col 2: Sales Overview Chart (approx 4.5 cols) */}
-        <div className="lg:col-span-5 flex flex-col">
-          <RevenueChart />
-        </div>
-
-        {/* Col 3: Create New Bill & Order Summary (approx 3.7 cols) */}
-        <div className="lg:col-span-3 space-y-5 flex flex-col justify-between">
+        {/* Right Section (approx 25% width) */}
+        <div className="lg:col-span-3 space-y-3.5 flex flex-col justify-between">
           <CreateNewBillCard onOpenCreateInvoice={() => onNavigate('billing')} />
           <OrderSummaryCard onNavigateStatus={() => onNavigate('orders')} />
         </div>
       </div>
 
-      {/* 3. Bottom 3-Column Grid: Top Selling Products (Col 1) | Low Stock Alert (Col 2) | Quick Actions (Col 3) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Col 1: Top Selling Products */}
-        <div className="lg:col-span-4">
+      {/* 3. Middle 3-Column Grid: Top Selling Products | Low Stock Alert | Quick Actions */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3.5 items-stretch">
+        <div className="flex flex-col">
           <TopProducts />
         </div>
-
-        {/* Col 2: Low Stock Alert */}
-        <div className="lg:col-span-4">
+        <div className="flex flex-col">
           <LowStockWarnings onAddStock={onOpenAddProduct} />
         </div>
-
-        {/* Col 3: Quick Actions */}
-        <div className="lg:col-span-4">
+        <div className="flex flex-col">
           <QuickAccessPanel
             onNavigate={onNavigate}
             onOpenAddProduct={onOpenAddProduct}
