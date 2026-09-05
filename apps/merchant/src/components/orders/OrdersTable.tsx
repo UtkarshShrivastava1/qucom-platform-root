@@ -1,234 +1,546 @@
-import React, { useState } from 'react';
-import { Card } from '../ui/Card.js';
-import { Badge } from '../ui/Badge.js';
-import { Button } from '../ui/Button.js';
-import { Input } from '../ui/Input.js';
-import { Search, Eye, Filter, CheckCircle2, Truck, PackageCheck, Clock } from 'lucide-react';
-
-export interface MerchantOrder {
-  id: string;
-  orderNumber: string;
-  customerName: string;
-  customerPhone: string;
-  deliveryAddress: string;
-  items: Array<{ name: string; quantity: number; price: number; variant?: string }>;
-  totalAmount: number;
-  paymentMethod: 'UPI' | 'Card' | 'COD';
-  fulfilmentMode: 'deliver' | 'pickup' | 'reserve';
-  status: 'pending' | 'confirmed' | 'packed' | 'out_for_delivery' | 'delivered' | 'cancelled';
-  otp: string;
-  createdAt: string;
-}
-
-const mockOrders: MerchantOrder[] = [
-  {
-    id: '1',
-    orderNumber: 'ORD-2026-901',
-    customerName: 'Aarav Patel',
-    customerPhone: '+91 98765 43210',
-    deliveryAddress: 'Flat 402, Green Glen Layout, Bellandur, Bengaluru',
-    items: [
-      { name: 'Slim Fit Cotton Shirt (Navy, L)', quantity: 2, price: 1299 },
-      { name: 'Pure Linen Trousers (Beige, 34)', quantity: 1, price: 1899 },
-    ],
-    totalAmount: 4497,
-    paymentMethod: 'UPI',
-    fulfilmentMode: 'deliver',
-    status: 'pending',
-    otp: '4829',
-    createdAt: '10 mins ago',
-  },
-  {
-    id: '2',
-    orderNumber: 'ORD-2026-902',
-    customerName: 'Sneha Kulkarni',
-    customerPhone: '+91 98112 34567',
-    deliveryAddress: 'In-Store Customer Pickup',
-    items: [
-      { name: 'Leather Formal Shoes (Brown, UK 9)', quantity: 1, price: 2999 },
-    ],
-    totalAmount: 2999,
-    paymentMethod: 'Card',
-    fulfilmentMode: 'pickup',
-    status: 'confirmed',
-    otp: '9102',
-    createdAt: '25 mins ago',
-  },
-  {
-    id: '3',
-    orderNumber: 'ORD-2026-903',
-    customerName: 'Karthik Raja',
-    customerPhone: '+91 97401 22334',
-    deliveryAddress: '12th Cross, Indiranagar, Bengaluru',
-    items: [
-      { name: 'Casual Denim Jacket (Blue, M)', quantity: 1, price: 2499 },
-      { name: 'Graphic Printed Tee (White, M)', quantity: 2, price: 699 },
-    ],
-    totalAmount: 3897,
-    paymentMethod: 'UPI',
-    fulfilmentMode: 'deliver',
-    status: 'packed',
-    otp: '3341',
-    createdAt: '1 hour ago',
-  },
-  {
-    id: '4',
-    orderNumber: 'ORD-2026-904',
-    customerName: 'Divya Nambiar',
-    customerPhone: '+91 99887 76655',
-    deliveryAddress: '5th Main, Koramangala 4th Block, Bengaluru',
-    items: [
-      { name: 'Silk Embroidered Saree (Maroon)', quantity: 1, price: 4500 },
-    ],
-    totalAmount: 4500,
-    paymentMethod: 'COD',
-    fulfilmentMode: 'deliver',
-    status: 'out_for_delivery',
-    otp: '7721',
-    createdAt: '2 hours ago',
-  },
-  {
-    id: '5',
-    orderNumber: 'ORD-2026-905',
-    customerName: 'Rohan Verma',
-    customerPhone: '+91 96543 21098',
-    deliveryAddress: 'HSR Layout Sector 2, Bengaluru',
-    items: [
-      { name: 'Chino Shorts (Khaki, 32)', quantity: 2, price: 899 },
-    ],
-    totalAmount: 1798,
-    paymentMethod: 'UPI',
-    fulfilmentMode: 'deliver',
-    status: 'delivered',
-    otp: '5519',
-    createdAt: '5 hours ago',
-  },
-];
-
-const statusBadgeMap: Record<MerchantOrder['status'], { label: string; variant: 'warning' | 'info' | 'brand' | 'success' | 'danger' }> = {
-  pending: { label: 'Pending Approval', variant: 'warning' },
-  confirmed: { label: 'Confirmed', variant: 'info' },
-  packed: { label: 'Packed & Ready', variant: 'brand' },
-  out_for_delivery: { label: 'Out for Delivery', variant: 'info' },
-  delivered: { label: 'Delivered', variant: 'success' },
-  cancelled: { label: 'Cancelled', variant: 'danger' },
-};
+import React from 'react';
+import {
+  Printer,
+  Eye,
+  MessageSquare,
+  ChevronDown,
+  ExternalLink,
+} from 'lucide-react';
+import {
+  OrderTab,
+  MerchantOrderRecord,
+  useOrderStore,
+} from '../../stores/orderStore.js';
 
 interface OrdersTableProps {
-  onSelectOrder: (order: MerchantOrder) => void;
+  onViewOrder: (order: MerchantOrderRecord) => void;
+  onPrintOrder: (order: MerchantOrderRecord) => void;
 }
 
-export const OrdersTable: React.FC<OrdersTableProps> = ({ onSelectOrder }) => {
-  const [orders, setOrders] = useState<MerchantOrder[]>(mockOrders);
-  const [selectedStatus, setSelectedStatus] = useState<string>('all');
-  const [searchQuery, setSearchQuery] = useState('');
+// Visual clothing category thumbnail matching mockups
+const ClothingThumbnail: React.FC<{ type: string }> = ({ type }) => {
+  switch (type) {
+    case 'kurti':
+    case 'dress':
+      return (
+        <div className="w-9 h-9 rounded-xl bg-rose-50 border border-rose-100/80 flex items-center justify-center shrink-0 shadow-2xs">
+          <svg viewBox="0 0 24 24" className="w-5 h-5 text-rose-500" fill="currentColor">
+            <path d="M12 2L9 5H5v4l2 1v12h10V10l2-1V5h-4l-3-3zm0 3c.6 0 1 .4 1 1s-.4 1-1 1-1-.4-1-1 .4-1 1-1z" />
+          </svg>
+        </div>
+      );
+    case 'jeans':
+    case 'shorts':
+      return (
+        <div className="w-9 h-9 rounded-xl bg-slate-100 border border-slate-200/80 flex items-center justify-center shrink-0 shadow-2xs">
+          <svg viewBox="0 0 24 24" className="w-5 h-5 text-slate-700" fill="currentColor">
+            <path d="M6 3h12v4l-2 15h-3l-1-10-1 10H8L6 7V3z" />
+          </svg>
+        </div>
+      );
+    case 'saree':
+      return (
+        <div className="w-9 h-9 rounded-xl bg-amber-50 border border-amber-100/80 flex items-center justify-center shrink-0 shadow-2xs">
+          <svg viewBox="0 0 24 24" className="w-5 h-5 text-amber-600" fill="currentColor">
+            <path d="M12 2c-3 0-5 3-5 6v14h10V8c0-3-2-6-5-6zm0 2c1.7 0 3 2.3 3 4H9c0-1.7 1.3-4 3-4z" />
+          </svg>
+        </div>
+      );
+    case 'tshirt':
+    default:
+      return (
+        <div className="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center shrink-0 shadow-2xs">
+          <svg viewBox="0 0 24 24" className="w-5 h-5 text-slate-100" fill="currentColor">
+            <path d="M16 2l4 4-2 3-2-1v14H8V8L6 9 4 6l4-4h2a3 3 0 004 0h2z" />
+          </svg>
+        </div>
+      );
+  }
+};
 
-  const filterTabs = ['all', 'pending', 'confirmed', 'packed', 'out_for_delivery', 'delivered'];
+export const OrdersTable: React.FC<OrdersTableProps> = ({ onViewOrder, onPrintOrder }) => {
+  const {
+    orders,
+    activeTab,
+    searchQuery,
+    paymentStatusFilter,
+    orderStatusFilter,
+    fulfillmentTypeFilter,
+    selectedOrderIds,
+    toggleOrderSelection,
+    selectAllOrders,
+    clearSelection,
+    acceptOrder,
+    rejectOrder,
+    markReadyToShip,
+  } = useOrderStore();
 
-  const filteredOrders = orders.filter((order) => {
-    const matchesStatus = selectedStatus === 'all' || order.status === selectedStatus;
-    const matchesSearch =
-      order.orderNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.customerPhone.includes(searchQuery);
-    return matchesStatus && matchesSearch;
+  // Filter orders by tab and search
+  const tabFilteredOrders = orders.filter((order) => {
+    // 1. Tab match
+    let matchesTab = true;
+    switch (activeTab) {
+      case 'new_orders':
+        matchesTab = order.status === 'new';
+        break;
+      case 'accepted':
+        matchesTab = order.status === 'accepted';
+        break;
+      case 'ready_to_ship':
+        matchesTab = order.status === 'ready_to_ship';
+        break;
+      case 'shipped':
+        matchesTab = order.status === 'shipped';
+        break;
+      case 'delivered':
+        matchesTab = order.status === 'delivered';
+        break;
+      case 'cancelled':
+        matchesTab = order.status === 'cancelled';
+        break;
+      case 'returns':
+        matchesTab = order.status === 'return_requested' || order.status === 'returned';
+        break;
+      case 'all_orders':
+      default:
+        matchesTab = true;
+        break;
+    }
+
+    // 2. Search query match
+    let matchesSearch = true;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      matchesSearch =
+        order.orderNumber.toLowerCase().includes(q) ||
+        order.customer.name.toLowerCase().includes(q) ||
+        order.customer.email.toLowerCase().includes(q) ||
+        order.customer.phone.includes(q) ||
+        order.itemsSummary.title.toLowerCase().includes(q);
+    }
+
+    // 3. Payment status filter
+    let matchesPayment = true;
+    if (paymentStatusFilter !== 'all') {
+      matchesPayment = order.payment.status.toLowerCase() === paymentStatusFilter;
+    }
+
+    // 4. Order status filter
+    let matchesStatus = true;
+    if (orderStatusFilter !== 'all') {
+      matchesStatus = order.status === orderStatusFilter;
+    }
+
+    return matchesTab && matchesSearch && matchesPayment && matchesStatus;
   });
 
+  const allSelected =
+    tabFilteredOrders.length > 0 &&
+    tabFilteredOrders.every((o) => selectedOrderIds.includes(o.id));
+
+  const handleSelectAllToggle = () => {
+    if (allSelected) {
+      clearSelection();
+    } else {
+      selectAllOrders(tabFilteredOrders.map((o) => o.id));
+    }
+  };
+
   return (
-    <Card className="p-5 space-y-5">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-xl font-bold text-slate-100">Orders Management</h2>
-          <p className="text-xs text-slate-400">Track and fulfill incoming customer transactions in real-time</p>
-        </div>
-
-        <div className="w-full sm:w-72">
-          <Input
-            placeholder="Search order ID, name or phone..."
-            leftIcon={<Search className="w-4 h-4" />}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-      </div>
-
-      {/* Filter Tabs */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 border-b border-slate-800 text-xs">
-        {filterTabs.map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setSelectedStatus(tab)}
-            className={`px-3.5 py-2 rounded-xl font-semibold capitalize whitespace-nowrap transition-all ${
-              selectedStatus === tab
-                ? 'bg-brand-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
-            }`}
-          >
-            {tab.replace(/_/g, ' ')}
-          </button>
-        ))}
-      </div>
-
-      {/* Orders Table */}
-      <div className="overflow-x-auto rounded-xl border border-slate-800">
+    <div className="rounded-2xl bg-white border border-slate-200/80 shadow-2xs overflow-hidden">
+      {/* Scrollable Table Wrapper */}
+      <div className="overflow-x-auto">
         <table className="w-full text-left text-xs">
-          <thead className="bg-slate-950 text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-800">
+          {/* Table Header */}
+          <thead className="bg-[#f8fafc] text-slate-700 font-semibold border-b border-slate-200">
             <tr>
-              <th className="p-3.5">Order ID</th>
-              <th className="p-3.5">Customer</th>
-              <th className="p-3.5">Items</th>
-              <th className="p-3.5">Total & Payment</th>
-              <th className="p-3.5">Mode</th>
-              <th className="p-3.5">Status</th>
-              <th className="p-3.5 text-right">Action</th>
+              {/* Checkbox */}
+              <th className="py-3 px-3.5 w-10">
+                <input
+                  type="checkbox"
+                  checked={allSelected}
+                  onChange={handleSelectAllToggle}
+                  className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-slate-300 cursor-pointer"
+                />
+              </th>
+
+              {/* Order Details */}
+              <th className="py-3 px-3 min-w-[130px]">Order Details</th>
+
+              {/* Customer */}
+              <th className="py-3 px-3 min-w-[160px]">Customer</th>
+
+              {/* Items */}
+              <th className="py-3 px-3 min-w-[180px]">Items</th>
+
+              {/* Amount */}
+              <th className="py-3 px-3 min-w-[90px]">Amount</th>
+
+              {/* Payment (on all except Returns where it's replaced or shown) */}
+              {activeTab !== 'returns' && (
+                <th className="py-3 px-3 min-w-[100px]">Payment</th>
+              )}
+
+              {/* Tab-Specific Columns */}
+              {(activeTab === 'accepted' || activeTab === 'ready_to_ship') && (
+                <th className="py-3 px-3 min-w-[90px]">OTP</th>
+              )}
+
+              {activeTab === 'shipped' && (
+                <>
+                  <th className="py-3 px-3 min-w-[110px]">Shipped On</th>
+                  <th className="py-3 px-3 min-w-[160px]">Courier Details</th>
+                </>
+              )}
+
+              {activeTab === 'delivered' && (
+                <>
+                  <th className="py-3 px-3 min-w-[110px]">Delivered On</th>
+                  <th className="py-3 px-3 min-w-[200px]">Delivery Address</th>
+                </>
+              )}
+
+              {activeTab === 'cancelled' && (
+                <>
+                  <th className="py-3 px-3 min-w-[110px]">Cancelled On</th>
+                  <th className="py-3 px-3 min-w-[160px]">Cancellation Reason</th>
+                  <th className="py-3 px-3 min-w-[130px]">Refund Status</th>
+                </>
+              )}
+
+              {activeTab === 'all_orders' && (
+                <>
+                  <th className="py-3 px-3 min-w-[110px]">Order Status</th>
+                  <th className="py-3 px-3 min-w-[140px]">Current Stage</th>
+                </>
+              )}
+
+              {activeTab === 'returns' && (
+                <>
+                  <th className="py-3 px-3 min-w-[120px]">Return Status</th>
+                  <th className="py-3 px-3 min-w-[120px]">Refund Status</th>
+                  <th className="py-3 px-3 min-w-[160px]">Return Reason</th>
+                </>
+              )}
+
+              {/* Order Time (for new_orders, accepted, ready_to_ship) */}
+              {['new_orders', 'accepted', 'ready_to_ship'].includes(activeTab) && (
+                <th className="py-3 px-3 min-w-[110px]">Order Time</th>
+              )}
+
+              {/* Actions Header */}
+              <th className="py-3 px-3.5 text-center min-w-[130px]">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/80 bg-slate-900/40">
-            {filteredOrders.length === 0 ? (
+
+          {/* Table Body */}
+          <tbody className="divide-y divide-slate-100">
+            {tabFilteredOrders.length === 0 ? (
               <tr>
-                <td colSpan={7} className="p-8 text-center text-slate-500">
-                  No orders found matching this filter.
+                <td colSpan={10} className="py-12 text-center text-slate-400">
+                  <p className="text-sm font-semibold text-slate-600">No orders found</p>
+                  <p className="text-xs text-slate-400 mt-1">There are no orders matching this filter or tab.</p>
                 </td>
               </tr>
             ) : (
-              filteredOrders.map((order) => {
-                const badge = statusBadgeMap[order.status];
+              tabFilteredOrders.map((order) => {
+                const isSelected = selectedOrderIds.includes(order.id);
+
                 return (
-                  <tr key={order.id} className="hover:bg-slate-850/50 transition-colors">
-                    <td className="p-3.5 font-bold text-slate-200">
-                      <div>{order.orderNumber}</div>
-                      <span className="text-[10px] text-slate-500">{order.createdAt}</span>
+                  <tr
+                    key={order.id}
+                    className={`transition-colors hover:bg-slate-50/80 ${
+                      isSelected ? 'bg-blue-50/30' : ''
+                    }`}
+                  >
+                    {/* Checkbox */}
+                    <td className="py-3.5 px-3.5">
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => toggleOrderSelection(order.id)}
+                        className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-slate-300 cursor-pointer"
+                      />
                     </td>
-                    <td className="p-3.5">
-                      <div className="font-semibold text-slate-200">{order.customerName}</div>
-                      <div className="text-[11px] text-slate-400">{order.customerPhone}</div>
+
+                    {/* Order Details */}
+                    <td className="py-3.5 px-3">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        {activeTab === 'new_orders' && (
+                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-600 text-white leading-none">
+                            New
+                          </span>
+                        )}
+                        <span className="font-bold text-blue-600 hover:underline cursor-pointer">
+                          {order.orderNumber}
+                        </span>
+                      </div>
+
+                      {/* Subtitle state */}
+                      <div className="text-[10px] mt-0.5 font-medium">
+                        {activeTab === 'new_orders' && (
+                          <span className="text-slate-400">{order.orderType}</span>
+                        )}
+                        {activeTab === 'accepted' && (
+                          <span className="text-emerald-600 font-semibold">Accepted</span>
+                        )}
+                        {activeTab === 'ready_to_ship' && (
+                          <span className="text-amber-600 font-semibold">Ready to Ship</span>
+                        )}
+                        {activeTab === 'shipped' && (
+                          <span className="text-emerald-600 font-semibold">Shipped</span>
+                        )}
+                        {activeTab === 'delivered' && (
+                          <span className="text-emerald-600 font-semibold">Delivered</span>
+                        )}
+                        {activeTab === 'cancelled' && (
+                          <span className="text-rose-600 font-semibold">Cancelled</span>
+                        )}
+                        {activeTab === 'returns' && (
+                          <span className="text-rose-600 font-semibold">Return Requested</span>
+                        )}
+                        {activeTab === 'all_orders' && (
+                          <span className="text-slate-400">{order.orderType}</span>
+                        )}
+                      </div>
                     </td>
-                    <td className="p-3.5 max-w-xs truncate text-slate-300">
-                      {order.items.map((i) => `${i.name} (x${i.quantity})`).join(', ')}
+
+                    {/* Customer */}
+                    <td className="py-3.5 px-3">
+                      <div className="font-bold text-slate-900 text-xs">{order.customer.name}</div>
+                      <div className="text-[10px] text-slate-500 mt-0.5">{order.customer.email}</div>
+                      <div className="text-[10px] text-slate-500">{order.customer.phone}</div>
                     </td>
-                    <td className="p-3.5">
-                      <div className="font-bold text-slate-100">₹ {order.totalAmount.toLocaleString('en-IN')}</div>
-                      <div className="text-[10px] text-slate-400">{order.paymentMethod}</div>
+
+                    {/* Items */}
+                    <td className="py-3.5 px-3">
+                      <div className="flex items-center gap-2.5">
+                        <ClothingThumbnail type={order.itemsSummary.categoryIconType} />
+                        <div className="min-w-0">
+                          <div className="font-bold text-slate-900 text-xs">
+                            {order.itemsSummary.count} items
+                          </div>
+                          <div className="text-[11px] text-slate-600 truncate mt-0.5">
+                            {order.itemsSummary.title}
+                          </div>
+                          {order.itemsSummary.extraCount && (
+                            <div className="text-[10px] text-slate-400">
+                              +{order.itemsSummary.extraCount} more
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </td>
-                    <td className="p-3.5">
-                      <Badge variant={order.fulfilmentMode === 'deliver' ? 'brand' : 'info'} size="sm">
-                        {order.fulfilmentMode === 'deliver' ? 'Deliver' : 'Pickup'}
-                      </Badge>
+
+                    {/* Amount */}
+                    <td className="py-3.5 px-3">
+                      <span className="font-bold text-slate-900 text-xs">
+                        ₹{order.pricing.totalAmount.toLocaleString('en-IN')}
+                      </span>
                     </td>
-                    <td className="p-3.5">
-                      <Badge variant={badge.variant} size="sm">
-                        {badge.label}
-                      </Badge>
-                    </td>
-                    <td className="p-3.5 text-right">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => onSelectOrder(order)}
-                      >
-                        <Eye className="w-3.5 h-3.5 mr-1" />
-                        <span>Manage</span>
-                      </Button>
+
+                    {/* Payment (when not Returns) */}
+                    {activeTab !== 'returns' && (
+                      <td className="py-3.5 px-3">
+                        <div className="font-bold text-emerald-600 text-xs">
+                          {order.payment.status}
+                        </div>
+                        <div className="text-[10px] text-slate-500 mt-0.5">
+                          {order.payment.paymentMethod}
+                        </div>
+                        <div className="text-[10px] text-slate-500">
+                          {order.payment.mode}
+                        </div>
+                      </td>
+                    )}
+
+                    {/* TAB SPECIFIC DATA CELLS */}
+
+                    {/* OTP Column for Accepted & Ready to Ship */}
+                    {(activeTab === 'accepted' || activeTab === 'ready_to_ship') && (
+                      <td className="py-3.5 px-3">
+                        <span className="font-extrabold text-slate-900 text-sm tracking-wide font-mono">
+                          {order.otp}
+                        </span>
+                      </td>
+                    )}
+
+                    {/* Shipped On & Courier Details for Shipped */}
+                    {activeTab === 'shipped' && (
+                      <>
+                        <td className="py-3.5 px-3 text-slate-700 whitespace-pre-line text-[11px]">
+                          {order.timestamps.shippedAt || '19 May 2024\n10:20 AM'}
+                        </td>
+                        <td className="py-3.5 px-3">
+                          <div className="font-bold text-slate-900 text-xs">
+                            {order.courier?.partner || 'Delhivery'}
+                          </div>
+                          <div className="text-[10px] text-slate-500 mt-0.5">
+                            Tracking ID: {order.courier?.trackingId || '1234567890123'}
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => alert(`Tracking parcel #${order.courier?.trackingId} on ${order.courier?.partner}`)}
+                            className="text-blue-600 hover:underline font-semibold text-[11px] block mt-0.5 cursor-pointer"
+                          >
+                            Track Order
+                          </button>
+                        </td>
+                      </>
+                    )}
+
+                    {/* Delivered On & Delivery Address for Delivered */}
+                    {activeTab === 'delivered' && (
+                      <>
+                        <td className="py-3.5 px-3 text-slate-700 whitespace-pre-line text-[11px]">
+                          {order.timestamps.deliveredAt || '19 May 2024\n12:30 PM'}
+                        </td>
+                        <td className="py-3.5 px-3">
+                          <div className="font-bold text-slate-900 text-xs">
+                            {order.customer.name}
+                          </div>
+                          <div className="text-[11px] text-slate-500 mt-0.5 leading-snug">
+                            {order.deliveryAddress.street}
+                          </div>
+                          <div className="text-[10px] text-slate-400">
+                            {order.deliveryAddress.city} - {order.deliveryAddress.pincode}
+                          </div>
+                        </td>
+                      </>
+                    )}
+
+                    {/* Cancelled Info */}
+                    {activeTab === 'cancelled' && (
+                      <>
+                        <td className="py-3.5 px-3 text-slate-700 whitespace-pre-line text-[11px]">
+                          {order.timestamps.cancelledAt || '18 May 2024\n01:15 PM'}
+                        </td>
+                        <td className="py-3.5 px-3 text-slate-700 text-[11px] max-w-xs">
+                          {order.cancellation?.reason || 'Customer requested cancellation'}
+                        </td>
+                        <td className="py-3.5 px-3">
+                          <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+                            {order.cancellation?.refundStatus || 'Refund Initiated'}
+                          </span>
+                        </td>
+                      </>
+                    )}
+
+                    {/* All Orders Info */}
+                    {activeTab === 'all_orders' && (
+                      <>
+                        <td className="py-3.5 px-3">
+                          <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200/60 capitalize">
+                            {order.status.replace(/_/g, ' ')}
+                          </span>
+                        </td>
+                        <td className="py-3.5 px-3 text-slate-600 text-[11px]">
+                          {order.currentStageName || 'Stage 01: New Order'}
+                        </td>
+                      </>
+                    )}
+
+                    {/* Returns Info */}
+                    {activeTab === 'returns' && (
+                      <>
+                        <td className="py-3.5 px-3">
+                          <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200/60">
+                            {order.returns?.returnStatus || 'Pickup Scheduled'}
+                          </span>
+                        </td>
+                        <td className="py-3.5 px-3 text-slate-600 text-[11px]">
+                          {order.returns?.refundStatus || 'Pending Inspection'}
+                        </td>
+                        <td className="py-3.5 px-3 text-slate-700 text-[11px] max-w-xs">
+                          {order.returns?.returnReason || 'Size did not fit'}
+                        </td>
+                      </>
+                    )}
+
+                    {/* Order Time (for new_orders, accepted, ready_to_ship) */}
+                    {['new_orders', 'accepted', 'ready_to_ship'].includes(activeTab) && (
+                      <td className="py-3.5 px-3 text-slate-700 whitespace-pre-line text-[11px]">
+                        {order.timestamps.createdAt}
+                      </td>
+                    )}
+
+                    {/* Actions Column */}
+                    <td className="py-3.5 px-3.5 text-right">
+                      <div className="flex items-center justify-end gap-1.5">
+                        {/* New Orders: Accept & Reject */}
+                        {activeTab === 'new_orders' && (
+                          <>
+                            <button
+                              type="button"
+                              onClick={() => acceptOrder(order.id)}
+                              className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition-colors shadow-2xs"
+                            >
+                              Accept Order
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => rejectOrder(order.id)}
+                              className="px-2 py-1.5 rounded-lg text-rose-600 hover:text-rose-700 hover:bg-rose-50 font-semibold text-xs transition-colors"
+                            >
+                              Reject
+                            </button>
+                          </>
+                        )}
+
+                        {/* Accepted: Ready to Ship */}
+                        {activeTab === 'accepted' && (
+                          <button
+                            type="button"
+                            onClick={() => markReadyToShip(order.id)}
+                            className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition-colors shadow-2xs"
+                          >
+                            Ready to Ship
+                          </button>
+                        )}
+
+                        {/* Ready to Ship: Ready to Ship / Dispatch */}
+                        {activeTab === 'ready_to_ship' && (
+                          <button
+                            type="button"
+                            onClick={() => alert(`Dispatched order ${order.orderNumber} to delivery runner`)}
+                            className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition-colors shadow-2xs"
+                          >
+                            Ready to Ship
+                          </button>
+                        )}
+
+                        {/* Print Invoice Button */}
+                        <button
+                          type="button"
+                          onClick={() => onPrintOrder(order)}
+                          className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-blue-600 transition-colors"
+                          title="Print Shipping Label / Invoice"
+                        >
+                          <Printer className="w-4 h-4" />
+                        </button>
+
+                        {/* View Details Button */}
+                        <button
+                          type="button"
+                          onClick={() => onViewOrder(order)}
+                          className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-blue-600 transition-colors"
+                          title="View Order Details"
+                        >
+                          <Eye className="w-4 h-4" />
+                        </button>
+
+                        {/* Direct Chat icon for Returns tab */}
+                        {activeTab === 'returns' && (
+                          <button
+                            type="button"
+                            onClick={() => alert(`Opening merchant chat with customer ${order.customer.name}`)}
+                            className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-blue-600 transition-colors"
+                            title="Chat with Customer"
+                          >
+                            <MessageSquare className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 );
@@ -237,6 +549,18 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({ onSelectOrder }) => {
           </tbody>
         </table>
       </div>
-    </Card>
+
+      {/* Footer: Scroll down to load more orders */}
+      <div className="py-3 border-t border-slate-100 text-center bg-white">
+        <button
+          type="button"
+          onClick={() => alert('All active orders loaded')}
+          className="text-xs text-slate-500 hover:text-slate-800 font-medium inline-flex items-center gap-1 transition-colors"
+        >
+          <span>Scroll down to load more orders</span>
+          <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+        </button>
+      </div>
+    </div>
   );
 };

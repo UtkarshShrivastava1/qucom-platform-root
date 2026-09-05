@@ -5,6 +5,7 @@ import { OnboardingPage } from './pages/OnboardingPage.js';
 import { LoginPage } from './pages/LoginPage.js';
 import { DashboardOverviewPage } from './pages/DashboardOverviewPage.js';
 import { OrdersPage } from './pages/OrdersPage.js';
+import { CreateOrderPage } from './pages/CreateOrderPage.js';
 import { CatalogPage } from './pages/CatalogPage.js';
 import { StoreSettingsPage } from './pages/StoreSettingsPage.js';
 import { Sidebar, DashboardTab } from './components/dashboard/Sidebar.js';
@@ -18,6 +19,7 @@ export const App: React.FC = () => {
 
   const [currentView, setCurrentView] = useState<'onboarding' | 'login' | 'dashboard'>('onboarding');
   const [currentTab, setCurrentTab] = useState<DashboardTab>('overview');
+  const [isCreateOrderView, setIsCreateOrderView] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -62,6 +64,7 @@ export const App: React.FC = () => {
           currentTab={currentTab}
           onSelectTab={(tab) => {
             setCurrentTab(tab);
+            setIsCreateOrderView(false);
             setIsMobileMenuOpen(false);
           }}
           isCollapsed={isSidebarCollapsed}
@@ -83,13 +86,22 @@ export const App: React.FC = () => {
         >
           {currentTab === 'overview' && (
             <DashboardOverviewPage
-              onNavigate={(tab) => setCurrentTab(tab)}
+              onNavigate={(tab) => {
+                setCurrentTab(tab);
+                setIsCreateOrderView(false);
+              }}
               onOpenAddProduct={() => setIsGlobalAddOpen(true)}
               onOpenBulkUpload={() => setIsGlobalBulkOpen(true)}
             />
           )}
 
-          {currentTab === 'orders' && <OrdersPage />}
+          {currentTab === 'orders' && (
+            isCreateOrderView ? (
+              <CreateOrderPage onBack={() => setIsCreateOrderView(false)} />
+            ) : (
+              <OrdersPage onOpenCreateOrder={() => setIsCreateOrderView(true)} />
+            )
+          )}
 
           {currentTab === 'catalog' && <CatalogPage />}
 
