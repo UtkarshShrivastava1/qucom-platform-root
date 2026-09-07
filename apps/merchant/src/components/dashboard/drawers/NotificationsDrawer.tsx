@@ -10,6 +10,7 @@ import {
   Store,
   ArrowRight,
 } from 'lucide-react';
+import { branding } from '@repo/shared-types/branding.config';
 
 interface NotificationsDrawerProps {
   isOpen: boolean;
@@ -38,7 +39,7 @@ const initialNotifications: NotificationItem[] = [
     title: 'New order received',
     description: (
       <>
-        Order <strong className="font-semibold text-slate-800">#VZT10325</strong> has been placed by Rohan Verma for ₹2,799
+        Order <strong className="font-semibold text-slate-800">#ORD-10325</strong> has been placed by Rohan Verma for ₹2,799
       </>
     ),
     time: 'Just now',
@@ -53,7 +54,7 @@ const initialNotifications: NotificationItem[] = [
     title: 'New order received',
     description: (
       <>
-        Order <strong className="font-semibold text-slate-800">#VZT10324</strong> has been placed by Sneha Kapoor for ₹1,649
+        Order <strong className="font-semibold text-slate-800">#ORD-10324</strong> has been placed by Sneha Kapoor for ₹1,649
       </>
     ),
     time: '5m ago',
@@ -101,7 +102,7 @@ const initialNotifications: NotificationItem[] = [
     title: 'Order shipped',
     description: (
       <>
-        Order <strong className="font-semibold text-slate-800">#VZT10318</strong> has been shipped via Delhivery.
+        Order <strong className="font-semibold text-slate-800">#ORD-10318</strong> has been shipped via Delhivery.
       </>
     ),
     time: '3h ago',
@@ -124,7 +125,7 @@ const initialNotifications: NotificationItem[] = [
   {
     id: '8',
     category: 'system',
-    title: 'Welcome to Viztore!',
+    title: `Welcome to ${branding.appName}!`,
     description: 'Complete your store setup and start selling to grow your business.',
     time: '1d ago',
     isUnread: false,

@@ -6,6 +6,7 @@ import {
   ChevronDown,
   Headphones,
 } from 'lucide-react';
+import { branding } from '@repo/shared-types/branding.config';
 
 interface HelpSupportDrawerProps {
   isOpen: boolean;
@@ -61,8 +62,8 @@ const faqItems: FaqItem[] = [
   },
   {
     id: '9',
-    question: 'How can I contact Viztore support?',
-    answer: 'Reach our merchant support team 24/7 via phone at 1800-123-4567 or email at support@viztore.com.',
+    question: `How can I contact ${branding.appName} support?`,
+    answer: `Reach our merchant support team 24/7 via phone at 1800-123-4567 or email at ${branding.supportEmail}.`,
   },
 ];
 
@@ -160,7 +161,7 @@ export const HelpSupportDrawer: React.FC<HelpSupportDrawerProps> = ({ isOpen, on
 
             <button
               type="button"
-              onClick={() => alert('Contacting Viztore support...')}
+              onClick={() => alert(`Contacting ${branding.appName} support...`)}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-200 hover:border-slate-300 hover:bg-slate-50 bg-white text-blue-600 text-xs font-semibold shadow-2xs transition-all"
             >
               <Headphones className="w-4 h-4 text-blue-600" />
@@ -169,7 +170,7 @@ export const HelpSupportDrawer: React.FC<HelpSupportDrawerProps> = ({ isOpen, on
 
             <div className="text-[11px] text-slate-500 space-y-0.5 pt-1">
               <p>Call us: <span className="font-semibold text-slate-700">1800-123-4567</span></p>
-              <p>Email: <span className="font-semibold text-blue-600 hover:underline cursor-pointer">support@viztore.com</span></p>
+              <p>Email: <span className="font-semibold text-blue-600 hover:underline cursor-pointer">{branding.supportEmail}</span></p>
             </div>
           </div>
         </div>
