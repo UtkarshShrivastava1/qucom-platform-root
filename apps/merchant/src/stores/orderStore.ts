@@ -130,8 +130,8 @@ interface OrderStoreState {
 const initialMockOrders: MerchantOrderRecord[] = [
   // 1. New Orders
   {
-    id: 'vzt-1',
-    orderNumber: '#VZT10325',
+    id: 'ord-1',
+    orderNumber: '#ORD-10325',
     orderType: 'Online Order',
     status: 'new',
     customer: {
@@ -176,8 +176,8 @@ const initialMockOrders: MerchantOrderRecord[] = [
     currentStageName: 'New Order (19 May)',
   },
   {
-    id: 'vzt-2',
-    orderNumber: '#VZT10324',
+    id: 'ord-2',
+    orderNumber: '#ORD-10324',
     orderType: 'Online Order',
     status: 'new',
     customer: {
@@ -221,8 +221,8 @@ const initialMockOrders: MerchantOrderRecord[] = [
     currentStageName: 'New Order (19 May)',
   },
   {
-    id: 'vzt-3',
-    orderNumber: '#VZT10323',
+    id: 'ord-3',
+    orderNumber: '#ORD-10323',
     orderType: 'Online Order',
     status: 'new',
     customer: {
@@ -265,8 +265,8 @@ const initialMockOrders: MerchantOrderRecord[] = [
     currentStageName: 'New Order (19 May)',
   },
   {
-    id: 'vzt-4',
-    orderNumber: '#VZT10322',
+    id: 'ord-4',
+    orderNumber: '#ORD-10322',
     orderType: 'Online Order',
     status: 'new',
     customer: {
@@ -311,8 +311,8 @@ const initialMockOrders: MerchantOrderRecord[] = [
     currentStageName: 'New Order (19 May)',
   },
   {
-    id: 'vzt-5',
-    orderNumber: '#VZT10321',
+    id: 'ord-5',
+    orderNumber: '#ORD-10321',
     orderType: 'Online Order',
     status: 'new',
     customer: {
@@ -356,8 +356,8 @@ const initialMockOrders: MerchantOrderRecord[] = [
     currentStageName: 'New Order (19 May)',
   },
   {
-    id: 'vzt-6',
-    orderNumber: '#VZT10320',
+    id: 'ord-6',
+    orderNumber: '#ORD-10320',
     orderType: 'Online Order',
     status: 'new',
     customer: {
@@ -402,8 +402,8 @@ const initialMockOrders: MerchantOrderRecord[] = [
 
   // 2. Accepted Orders
   {
-    id: 'vzt-acc-1',
-    orderNumber: '#VZT10098',
+    id: 'ord-acc-1',
+    orderNumber: '#ORD-10098',
     orderType: 'Online Order',
     status: 'accepted',
     customer: {
@@ -449,8 +449,8 @@ const initialMockOrders: MerchantOrderRecord[] = [
     currentStageName: 'Accepted (19 May)',
   },
   {
-    id: 'vzt-acc-2',
-    orderNumber: '#VZT10097',
+    id: 'ord-acc-2',
+    orderNumber: '#ORD-10097',
     orderType: 'Online Order',
     status: 'accepted',
     customer: {
@@ -495,8 +495,8 @@ const initialMockOrders: MerchantOrderRecord[] = [
     currentStageName: 'Accepted (19 May)',
   },
   {
-    id: 'vzt-acc-3',
-    orderNumber: '#VZT10096',
+    id: 'ord-acc-3',
+    orderNumber: '#ORD-10096',
     orderType: 'Online Order',
     status: 'accepted',
     customer: {
@@ -542,8 +542,8 @@ const initialMockOrders: MerchantOrderRecord[] = [
 
   // 3. Ready to Ship Orders
   {
-    id: 'vzt-rts-1',
-    orderNumber: '#VZT10098',
+    id: 'ord-rts-1',
+    orderNumber: '#ORD-10098',
     orderType: 'Online Order',
     status: 'ready_to_ship',
     customer: {
@@ -589,8 +589,8 @@ const initialMockOrders: MerchantOrderRecord[] = [
     currentStageName: 'Ready to Ship (19 May)',
   },
   {
-    id: 'vzt-rts-2',
-    orderNumber: '#VZT10097',
+    id: 'ord-rts-2',
+    orderNumber: '#ORD-10097',
     orderType: 'Online Order',
     status: 'ready_to_ship',
     customer: {
@@ -635,8 +635,8 @@ const initialMockOrders: MerchantOrderRecord[] = [
     currentStageName: 'Ready to Ship (19 May)',
   },
   {
-    id: 'vzt-rts-3',
-    orderNumber: '#VZT10096',
+    id: 'ord-rts-3',
+    orderNumber: '#ORD-10096',
     orderType: 'Online Order',
     status: 'ready_to_ship',
     customer: {
@@ -682,8 +682,8 @@ const initialMockOrders: MerchantOrderRecord[] = [
 
   // 4. Shipped Orders
   {
-    id: 'vzt-shp-1',
-    orderNumber: '#VZT10089',
+    id: 'ord-shp-1',
+    orderNumber: '#ORD-10089',
     orderType: 'Online Order',
     status: 'shipped',
     customer: {
@@ -734,8 +734,8 @@ const initialMockOrders: MerchantOrderRecord[] = [
     currentStageName: 'Shipped (19 May)',
   },
   {
-    id: 'vzt-shp-2',
-    orderNumber: '#VZT10088',
+    id: 'ord-shp-2',
+    orderNumber: '#ORD-10088',
     orderType: 'Online Order',
     status: 'shipped',
     customer: {
@@ -785,8 +785,8 @@ const initialMockOrders: MerchantOrderRecord[] = [
     currentStageName: 'Shipped (19 May)',
   },
   {
-    id: 'vzt-shp-3',
-    orderNumber: '#VZT10087',
+    id: 'ord-shp-3',
+    orderNumber: '#ORD-10087',
     orderType: 'Online Order',
     status: 'shipped',
     customer: {
@@ -837,8 +837,8 @@ const initialMockOrders: MerchantOrderRecord[] = [
 
   // 5. Delivered Orders
   {
-    id: 'vzt-del-1',
-    orderNumber: '#VZT10089',
+    id: 'ord-del-1',
+    orderNumber: '#ORD-10089',
     orderType: 'Online Order',
     status: 'delivered',
     customer: {
@@ -884,8 +884,8 @@ const initialMockOrders: MerchantOrderRecord[] = [
     currentStageName: 'Delivered (19 May)',
   },
   {
-    id: 'vzt-del-2',
-    orderNumber: '#VZT10088',
+    id: 'ord-del-2',
+    orderNumber: '#ORD-10088',
     orderType: 'Online Order',
     status: 'delivered',
     customer: {
@@ -930,8 +930,8 @@ const initialMockOrders: MerchantOrderRecord[] = [
     currentStageName: 'Delivered (19 May)',
   },
   {
-    id: 'vzt-del-3',
-    orderNumber: '#VZT10087',
+    id: 'ord-del-3',
+    orderNumber: '#ORD-10087',
     orderType: 'Online Order',
     status: 'delivered',
     customer: {
@@ -977,8 +977,8 @@ const initialMockOrders: MerchantOrderRecord[] = [
 
   // 6. Cancelled Orders
   {
-    id: 'vzt-can-1',
-    orderNumber: '#VZT10072',
+    id: 'ord-can-1',
+    orderNumber: '#ORD-10072',
     orderType: 'Online Order',
     status: 'cancelled',
     customer: {
@@ -1026,8 +1026,8 @@ const initialMockOrders: MerchantOrderRecord[] = [
     currentStageName: 'Cancelled (18 May)',
   },
   {
-    id: 'vzt-can-2',
-    orderNumber: '#VZT10071',
+    id: 'ord-can-2',
+    orderNumber: '#ORD-10071',
     orderType: 'Online Order',
     status: 'cancelled',
     customer: {
@@ -1077,8 +1077,8 @@ const initialMockOrders: MerchantOrderRecord[] = [
 
   // 7. Returns
   {
-    id: 'vzt-ret-1',
-    orderNumber: '#VZT10065',
+    id: 'ord-ret-1',
+    orderNumber: '#ORD-10065',
     orderType: 'Online Order',
     status: 'return_requested',
     customer: {
@@ -1128,8 +1128,8 @@ const initialMockOrders: MerchantOrderRecord[] = [
     currentStageName: 'Return Requested (19 May)',
   },
   {
-    id: 'vzt-ret-2',
-    orderNumber: '#VZT10064',
+    id: 'ord-ret-2',
+    orderNumber: '#ORD-10064',
     orderType: 'Online Order',
     status: 'return_requested',
     customer: {
@@ -1188,7 +1188,7 @@ export const useOrderStore = create<OrderStoreState>((set, get) => ({
   orderStatusFilter: 'all',
   fulfillmentTypeFilter: 'all',
   dateRange: '13 May 2024 - 19 May 2024',
-  selectedOrderIds: ['vzt-1'], // Pre-selected row 1 matching mockup!
+  selectedOrderIds: ['ord-1'], // Pre-selected row 1 matching mockup!
 
   setActiveTab: (tab) => set({ activeTab: tab, selectedOrderIds: [] }),
   setSearchQuery: (query) => set({ searchQuery: query }),
@@ -1276,13 +1276,13 @@ export const useOrderStore = create<OrderStoreState>((set, get) => ({
   addManualOrder: (newOrder) => {
     const nextNum = Math.floor(10330 + Math.random() * 50);
     const fullOrder: MerchantOrderRecord = {
-      id: `vzt-man-${Date.now()}`,
-      orderNumber: `#VZT${nextNum}`,
+      id: `ord-man-${Date.now()}`,
+      orderNumber: `#ORD-${nextNum}`,
       orderType: newOrder.orderType || 'Manual In-Store',
       status: newOrder.status || 'new',
       customer: newOrder.customer || {
         name: 'Walk-in Customer',
-        email: 'customer@viztore.com',
+        email: 'customer@example.com',
         phone: '+91 99999 00000',
         avatarInitials: 'WC',
       },

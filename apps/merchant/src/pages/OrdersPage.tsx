@@ -6,6 +6,7 @@ import { OrdersTabsBar } from '../components/orders/OrdersTabsBar.js';
 import { OrdersToolbar } from '../components/orders/OrdersToolbar.js';
 import { OrdersTable } from '../components/orders/OrdersTable.js';
 import { OrderDetailModal } from '../components/orders/OrderDetailModal.js';
+import { branding } from '@repo/shared-types/branding.config';
 
 interface OrdersPageProps {
   onOpenCreateOrder?: () => void;
@@ -59,7 +60,7 @@ export const OrdersPage: React.FC<OrdersPageProps> = ({ onOpenCreateOrder }) => 
           </head>
           <body>
             <div class="header">
-              <h2>Viztore Merchant Invoice</h2>
+              <h2>${branding.appName} Merchant Invoice</h2>
               <p>Order ID: <strong>${order.orderNumber}</strong> | Date: ${order.timestamps.createdAt.replace('\n', ' ')}</p>
               <div class="otp">Delivery Runner OTP: ${order.otp}</div>
             </div>
