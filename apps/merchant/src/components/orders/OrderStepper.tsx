@@ -130,12 +130,25 @@ export const OrderStepper: React.FC<OrderStepperProps> = ({ activeTab = 'new_ord
                   </span>
                 </div>
 
-                {/* Dotted Arrow Connector: h-12 ensures 100% exact vertical center with the 48px circle */}
+                {/* Dotted Arrow Connector: perfectly aligned on the exact same horizontal line */}
                 {!isLast && (
                   <div className="flex-1 mx-2 sm:mx-4 h-12 flex items-center justify-center">
-                    <div className="w-full border-t-2 border-dotted border-blue-200 relative flex items-center justify-end">
-                      {/* Arrowhead */}
-                      <div className="w-1.5 h-1.5 border-t-2 border-r-2 border-blue-400 rotate-45 -mr-0.5" />
+                    <div className="w-full flex items-center">
+                      <div className="flex-1 border-t-2 border-dotted border-blue-200" />
+                      <svg
+                        className="w-2.5 h-2.5 text-blue-400 shrink-0 -ml-0.5"
+                        viewBox="0 0 10 10"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M2 2L6.5 5L2 8"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
                     </div>
                   </div>
                 )}

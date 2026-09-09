@@ -73,6 +73,7 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({ onViewOrder, onPrintOr
     acceptOrder,
     rejectOrder,
     markReadyToShip,
+    dispatchOrder,
   } = useOrderStore();
 
   // Filter orders by tab and search
@@ -498,14 +499,14 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({ onViewOrder, onPrintOr
                           </button>
                         )}
 
-                        {/* Ready to Ship: Ready to Ship / Dispatch */}
+                        {/* Ready to Ship: Mark Shipped */}
                         {activeTab === 'ready_to_ship' && (
                           <button
                             type="button"
-                            onClick={() => alert(`Dispatched order ${order.orderNumber} to delivery runner`)}
-                            className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition-colors shadow-2xs"
+                            onClick={() => dispatchOrder(order.id)}
+                            className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition-colors shadow-2xs whitespace-nowrap"
                           >
-                            Ready to Ship
+                            Mark Shipped
                           </button>
                         )}
 
