@@ -65,12 +65,12 @@ export function createOrderRepository(
 
   async function findById(id: string): Promise<OrderResponse | null> {
     if (!isValidObjectId(id)) return null;
-    const order = await model.findById(id);
+    const order = await model.findById(id).read('secondaryPreferred');
     return order ? toResponse(order) : null;
   }
 
   async function findByOrderNumber(orderNumber: string): Promise<OrderResponse | null> {
-    const order = await model.findOne({ orderNumber });
+    const order = await model.findOne({ orderNumber }).read('secondaryPreferred');
     return order ? toResponse(order) : null;
   }
 
@@ -85,6 +85,7 @@ export function createOrderRepository(
     const [rows, total] = await Promise.all([
       model
         .find({ userId })
+        .read('secondaryPreferred')
         .sort({ createdAt: -1 })
         .skip((safePage - 1) * safeLimit)
         .limit(safeLimit),
@@ -113,6 +114,7 @@ export function createOrderRepository(
     const [rows, total] = await Promise.all([
       model
         .find({ storeId })
+        .read('secondaryPreferred')
         .sort({ createdAt: -1 })
         .skip((safePage - 1) * safeLimit)
         .limit(safeLimit),
@@ -140,9 +142,11 @@ export function createOrderRepository(
     const [rows, total] = await Promise.all([
       model
         .find()
+        .read('secondaryPreferred')
         .sort({ createdAt: -1 })
         .skip((safePage - 1) * safeLimit)
         .limit(safeLimit),
+
       model.countDocuments(),
     ]);
 

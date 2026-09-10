@@ -216,8 +216,10 @@ productSchema.pre('save', function (next) {
 
 // ── Indexes ────────────────────────────────────────────────────────────
 
-// Compound index for filtered catalog queries
+// Compound index for filtered catalog queries (Strict ESR Rule: Equality, Sort, Range)
+productSchema.index({ storeId: 1, isActive: 1, createdAt: -1 });
 productSchema.index({ isActive: 1, category: 1, storeId: 1 });
+
 
 // Full-text search index
 productSchema.index(

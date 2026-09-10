@@ -10,6 +10,8 @@ import {
 } from './catalog.types.js';
 import { listProducts } from './catalog.service.js';
 
+import { cacheAside } from '../../shared/redis/cache.js';
+
 export function createCatalogRepository(
   productModel: Model<IProductDocument>,
 ): ICatalogRepository {
@@ -29,18 +31,29 @@ export function createCatalogRepository(
   }
 
   async function findById(id: string): Promise<IProduct | null> {
-    const product = await productModel.findOne({ _id: id, isActive: true }).lean();
-    return product as unknown as IProduct;
+    return cacheAside(`catalog:product:${id}`, 180, async () => {
+      const product = await productModel
+        .findOne({ _id: id, isActive: true })
+        .read('secondaryPreferred')
+        .lean();
+      return product as unknown as IProduct;
+    });
   }
 
   async function findBySlug(slug: string): Promise<IProduct | null> {
-    const product = await productModel.findOne({ slug, isActive: true }).lean();
-    return product as unknown as IProduct;
+    return cacheAside(`catalog:slug:${slug}`, 180, async () => {
+      const product = await productModel
+        .findOne({ slug, isActive: true })
+        .read('secondaryPreferred')
+        .lean();
+      return product as unknown as IProduct;
+    });
   }
 
   async function list(query: ProductQueryDto): Promise<IProductListResponse> {
     return listProducts(query);
   }
+
 
   async function update(id: string, dto: UpdateProductDto): Promise<IProduct | null> {
     const product = await productModel.findByIdAndUpdate(

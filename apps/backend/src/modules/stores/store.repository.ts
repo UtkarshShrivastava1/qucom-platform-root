@@ -9,6 +9,8 @@ import {
   IStoreDocument,
 } from './store.types.js';
 
+import { cacheAside } from '../../shared/redis/cache.js';
+
 export function createStoreRepository(
   storeModel: Model<IStoreDocument>,
 ): IStoreRepository {
@@ -24,19 +26,24 @@ export function createStoreRepository(
   }
 
   async function findById(id: string): Promise<IStore | null> {
-    const store = await storeModel.findById(id);
-    return store ? ((store.toJSON ? store.toJSON() : store) as unknown as IStore) : null;
+    return cacheAside(`stores:id:${id}`, 180, async () => {
+      const store = await storeModel.findById(id).read('secondaryPreferred');
+      return store ? ((store.toJSON ? store.toJSON() : store) as unknown as IStore) : null;
+    });
   }
 
   async function findBySlug(slug: string): Promise<IStore | null> {
-    const store = await storeModel.findOne({ slug, isActive: true });
-    return store ? ((store.toJSON ? store.toJSON() : store) as unknown as IStore) : null;
+    return cacheAside(`stores:slug:${slug}`, 180, async () => {
+      const store = await storeModel.findOne({ slug, isActive: true }).read('secondaryPreferred');
+      return store ? ((store.toJSON ? store.toJSON() : store) as unknown as IStore) : null;
+    });
   }
 
   async function findByOwnerId(ownerId: string): Promise<IStore[]> {
-    const stores = await storeModel.find({ ownerId }).lean();
+    const stores = await storeModel.find({ ownerId }).read('secondaryPreferred').lean();
     return stores as unknown as IStore[];
   }
+
 
   async function findNearby(query: NearbyStoresQueryDto): Promise<IStore[]> {
     const { lng, lat, radiusKm = 4, category, search } = query;
