@@ -97,7 +97,18 @@ async function bootstrap() {
       logger.debug(`📡 Socket broadcast ${EVENTS.ORDER_DELIVERED} to order:${payload.orderId}`);
     });
 
+    eventBus.on(EVENTS.DELIVERY_ASSIGNED, (payload) => {
+      io.to(`order:${payload.orderId}`).emit(EVENTS.DELIVERY_ASSIGNED, payload);
+      logger.debug(`📡 Socket broadcast ${EVENTS.DELIVERY_ASSIGNED} to order:${payload.orderId}`);
+    });
+
+    eventBus.on(EVENTS.DELIVERY_COMPLETED, (payload) => {
+      io.to(`order:${payload.orderId}`).emit(EVENTS.DELIVERY_COMPLETED, payload);
+      logger.debug(`📡 Socket broadcast ${EVENTS.DELIVERY_COMPLETED} to order:${payload.orderId}`);
+    });
+
     // Make io accessible across app if needed
+
     app.set('io', io);
 
 
