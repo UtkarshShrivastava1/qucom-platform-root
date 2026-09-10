@@ -10,11 +10,15 @@ import { AppError } from './shared/utils/AppError.js';
 import { ApiResponse } from './shared/utils/ApiResponse.js';
 import { logger } from './shared/utils/logger.js';
 
+import mongoose from 'mongoose';
+import { checkRedisHealth } from './shared/redis/client.js';
+
 // Import domain module routes
 import { authRouter } from './modules/auth/index.js';
 import { storeRouter } from './modules/stores/index.js';
 import { catalogRouter } from './modules/catalog/index.js';
 import { orderRouter } from './modules/orders/index.js';
+
 
 export function createApp(): Express {
   const app: Express = express();
@@ -82,8 +86,9 @@ export function createApp(): Express {
     });
   }
 
-  // Healthcheck Route
-  app.get('/health', (_req: Request, res: Response) => {
+  // Health & Liveness / Readiness Probes (structure.md Section 6.4)
+  // Liveness probe: Is the node process alive and responsive?
+  app.get(['/health', '/healthz'], (_req: Request, res: Response) => {
     ApiResponse.success(res, {
       status: 'healthy',
       uptime: process.uptime(),
@@ -92,6 +97,40 @@ export function createApp(): Express {
       version: env.API_VERSION,
     });
   });
+
+  // Readiness probe: Are database, redis, and system resources ready to accept traffic?
+  app.get('/readyz', (_req: Request, res: Response) => {
+    const isDbConnected = mongoose.connection.readyState === 1;
+    const isRedisHealthy = checkRedisHealth();
+    const memory = process.memoryUsage();
+
+    const checks = {
+      database: isDbConnected ? 'connected' : 'disconnected',
+      redis: isRedisHealthy ? 'connected' : (env.ENABLE_REDIS ? 'unreachable' : 'disabled_in_memory'),
+      memory: {
+        heapUsedMB: Math.round((memory.heapUsed / 1024 / 1024) * 100) / 100,
+        heapTotalMB: Math.round((memory.heapTotal / 1024 / 1024) * 100) / 100,
+        rssMB: Math.round((memory.rss / 1024 / 1024) * 100) / 100,
+      },
+      uptime: process.uptime(),
+      timestamp: new Date().toISOString(),
+    };
+
+    if (!isDbConnected) {
+      res.status(StatusCodes.SERVICE_UNAVAILABLE).json({
+        success: false,
+        error: {
+          code: 'SERVICE_UNAVAILABLE',
+          message: 'Database connection is not ready to serve traffic',
+          details: checks,
+        },
+      });
+      return;
+    }
+
+    ApiResponse.success(res, checks, 'Service is ready to accept traffic');
+  });
+
 
   // API Domain Routes (Versioned under /api/v1)
   const apiV1 = express.Router();

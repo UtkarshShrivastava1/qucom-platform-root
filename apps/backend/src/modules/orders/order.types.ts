@@ -1,13 +1,8 @@
 import type { Document } from 'mongoose';
+import { OrderStatus } from '@repo/shared-types';
+export { OrderStatus };
 
-export enum OrderStatus {
-  PENDING = 'PENDING',
-  CONFIRMED = 'CONFIRMED',
-  PROCESSING = 'PROCESSING',
-  SHIPPED = 'SHIPPED',
-  DELIVERED = 'DELIVERED',
-  CANCELLED = 'CANCELLED',
-}
+
 
 export interface OrderItemDTO {
   productId: string;

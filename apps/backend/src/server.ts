@@ -5,7 +5,10 @@ import { createApp } from './app.js';
 import { env } from './shared/config/env.config.js';
 import { connectDatabase, disconnectDatabase } from './shared/database/connection.js';
 import { connectRedis, disconnectRedis, getRedisClient, checkRedisHealth } from './shared/redis/client.js';
+import { eventBus } from './shared/events/eventBus.js';
+import { EVENTS } from './shared/events/eventTypes.js';
 import { logger } from './shared/utils/logger.js';
+
 
 async function bootstrap() {
   try {
@@ -52,13 +55,51 @@ async function bootstrap() {
     io.on('connection', (socket) => {
       logger.debug(`🔌 New Socket client connected: ${socket.id}`);
 
+      // Allow clients to join rooms for scoped real-time updates (store:<storeId>, user:<userId>, order:<orderId>)
+      socket.on('join_room', (room: string) => {
+        if (typeof room === 'string' && room.length < 100) {
+          socket.join(room);
+          logger.debug(`🔌 Socket ${socket.id} joined room: ${room}`);
+        }
+      });
+
+      socket.on('leave_room', (room: string) => {
+        if (typeof room === 'string' && room.length < 100) {
+          socket.leave(room);
+          logger.debug(`🔌 Socket ${socket.id} left room: ${room}`);
+        }
+      });
+
       socket.on('disconnect', (reason) => {
         logger.debug(`🔌 Socket client disconnected: ${socket.id} (${reason})`);
       });
     });
 
+    // Wire in-process EventBus to Socket.io & Redis Adapter for distributed real-time sync (structure.md Section 5 & 6.2)
+    eventBus.on(EVENTS.ORDER_PLACED, (payload) => {
+      io.to(`store:${payload.storeId}`).emit(EVENTS.ORDER_PLACED, payload);
+      io.to(`user:${payload.userId}`).emit(EVENTS.ORDER_PLACED, payload);
+      logger.debug(`📡 Socket broadcast ${EVENTS.ORDER_PLACED} to store:${payload.storeId} & user:${payload.userId}`);
+    });
+
+    eventBus.on(EVENTS.ORDER_CONFIRMED, (payload) => {
+      io.to(`order:${payload.orderId}`).emit(EVENTS.ORDER_CONFIRMED, payload);
+      logger.debug(`📡 Socket broadcast ${EVENTS.ORDER_CONFIRMED} to order:${payload.orderId}`);
+    });
+
+    eventBus.on(EVENTS.ORDER_CANCELLED, (payload) => {
+      io.to(`order:${payload.orderId}`).emit(EVENTS.ORDER_CANCELLED, payload);
+      logger.debug(`📡 Socket broadcast ${EVENTS.ORDER_CANCELLED} to order:${payload.orderId}`);
+    });
+
+    eventBus.on(EVENTS.ORDER_DELIVERED, (payload) => {
+      io.to(`order:${payload.orderId}`).emit(EVENTS.ORDER_DELIVERED, payload);
+      logger.debug(`📡 Socket broadcast ${EVENTS.ORDER_DELIVERED} to order:${payload.orderId}`);
+    });
+
     // Make io accessible across app if needed
     app.set('io', io);
+
 
     // 5. Start HTTP Listener
     server.listen(env.PORT, () => {

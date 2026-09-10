@@ -34,3 +34,8 @@ export const validateRequest = (schemas: RequestValidationSchemas): RequestHandl
     }
   };
 };
+
+export const validateBody = (schema: AnyZodObject): RequestHandler => validateRequest({ body: schema });
+export const validateQuery = (schema: AnyZodObject): RequestHandler => validateRequest({ query: schema });
+export const validateParams = (schema: AnyZodObject): RequestHandler => validateRequest({ params: schema });
+
