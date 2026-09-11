@@ -38,13 +38,13 @@ graph TB
 
 | Layer | Technology | Status | Details |
 |---|---|---|---|
-| **Backend API** | Node.js v20+, Express, Mongoose, TypeScript | **Live & In Sync** ✅ | Auth, Stores, Onboarding, Catalog, Orders, Delivery modules; /healthz & /readyz probes active |
+| **Backend API** | Node.js v20+, Express, Mongoose, TypeScript | **Live & In Sync** ✅ | Auth, Stores, Onboarding, Catalog, Orders, Delivery, Notifications modules; /healthz & /readyz probes active |
 | **Merchant Panel** | React 18, Vite, Tailwind CSS, Zustand | **Refined** ✅ | Pixel-perfect Dashboard, 4 side drawers, 8-Tab Orders Pipeline & Product Cataloging |
 | **Customer Storefront** | Next.js 14 App Router, Tailwind, TanStack Query | **Live** ✅ | Home feed, Stores directory, PLP, PDP, Category browse |
 | **Shared Types** | TypeScript, Zod | **100% In Sync** ✅ | All contracts, validation schemas, DTOs (`structure.md`), branding config |
 | **Real-Time & Events** | Socket.io + Redis Adapter + TypedEventBus | **Wired** ✅ | In-process domain events forwarded to Socket.io rooms with Redis distributed scaling |
 | **Agent Workflows** | Custom Skills & Rules | **Active** ✅ | Fullstack Feature Workflow, UI Matching, Intern Delegation, /create-task |
-| **Test Suite** | Vitest | **50/50 Passing** ✅ | 11 test suites (AppError, Auth, Stores, Onboarding, Catalog, Orders, Delivery, WorkerPool, Cache-Aside) |
+| **Test Suite** | Vitest | **56/56 Passing** ✅ | 12 test suites (AppError, Auth, Stores, Onboarding, Catalog, Orders, Delivery, Notifications, WorkerPool, Cache-Aside) |
 | **Build Status** | Turborepo | **Clean** ✅ | Full monorepo builds with zero errors across all 5 packages |
 | **Engineering Standards** | 8/8 Pillars (`structure.md`) | **100% Implemented** ✅ | Facades, Composition roots, 3-tier testing, EventBus, WorkerPool, Cache-Aside + Replica split, ESR indexing, Decoupled repos |
 
@@ -146,6 +146,14 @@ graph TB
   - 4-digit physical delivery OTP handshake with verification, order status synchronization, and handoff completion.
   - EventBus integration: listens to `ORDER_CONFIRMED` to auto-initialize deliveries; emits `DELIVERY_ASSIGNED` and `DELIVERY_COMPLETED` domain events forwarded to Socket.io rooms.
   - 5/5 unit tests passing in `delivery.service.test.ts` (50/50 total tests passing).
+- [x] **Centralized `notifications/` Backend Engine** (`100% COMPLETE`):
+  - Standardized 10-file Clean Architecture: `notification.types.ts`, `notification.validator.ts`, `notification.model.ts`, `notification.repository.ts`, `notification.service.ts`, `notification.controller.ts`, `notification.routes.ts`, `notification.module.ts`, `notification.service.test.ts`, and `index.ts`.
+  - Multi-recipient routing (`merchant`, `customer`, `admin`) and category segregation (`order`, `inventory`, `system`, `promo`) powering Abhay's 4-tab `NotificationsDrawer`.
+  - Compound ESR indexing: `{ recipientId: 1, recipientRole: 1, category: 1, isRead: 1, createdAt: -1 }`.
+  - EventBus automatic listeners: generates real-time notifications on `ORDER_PLACED`, `ORDER_CONFIRMED`, `ORDER_CANCELLED`, `DELIVERY_ASSIGNED`, `DELIVERY_COMPLETED`, `PRODUCT_OUT_OF_STOCK`.
+  - Real-time Socket.io push broadcasts (`NOTIFICATION_CREATED`) to target rooms (`store:<id>`, `user:<id>`).
+  - Read management: single mark-as-read, category-filtered bulk mark-all-read, and aggregate unread summary endpoint.
+  - 6/6 unit tests passing in `notification.service.test.ts` (56/56 total tests passing).
 - [x] Socket.io Redis adapter configuration & in-process EventBus forwarding to rooms (`store:<id>`, `order:<id>`, `user:<id>`)
 - [ ] Merchant audio chime alerts for incoming orders (Frontend UI hook pending intern PR merge)
 - [ ] Live customer delivery tracking map with driver location & ETA (Frontend UI pending intern PR merge)

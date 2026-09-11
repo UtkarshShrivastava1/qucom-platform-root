@@ -6,4 +6,5 @@ export * from './merchant.types.js';
 export * from './catalog.types.js';
 export * from './order.types.js';
 export * from './delivery.types.js';
+export * from './notification.types.js';
 

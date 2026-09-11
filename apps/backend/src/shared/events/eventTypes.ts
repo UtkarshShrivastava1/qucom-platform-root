@@ -8,6 +8,7 @@ export const EVENTS = {
   DELIVERY_ASSIGNED: 'delivery.assigned',
   DELIVERY_COMPLETED: 'delivery.completed',
   PRODUCT_OUT_OF_STOCK: 'product.outOfStock',
+  NOTIFICATION_CREATED: 'notification.created',
 } as const;
 
 export type EventName = typeof EVENTS[keyof typeof EVENTS];
@@ -54,6 +55,17 @@ export interface ProductOutOfStockPayload {
   storeId: string;
 }
 
+export interface NotificationCreatedPayload {
+  notificationId: string;
+  recipientId: string;
+  recipientRole: string;
+  category: string;
+  title: string;
+  message: string;
+  data?: Record<string, unknown>;
+  createdAt: Date | string;
+}
+
 export interface EventPayloadMap {
   [EVENTS.USER_REGISTERED]: UserRegisteredPayload;
   [EVENTS.ORDER_PLACED]: OrderPlacedPayload;
@@ -64,4 +76,6 @@ export interface EventPayloadMap {
   [EVENTS.DELIVERY_ASSIGNED]: DeliveryAssignedPayload;
   [EVENTS.DELIVERY_COMPLETED]: OrderStatusChangedPayload;
   [EVENTS.PRODUCT_OUT_OF_STOCK]: ProductOutOfStockPayload;
+  [EVENTS.NOTIFICATION_CREATED]: NotificationCreatedPayload;
 }
+

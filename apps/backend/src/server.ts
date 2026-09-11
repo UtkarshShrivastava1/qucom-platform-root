@@ -107,6 +107,12 @@ async function bootstrap() {
       logger.debug(`📡 Socket broadcast ${EVENTS.DELIVERY_COMPLETED} to order:${payload.orderId}`);
     });
 
+    eventBus.on(EVENTS.NOTIFICATION_CREATED, (payload) => {
+      const room = payload.recipientRole === 'merchant' ? `store:${payload.recipientId}` : `user:${payload.recipientId}`;
+      io.to(room).emit(EVENTS.NOTIFICATION_CREATED, payload);
+      logger.debug(`📡 Socket broadcast ${EVENTS.NOTIFICATION_CREATED} to room ${room}`);
+    });
+
     // Make io accessible across app if needed
 
     app.set('io', io);

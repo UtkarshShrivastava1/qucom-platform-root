@@ -19,6 +19,7 @@ import { storeRouter } from './modules/stores/index.js';
 import { catalogRouter } from './modules/catalog/index.js';
 import { orderRouter } from './modules/orders/index.js';
 import { deliveryRouter } from './modules/delivery/index.js';
+import { notificationRouter } from './modules/notifications/index.js';
 
 
 
@@ -141,6 +142,7 @@ export function createApp(): Express {
   apiV1.use('/catalog', catalogRouter);
   apiV1.use('/orders', orderRouter);
   apiV1.use('/delivery', deliveryRouter);
+  apiV1.use('/notifications', notificationRouter);
 
 
   app.use(`/api/${env.API_VERSION}`, apiV1);
