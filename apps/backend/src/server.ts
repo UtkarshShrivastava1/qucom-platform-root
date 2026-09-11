@@ -39,9 +39,11 @@ async function bootstrap() {
     if (checkRedisHealth()) {
       try {
         const pubClient = getRedisClient();
-        const subClient = pubClient.duplicate();
-        io.adapter(createAdapter(pubClient, subClient));
-        logger.info('⚡ Socket.io configured with Redis adapter');
+        if (pubClient) {
+          const subClient = pubClient.duplicate();
+          io.adapter(createAdapter(pubClient, subClient));
+          logger.info('⚡ Socket.io configured with Redis adapter');
+        }
       } catch (err) {
         logger.warn('⚠️ Socket.io Redis adapter setup skipped, using in-memory adapter');
       }

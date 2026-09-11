@@ -14,6 +14,15 @@ const envSchema = z.object({
   MONGODB_URI: z.string().min(1, 'MONGODB_URI is required'),
 
   // Redis
+  ENABLE_REDIS: z
+    .preprocess((val) => {
+      if (typeof val === 'string') {
+        if (val.toLowerCase() === 'false' || val === '0') return false;
+        if (val.toLowerCase() === 'true' || val === '1') return true;
+      }
+      return val;
+    }, z.boolean())
+    .default(true),
   REDIS_URL: z.string().default('redis://127.0.0.1:6379'),
 
   // JWT
@@ -39,6 +48,7 @@ const testDefaults = {
   PORT: 5000,
   API_VERSION: 'v1',
   MONGODB_URI: 'mongodb://localhost:27017/platform-db-test',
+  ENABLE_REDIS: false,
   REDIS_URL: 'redis://127.0.0.1:6379',
   JWT_ACCESS_SECRET: 'test_access_secret_1234567890123456',
   JWT_REFRESH_SECRET: 'test_refresh_secret_1234567890123456',
@@ -63,6 +73,7 @@ export const env = (parsedEnv.success ? parsedEnv.data : {
   PORT: 5000,
   API_VERSION: 'v1',
   MONGODB_URI: 'mongodb://localhost:27017/platform-db-test',
+  ENABLE_REDIS: false,
   REDIS_URL: 'redis://127.0.0.1:6379',
   JWT_ACCESS_SECRET: 'test_access_secret_1234567890123456',
   JWT_REFRESH_SECRET: 'test_refresh_secret_1234567890123456',
