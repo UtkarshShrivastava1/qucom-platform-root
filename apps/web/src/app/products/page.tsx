@@ -2,9 +2,9 @@
 
 import React, { useState, useCallback, useMemo, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Header } from '@/components/ui/Header';
-import { Footer } from '@/components/ui/Footer';
-import { ProductCard } from '@/components/ui/ProductCard';
+import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
+import { ProductCard } from '@/features/products/components/ProductCard';
 import { ProductGridSkeleton } from '@/components/ui/Skeleton';
 import { useProducts } from '@/hooks/useProducts';
 import { useLocationStore } from '@/stores/location.store';
@@ -72,10 +72,10 @@ function ProductsContent() {
   ].filter(Boolean).length;
 
   return (
-    <div className="min-h-screen bg-surface-950">
-      <Header address={address} />
+    <div className="min-h-screen bg-transparent">
+      <Header address={address} className="hidden md:block" />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+      <main className="max-w-[1920px] mx-auto px-4 sm:px-6 py-6 space-y-6">
         {/* Page Header */}
         <div className="flex items-center justify-between">
           <div>
@@ -156,11 +156,10 @@ function ProductsContent() {
                     <button
                       key={cat.value}
                       onClick={() => updateFilter('category', cat.value || undefined)}
-                      className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                        (query.category || '') === cat.value
-                          ? 'bg-brand-500/15 text-brand-400 font-medium'
-                          : 'text-surface-400 hover:bg-surface-900 hover:text-surface-200'
-                      }`}
+                      className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${(query.category || '') === cat.value
+                        ? 'bg-brand-500/15 text-brand-400 font-medium'
+                        : 'text-surface-400 hover:bg-surface-900 hover:text-surface-200'
+                        }`}
                     >
                       {cat.label}
                     </button>
@@ -232,11 +231,10 @@ function ProductsContent() {
                     <button
                       key={pageNum}
                       onClick={() => updateFilter('page', String(pageNum))}
-                      className={`w-9 h-9 rounded-lg text-sm font-medium transition-colors ${
-                        meta.page === pageNum
-                          ? 'bg-brand-500 text-white'
-                          : 'bg-surface-900 text-surface-400 hover:bg-surface-800'
-                      }`}
+                      className={`w-9 h-9 rounded-lg text-sm font-medium transition-colors ${meta.page === pageNum
+                        ? 'bg-brand-500 text-white'
+                        : 'bg-surface-900 text-surface-400 hover:bg-surface-800'
+                        }`}
                     >
                       {pageNum}
                     </button>
@@ -265,9 +263,9 @@ export default function ProductsPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-surface-950">
-          <Header />
-          <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+        <div className="min-h-screen bg-transparent">
+          <Header className="hidden md:block" />
+          <main className="max-w-[1920px] mx-auto px-4 sm:px-6 py-6">
             <ProductGridSkeleton count={8} />
           </main>
           <Footer />

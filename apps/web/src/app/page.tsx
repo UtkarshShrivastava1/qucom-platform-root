@@ -3,14 +3,14 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { ChevronRight, Sparkles, TrendingUp } from 'lucide-react';
-import { Header } from '@/components/ui/Header';
-import { Footer } from '@/components/ui/Footer';
-import { CategoryStrip } from '@/components/ui/CategoryStrip';
-import { PromoCarousel } from '@/components/ui/PromoCarousel';
-import { TrustBar } from '@/components/ui/TrustBar';
-import { ProductCard } from '@/components/ui/ProductCard';
-import { StoreCard } from '@/components/ui/StoreCard';
+import Header from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
+import { PromoCarousel } from '@/features/home/components/PromoCarousel';
+import { TrustBar } from '@/features/home/components/TrustBar';
+import { ProductCard } from '@/features/products/components/ProductCard';
+import { StoreCard } from '@/features/stores/components/StoreCard';
 import { ProductGridSkeleton, StoreCardSkeleton } from '@/components/ui/Skeleton';
+import { CategoryStrip } from '@/features/home/components/CategoryStrip';
 import { useNearbyStores } from '@/hooks/useNearbyStores';
 import { useFeaturedProducts } from '@/hooks/useFeaturedProducts';
 import { useLocationStore } from '@/stores/location.store';
@@ -22,36 +22,37 @@ export default function HomePage() {
   const { data: nearbyStores, isLoading: storesLoading } = useNearbyStores(lng, lat);
   const { data: featuredProducts, isLoading: productsLoading } = useFeaturedProducts(12);
 
+
   return (
-    <div className="min-h-screen bg-surface-950">
-      <Header address={address} />
+    <div className="min-h-screen bg-white">
+      <main className="mx-auto space-y-6 sm:space-y-8 pb-24 md:pb-12 bg-surface-50 min-h-screen">
+        {/* ── DESKTOP CATEGORY STRIP ───────────────────────────────────── */}
+        <div className="hidden md:block w-full">
+          <CategoryStrip activeCategory={activeCategory} onCategoryChange={setActiveCategory} />
+        </div>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 space-y-8 py-6">
-        {/* Category Navigation Strip */}
-        <CategoryStrip activeCategory={activeCategory} onCategoryChange={setActiveCategory} />
-
-        {/* Promotional Carousel */}
-        <PromoCarousel />
-
-        {/* Trust & Service Assurance Bar */}
-        <TrustBar />
+        {/* ── HERO SECTION (Carousel + TrustBar) ─────────────────────── */}
+        <div className="max-w-[1920px] mx-auto px-4 sm:px-6 mt-6 md:mt-8 space-y-4 md:space-y-6">
+          <PromoCarousel />
+          <TrustBar />
+        </div>
 
         {/* ── Stores Near You ────────────────────────────────────────── */}
-        <section className="space-y-4">
+        <section className="space-y-4 max-w-[1920px] mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-brand-400" />
-              <h2 className="text-lg font-bold text-surface-100">Stores Near You</h2>
+              <h2 className="text-lg sm:text-2xl font-bold text-[#192168]">Stores Near You</h2>
             </div>
             <Link
               href="/stores"
-              className="flex items-center gap-1 text-sm font-medium text-brand-400 hover:text-brand-300 transition-colors"
+              className="flex items-center gap-1 text-sm font-medium sm:font-semibold text-[#192168] sm:text-[#1668F6] hover:text-brand-300 sm:hover:text-[#0f4bba] transition-colors"
             >
               See All <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
 
-          <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2">
+          <div className="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-hide pb-2">
             {storesLoading ? (
               Array.from({ length: 4 }).map((_, i) => <StoreCardSkeleton key={i} />)
             ) : nearbyStores && nearbyStores.length > 0 ? (
@@ -67,24 +68,24 @@ export default function HomePage() {
         </section>
 
         {/* ── Best Deals For You ─────────────────────────────────────── */}
-        <section className="space-y-4">
+        <section className="space-y-4 max-w-[1920px] mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-emerald-400" />
-              <h2 className="text-lg font-bold text-surface-100">Best Deals For You</h2>
+              <h2 className="text-lg sm:text-2xl font-bold text-[#192168]">Best Deals For You</h2>
             </div>
             <Link
               href="/products?sort=discount"
-              className="flex items-center gap-1 text-sm font-medium text-brand-400 hover:text-brand-300 transition-colors"
+              className="flex items-center gap-1 text-sm font-medium sm:font-semibold text-[#192168] sm:text-[#1668F6] hover:text-brand-300 sm:hover:text-[#0f4bba] transition-colors"
             >
-              View All <ChevronRight className="w-4 h-4" />
+              See All <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
 
           {productsLoading ? (
             <ProductGridSkeleton count={8} />
           ) : featuredProducts && featuredProducts.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
               {featuredProducts.map((product) => (
                 <ProductCard key={product._id} product={product} />
               ))}
@@ -97,13 +98,13 @@ export default function HomePage() {
           )}
         </section>
 
-        {/* ── Explore Stores CTA ─────────────────────────────────────── */}
-        <section className="relative overflow-hidden rounded-2xl gradient-brand p-8 sm:p-10">
+        {/* ── MOBILE ONLY: Explore Stores CTA ────────────────────────── */}
+        <section className="md:hidden relative overflow-hidden rounded-2xl gradient-brand p-8 mx-4">
           <div className="relative z-10 space-y-3">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
+            <h2 className="text-2xl font-extrabold text-white">
               Explore All Local Stores
             </h2>
-            <p className="text-white/80 text-sm sm:text-base max-w-lg">
+            <p className="text-white/80 text-sm max-w-lg">
               Discover amazing products from verified local retailers near you. Filter by category, sort by rating, and find your new favourite shop.
             </p>
             <Link

@@ -3,6 +3,8 @@ import { Inter } from 'next/font/google';
 import { branding } from '@repo/shared-types';
 import { Providers } from './providers';
 import { CartDrawer } from '../components/cart/CartDrawer';
+import { BottomNav } from '@/components/layout/BottomNav';
+import { Header } from '@/components/layout/Header';
 import './globals.css';
 
 const inter = Inter({
@@ -37,11 +39,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`dark ${inter.variable}`} suppressHydrationWarning>
-      <body className="font-sans bg-surface-950 text-surface-100 antialiased min-h-screen">
+    <html lang="en" className={`${inter.variable}`} suppressHydrationWarning>
+      <body className="font-sans bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50/40 via-white to-white text-surface-900 antialiased min-h-[100dvh] relative overflow-x-hidden">
         <Providers>
+          <Header />
           {children}
           <CartDrawer />
+          <BottomNav />
         </Providers>
       </body>
     </html>
