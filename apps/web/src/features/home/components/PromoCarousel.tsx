@@ -11,6 +11,7 @@ const promoSlides = [
     cta: 'Shop Now',
     href: '/products?category=fashion',
     gradient: 'from-brand-600 via-purple-600 to-pink-500',
+    imageUrl: 'https://picsum.photos/seed/promo1/600/400',
   },
   {
     id: 2,
@@ -19,6 +20,7 @@ const promoSlides = [
     cta: 'Explore',
     href: '/products?category=electronics',
     gradient: 'from-emerald-600 via-teal-600 to-cyan-500',
+    imageUrl: 'https://picsum.photos/seed/promo2/600/400',
   },
   {
     id: 3,
@@ -27,6 +29,7 @@ const promoSlides = [
     cta: 'Discover',
     href: '/products?sort=discount',
     gradient: 'from-amber-600 via-orange-600 to-rose-500',
+    imageUrl: 'https://picsum.photos/seed/promo3/600/400',
   },
 ];
 
@@ -49,53 +52,60 @@ export function PromoCarousel() {
   const slide = promoSlides[currentSlide];
 
   return (
-    <div className="relative w-full rounded-2xl overflow-hidden group">
+    <div className="relative w-full rounded-2xl overflow-hidden group shadow-md">
       {/* Slide */}
       <div
-        className={`relative h-48 sm:h-64 bg-gradient-to-r ${slide.gradient} flex items-center justify-between px-8 sm:px-12 transition-all duration-500`}
+        className={`relative h-48 sm:h-72 bg-gradient-to-r ${slide.gradient} flex items-center justify-between px-8 sm:px-16 transition-all duration-500`}
       >
-        <div className="space-y-2 sm:space-y-3">
-          <p className="text-white/80 text-sm sm:text-base font-medium">{slide.subtitle}</p>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white">{slide.title}</h2>
+        <div className="relative z-10 space-y-2 sm:space-y-4 max-w-sm sm:max-w-xl">
+          <p className="text-white/90 text-sm sm:text-lg font-semibold tracking-wide uppercase">{slide.subtitle}</p>
+          <h2 className="text-3xl sm:text-5xl font-extrabold text-white leading-tight">{slide.title}</h2>
           <a
             href={slide.href}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-surface-900 text-sm font-semibold hover:bg-white/90 transition-colors shadow-lg"
+            className="inline-flex items-center gap-2 px-6 py-3 mt-2 rounded-xl bg-white text-surface-900 text-sm sm:text-base font-bold hover:bg-white/90 transition-colors shadow-lg"
           >
             {slide.cta}
           </a>
         </div>
 
-        {/* Decorative circles */}
-        <div className="hidden sm:block absolute right-12 top-1/2 -translate-y-1/2">
-          <div className="w-32 h-32 rounded-full bg-white/10 animate-pulse-soft" />
-          <div className="absolute -top-6 -right-6 w-20 h-20 rounded-full bg-white/5" />
+        {/* Banner Image */}
+        <div className="absolute right-0 bottom-0 h-full w-1/2 max-w-md hidden sm:block">
+          {/* Subtle gradient overlay to blend image edge with the solid color */}
+          <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-transparent to-transparent z-10" 
+               style={{ background: `linear-gradient(to right, var(--tw-gradient-from) 0%, transparent 100%)` }} 
+          />
+          <img 
+            src={slide.imageUrl} 
+            alt={slide.title} 
+            className="h-full w-full object-cover object-left opacity-90 drop-shadow-2xl mix-blend-overlay"
+          />
         </div>
       </div>
 
       {/* Navigation Arrows */}
       <button
         onClick={prevSlide}
-        className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-surface-950/40 backdrop-blur-sm text-white hover:bg-surface-950/60 transition-all opacity-0 group-hover:opacity-100"
+        className="absolute left-4 top-1/2 -translate-y-1/2 p-2 sm:p-3 rounded-full bg-surface-950/20 backdrop-blur-md text-white hover:bg-surface-950/40 transition-all opacity-0 group-hover:opacity-100 z-20"
       >
-        <ChevronLeft className="w-5 h-5" />
+        <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
       </button>
       <button
         onClick={nextSlide}
-        className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-surface-950/40 backdrop-blur-sm text-white hover:bg-surface-950/60 transition-all opacity-0 group-hover:opacity-100"
+        className="absolute right-4 top-1/2 -translate-y-1/2 p-2 sm:p-3 rounded-full bg-surface-950/20 backdrop-blur-md text-white hover:bg-surface-950/40 transition-all opacity-0 group-hover:opacity-100 z-20"
       >
-        <ChevronRight className="w-5 h-5" />
+        <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
       </button>
 
       {/* Dots */}
-      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
         {promoSlides.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrentSlide(idx)}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+            className={`h-2.5 rounded-full transition-all duration-300 shadow-sm ${
               idx === currentSlide
-                ? 'bg-white w-6'
-                : 'bg-white/40 hover:bg-white/60'
+                ? 'bg-white w-8'
+                : 'bg-white/50 hover:bg-white/80 w-2.5'
             }`}
           />
         ))}

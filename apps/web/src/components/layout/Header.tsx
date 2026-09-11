@@ -17,6 +17,7 @@ export interface HeaderProps {
   notificationCount?: number;
   searchPlaceholder?: string;
   className?: string;
+  pageTitle?: string;
 }
 
 export function Header({
@@ -27,11 +28,23 @@ export function Header({
   notificationCount = 1,
   searchPlaceholder = "Search for products, stores and more...",
   className = "",
+  pageTitle,
 }: HeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
   const isSimpleHeader = pathname === '/checkout' || pathname === '/account/orders' || pathname === '/account/wishlist' || pathname === '/account/addresses' || pathname === '/account/edit-profile' || pathname === '/account/coupons' || pathname === '/account/support' || pathname === '/account/sell' || pathname === '/account/privacy' || pathname === '/account/feedback' || pathname === '/account/terms' || pathname === '/account/logout' || pathname === '/account/logged-out' || pathname?.startsWith('/account/orders/');
   const isAccountPage = pathname?.startsWith('/account') && !isSimpleHeader;
+
+  let displayTitle = pageTitle;
+  if (!displayTitle && isSimpleHeader) {
+    if (pathname === '/account/edit-profile') displayTitle = 'Edit Profile';
+    else if (pathname === '/account/addresses') displayTitle = 'My Addresses';
+    else if (pathname === '/account/wishlist') displayTitle = 'Wishlist';
+    else if (pathname === '/account/orders') displayTitle = 'My Orders';
+    else if (pathname === '/account/coupons') displayTitle = 'My Coupons';
+    else if (pathname === '/account/support') displayTitle = 'Help & Support';
+    else if (pathname === '/checkout') displayTitle = 'Checkout';
+  }
 
   return (
     <header className={`w-full select-none ${className}`}>
@@ -77,8 +90,8 @@ export function Header({
                 <button onClick={() => router.push('/account')} className="p-1 -ml-1 text-[#192168]">
                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
                 </button>
-                <div className="scale-90">
-                  <Logo theme="dark" />
+                <div className={displayTitle ? "flex-1 flex justify-center text-[#192168] font-bold text-lg" : "scale-90"}>
+                  {displayTitle ? displayTitle : <Logo theme="dark" />}
                 </div>
                 <div className="flex items-center gap-4">
                   <button type="button" className="text-[#192168]" onClick={() => router.push('/account/wishlist')}>

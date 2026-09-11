@@ -40,13 +40,21 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable}`} suppressHydrationWarning>
-      <body className="font-sans bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50/40 via-white to-white text-surface-900 antialiased min-h-[100dvh] relative overflow-x-hidden">
-        <Providers>
+      <body className="font-sans bg-white text-surface-900 antialiased min-h-[100dvh] relative overflow-x-hidden">
+        {/* Subtle decorative side gradients for wide screens */}
+        <div className="pointer-events-none fixed inset-0 z-0 hidden lg:block" aria-hidden="true">
+          <div className="absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-blue-50/50 to-transparent" />
+          <div className="absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-blue-50/50 to-transparent" />
+        </div>
+        
+        <div className="relative z-10">
+          <Providers>
           <Header />
           {children}
           <CartDrawer />
           <BottomNav />
         </Providers>
+        </div>
       </body>
     </html>
   );

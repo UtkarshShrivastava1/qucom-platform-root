@@ -192,7 +192,7 @@ export async function addAddress(userId: string, address: UserAddressDto): Promi
   }
 
   if (address.isDefault) {
-    user.addresses.forEach((addr) => {
+    user.addresses.forEach((addr: any) => {
       addr.isDefault = false;
     });
   }
@@ -212,7 +212,7 @@ export async function deleteAddress(userId: string, addressId: string): Promise<
     throw AppError.notFound('User not found', 'USER_NOT_FOUND');
   }
 
-  user.addresses = user.addresses.filter((addr) => addr._id?.toString() !== addressId);
+  user.addresses = user.addresses.filter((addr: any) => addr._id?.toString() !== addressId);
   await user.save();
 
   return user.toJSON() as unknown as IUser;

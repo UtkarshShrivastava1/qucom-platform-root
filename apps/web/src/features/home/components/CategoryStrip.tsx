@@ -1,26 +1,20 @@
 'use client';
 
 import React from 'react';
-import { 
-  Shirt, Smartphone, Laptop, Sparkles, Home, Tv, 
-  Baby, Leaf, Car, Dumbbell, Sofa, BookOpen, Bike 
-} from 'lucide-react';
 import { ProductCategory } from '@repo/shared-types';
+import Image from 'next/image';
 
 const categories = [
-  { label: 'Fashion', value: ProductCategory.FASHION, icon: Shirt, color: 'text-blue-500' },
-  { label: 'Mobiles', value: 'mobiles', icon: Smartphone, color: 'text-pink-500' },
-  { label: 'Electronics', value: ProductCategory.ELECTRONICS, icon: Laptop, color: 'text-indigo-500' },
-  { label: 'Beauty', value: ProductCategory.BEAUTY, icon: Sparkles, color: 'text-rose-500' },
-  { label: 'Home & Living', value: ProductCategory.HOME_LIVING, icon: Home, color: 'text-amber-500' },
-  { label: 'Appliances', value: 'appliances', icon: Tv, color: 'text-cyan-500' },
-  { label: 'Toys & Baby', value: 'toys_baby', icon: Baby, color: 'text-fuchsia-500' },
-  { label: 'Food & Health', value: ProductCategory.GROCERY_STAPLES, icon: Leaf, color: 'text-green-500' },
-  { label: 'Auto Accessories', value: 'auto_accessories', icon: Car, color: 'text-slate-500' },
-  { label: 'Sports', value: ProductCategory.SPORTS_FITNESS, icon: Dumbbell, color: 'text-orange-500' },
-  { label: 'Furniture', value: 'furniture', icon: Sofa, color: 'text-amber-700' },
-  { label: 'Books', value: 'books', icon: BookOpen, color: 'text-purple-500' },
-  { label: '2 Wheelers', value: 'two_wheelers', icon: Bike, color: 'text-blue-600' },
+  { label: 'Top Offers', value: 'offers', imageUrl: 'https://picsum.photos/seed/offers/120/120' },
+  { label: 'Mobiles & Tablets', value: 'mobiles', imageUrl: 'https://picsum.photos/seed/mobiles/120/120' },
+  { label: 'Electronics', value: ProductCategory.ELECTRONICS, imageUrl: 'https://picsum.photos/seed/electronics/120/120' },
+  { label: 'TVs & Appliances', value: 'appliances', imageUrl: 'https://picsum.photos/seed/appliances/120/120' },
+  { label: 'Fashion', value: ProductCategory.FASHION, imageUrl: 'https://picsum.photos/seed/fashion/120/120' },
+  { label: 'Beauty', value: ProductCategory.BEAUTY, imageUrl: 'https://picsum.photos/seed/beauty/120/120' },
+  { label: 'Home & Kitchen', value: ProductCategory.HOME_LIVING, imageUrl: 'https://picsum.photos/seed/home/120/120' },
+  { label: 'Furniture', value: 'furniture', imageUrl: 'https://picsum.photos/seed/furniture/120/120' },
+  { label: 'Travel', value: 'travel', imageUrl: 'https://picsum.photos/seed/travel/120/120' },
+  { label: 'Grocery', value: ProductCategory.GROCERY_STAPLES, imageUrl: 'https://picsum.photos/seed/grocery/120/120' },
 ];
 
 interface CategoryStripProps {
@@ -30,21 +24,24 @@ interface CategoryStripProps {
 
 export function CategoryStrip({ activeCategory = 'all', onCategoryChange }: CategoryStripProps) {
   return (
-    <div className="w-full overflow-x-auto scrollbar-hide py-4 bg-white border-b border-surface-100 shadow-sm">
-      <div className="flex items-center justify-between gap-6 px-6 min-w-max max-w-[1920px] mx-auto">
+    <div className="w-full overflow-x-auto scrollbar-hide py-3 bg-white shadow-sm border-b border-surface-100">
+      <div className="flex items-center justify-between gap-4 md:gap-8 px-4 sm:px-6 min-w-max max-w-[1920px] mx-auto">
         {categories.map((cat) => {
           const isActive = activeCategory === cat.value;
-          const Icon = cat.icon;
           return (
             <button
               key={cat.value}
               onClick={() => onCategoryChange?.(cat.value)}
               className="flex flex-col items-center gap-2 group transition-all"
             >
-              <div className={`p-0 transition-transform group-hover:scale-110 ${isActive ? 'scale-110' : ''}`}>
-                <Icon className={`w-6 h-6 ${cat.color}`} strokeWidth={isActive ? 2.5 : 2} />
+              <div className={`relative w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden transition-transform group-hover:scale-105 ${isActive ? 'ring-2 ring-brand-500 scale-105' : ''}`}>
+                <img
+                  src={cat.imageUrl}
+                  alt={cat.label}
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <span className={`text-[11px] font-semibold whitespace-nowrap ${isActive ? 'text-[#192168]' : 'text-surface-600 group-hover:text-[#192168]'}`}>
+              <span className={`text-[12px] sm:text-sm font-semibold whitespace-nowrap ${isActive ? 'text-[#1668F6]' : 'text-surface-800 group-hover:text-[#1668F6]'}`}>
                 {cat.label}
               </span>
             </button>
