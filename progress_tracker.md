@@ -160,14 +160,21 @@ graph TB
 
 ---
 
-### 🟣 Phase 6 — Account, Engagement & Polish
-> *Customer profile management, order history, ratings, and merchant analytics*
+### 🟣 Phase 6 — Account, Store Ratings & Polish
+> *Customer profile management, order history, simple store rating, and lean merchant operations*
 
-- [ ] Customer account hub (saved addresses, order tracking timeline, wishlist with price drop alerts)
-- [ ] Customer feedback & NPS rating system
-- [ ] "Sell on Viztore" in-app merchant acquisition flow
-- [ ] Merchant marketing module (in-app banner and promo campaign manager)
-- [ ] Advanced revenue analytics and sales reports for merchants
+- [ ] Customer account hub (saved addresses CRUD with default toggle, order tracking timeline, wishlist with price-drop alerts)
+- [ ] **Lightweight Store Rating & Feedback Engine**:
+  - Simple 1–5 star customer rating for the fulfilling store/merchant upon order completion.
+  - Rolling aggregate store rating score & count computed by the backend (`averageRating`, `totalRatings`).
+  - Scoped strictly to the store/merchant level (No complex per-item review threads or customer photo uploads).
+- [ ] Customer platform NPS & experience feedback submission (`/api/v1/feedback`)
+- [ ] Merchant conversion flow ("Sell on {branding.appName}" informational screen)
+- [ ] Merchant marketing module (standard in-app banner and promo campaign manager)
+- [ ] Merchant revenue analytics and sales aggregation reports
+- [x] **Lean Scope & Non-AI Search Mandate**:
+  - Zero paid external AI APIs (strictly NO image-scan visual search, NO voice command AI processing).
+  - High-performance, cost-effective search powered purely by MongoDB compound text indexes and faceted aggregation.
 
 ---
 

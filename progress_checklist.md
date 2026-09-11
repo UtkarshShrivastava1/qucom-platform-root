@@ -119,12 +119,13 @@
 
 ---
 
-## 🟣 Phase 6: Customer Account, Merchant Marketing & Polish
-
-- [ ] Customer account dashboard: saved addresses, order history, wishlist
-- [ ] Review & ratings engine with verified purchase badges
-- [ ] Merchant marketing suite: discount voucher & banner campaign manager
+## 🟣 Phase 6: Customer Account, Store Ratings & Polish
+- [ ] Customer account dashboard: saved addresses CRUD, order history, wishlist
+- [ ] Simple Store/Merchant rating system (1–5 stars per delivered order, aggregated store rating score/count; no per-item reviews)
+- [ ] Customer platform NPS & experience feedback submission
+- [ ] Merchant marketing suite: discount voucher & banner campaign manager (standard non-AI)
 - [ ] Merchant revenue analytics & sales reports
+- [x] Lean Architecture Mandate: Zero paid AI APIs (pure MongoDB text search, no visual/voice AI)
 
 ---
 
