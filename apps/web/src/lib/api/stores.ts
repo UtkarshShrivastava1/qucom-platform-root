@@ -1,4 +1,4 @@
-import { StoreCategory, StoreApprovalStatus, type IStore } from "@repo/shared-types";
+import { StoreCategory, StoreApprovalStatus, type IStore, branding } from "@repo/shared-types";
 
 const DUMMY_JSON_URL = "https://dummyjson.com";
 
@@ -110,7 +110,7 @@ export async function fetchNearbyStores(
           .replace(/[^a-z0-9]+/g, "-")
           .replace(/(^-|-$)/g, "")}`,
         name: `${product.title} Store`,
-        description: `Local ${product.category} store available on Viztore.`,
+        description: `Local ${product.category} store available on ${branding.appName}.`,
         bannerUrl: product.thumbnail,
         logoUrl: product.thumbnail,
         category: (product.category as StoreCategory) || StoreCategory.OTHER,

@@ -23,6 +23,7 @@ import {
   User,
   Star
 } from 'lucide-react';
+import { branding } from '@repo/shared-types';
 
 const mockStores = [
   {
@@ -112,7 +113,7 @@ export function AccountClient() {
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[12px] font-bold text-[#192168]">Sell on Viztore</span>
+                    <span className="text-[12px] font-bold text-[#192168]">Sell on {branding.appName}</span>
                     <span className="bg-[#1668F6] text-white text-[8px] font-extrabold px-1.5 py-0.5 rounded-full">New</span>
                   </div>
                   <span className="text-[10px] font-medium text-surface-500 leading-tight block">Start selling and grow your business</span>
@@ -276,7 +277,7 @@ export function AccountClient() {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[12px] font-bold text-[#192168]">Sell on Viztore</span>
+                  <span className="text-[12px] font-bold text-[#192168]">Sell on {branding.appName}</span>
                   <span className="bg-[#1668F6] text-white text-[8px] font-extrabold px-1.5 py-0.5 rounded-full">New</span>
                 </div>
                 <span className="text-[10px] font-medium text-surface-500 leading-tight block">Start selling and grow your business</span>

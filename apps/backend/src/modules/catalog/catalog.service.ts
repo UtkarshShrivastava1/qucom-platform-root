@@ -432,7 +432,7 @@ export async function checkVariantStock(
     return { available: false, currentStock: 0 };
   }
 
-  const variant = product.variants.find((v: any) => v.sku === sku && v.isActive);
+  const variant = product.variants.find((v) => v.sku === sku && v.isActive);
   if (!variant) {
     return { available: false, currentStock: 0 };
   }

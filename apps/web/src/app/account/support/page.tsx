@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Search, Package, RotateCcw, CreditCard, User, Store, ChevronRight, MessageSquare, PhoneCall, Mail, ShieldCheck } from 'lucide-react';
+import { branding } from '@repo/shared-types';
 
 export default function SupportPage() {
   return (
@@ -41,7 +42,7 @@ export default function SupportPage() {
             <QuickHelpIcon icon={<RotateCcw className="h-5 w-5 text-amber-500" />} label="Returns & Refunds" bg="bg-amber-50" border="border-amber-100" />
             <QuickHelpIcon icon={<CreditCard className="h-5 w-5 text-emerald-500" />} label="Payments & Offers" bg="bg-emerald-50" border="border-emerald-100" />
             <QuickHelpIcon icon={<User className="h-5 w-5 text-purple-500" />} label="Account & Profile" bg="bg-purple-50" border="border-purple-100" />
-            <QuickHelpIcon icon={<Store className="h-5 w-5 text-pink-500" />} label="Selling on Viztore" bg="bg-pink-50" border="border-pink-100" />
+            <QuickHelpIcon icon={<Store className="h-5 w-5 text-pink-500" />} label={`Selling on ${branding.appName}`} bg="bg-pink-50" border="border-pink-100" />
           </div>
         </div>
 
@@ -87,7 +88,7 @@ export default function SupportPage() {
               bg="bg-purple-50"
               title="Email Us"
               desc="Drop us an email and we'll get back to you"
-              action="support@viztore.com"
+              action={branding.supportEmail}
               actionColor="text-[#1668F6]"
             />
           </div>

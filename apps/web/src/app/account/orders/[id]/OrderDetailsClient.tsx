@@ -12,6 +12,7 @@ import {
   HeadphonesIcon,
   ChevronRight
 } from 'lucide-react';
+import { branding } from '@repo/shared-types';
 
 export function OrderDetailsClient({ id }: { id: string }) {
   const displayId = id.startsWith('VZT') ? `#${id}` : `#VZT${id}`;
@@ -192,7 +193,7 @@ export function OrderDetailsClient({ id }: { id: string }) {
               
               <div className="mt-5 bg-[#ecfdf3] rounded-lg p-3 flex gap-2">
                 <CheckCircle2 className="w-4 h-4 text-[#22c55e] flex-shrink-0" />
-                <p className="text-[10px] font-medium text-green-700">Your order has been delivered. Thank you for shopping with Viztore!</p>
+                <p className="text-[10px] font-medium text-green-700">Your order has been delivered. Thank you for shopping with {branding.appName}!</p>
               </div>
             </div>
 

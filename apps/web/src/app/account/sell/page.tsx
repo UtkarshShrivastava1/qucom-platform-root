@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Rocket, Users, TrendingUp, ShieldCheck, HeadphonesIcon, Megaphone, PieChart, Calendar, Wallet, ChevronRight } from 'lucide-react';
+import { branding } from '@repo/shared-types';
 
 export default function SellPage() {
   return (
@@ -11,7 +12,7 @@ export default function SellPage() {
         {/* Hero Section */}
         <div className="relative mb-6 pb-6 border-b border-gray-100">
           <div className="pr-36">
-            <h1 className="text-2xl font-black text-[#192168] mb-4">Sell on Viztore</h1>
+            <h1 className="text-2xl font-black text-[#192168] mb-4">Sell on {branding.appName}</h1>
             <p className="text-sm text-gray-600 leading-relaxed font-medium max-w-[220px]">Start selling and grow your business with India's trusted local marketplace</p>
           </div>
           {/* Mock Graphic Container */}
@@ -27,7 +28,7 @@ export default function SellPage() {
               <Rocket className="h-5 w-5" />
             </div>
             <div>
-              <h4 className="font-bold text-emerald-900 text-sm">Grow your business with Viztore</h4>
+              <h4 className="font-bold text-emerald-900 text-sm">Grow your business with {branding.appName}</h4>
               <p className="text-[10px] text-emerald-700 leading-tight mt-0.5">Reach more local customers and boost your sales</p>
             </div>
           </div>
@@ -38,7 +39,7 @@ export default function SellPage() {
 
         {/* Why Sell */}
         <div className="mb-10">
-          <h3 className="text-sm font-bold text-[#192168] mb-5">Why sell on Viztore?</h3>
+          <h3 className="text-sm font-bold text-[#192168] mb-5">Why sell on {branding.appName}?</h3>
           <div className="grid grid-cols-2 gap-4 gap-y-6 md:grid-cols-4">
             <FeatureIcon 
               icon={<Users className="h-6 w-6 text-blue-500" />} 

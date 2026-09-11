@@ -3,6 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { CheckCircle2, Store, Tag, Grid, Heart, ShieldCheck } from 'lucide-react';
+import { branding } from '@repo/shared-types';
 
 export default function LoggedOutPage() {
   const router = useRouter();
@@ -45,7 +46,7 @@ export default function LoggedOutPage() {
 
         {/* Explore */}
         <div className="mb-8">
-          <h3 className="text-base font-bold text-[#192168] mb-4">Explore Viztore</h3>
+          <h3 className="text-base font-bold text-[#192168] mb-4">Explore {branding.appName}</h3>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
             <ExploreCard 
               icon={<Store className="h-5 w-5 text-emerald-500" />}
@@ -84,7 +85,7 @@ export default function LoggedOutPage() {
             <ShieldCheck className="h-5 w-5" />
           </div>
           <div>
-            <h4 className="font-bold text-[#192168] text-sm">Thank you for using Viztore</h4>
+            <h4 className="font-bold text-[#192168] text-sm">Thank you for using {branding.appName}</h4>
             <p className="mt-0.5 text-xs text-emerald-800/80">We hope to see you again soon!</p>
           </div>
         </div>

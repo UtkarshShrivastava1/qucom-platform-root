@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { MessageSquare, Frown, Meh, Smile, Camera, ArrowRight, Star } from 'lucide-react';
+import { branding } from '@repo/shared-types';
 
 export default function FeedbackPage() {
   const [rating, setRating] = useState<number | null>(null);
@@ -28,7 +29,7 @@ export default function FeedbackPage() {
 
         {/* Experience Rating */}
         <div className="bg-white rounded-2xl p-5 shadow-sm border border-surface-200/50 mb-4">
-          <h3 className="text-sm font-bold text-[#192168] mb-4">How was your experience with Viztore?</h3>
+          <h3 className="text-sm font-bold text-[#192168] mb-4">How was your experience with {branding.appName}?</h3>
           <div className="flex justify-between items-center">
             <RatingIcon icon={<Frown className="h-8 w-8" />} label="Very Poor" index={1} active={rating === 1} onClick={() => setRating(1)} />
             <RatingIcon icon={<Frown className="h-8 w-8" />} label="Poor" index={2} active={rating === 2} onClick={() => setRating(2)} />
@@ -75,7 +76,7 @@ export default function FeedbackPage() {
 
         {/* NPS */}
         <div className="bg-white rounded-2xl p-5 shadow-sm border border-surface-200/50 mb-4">
-          <h3 className="text-sm font-bold text-[#192168] mb-4">Would you recommend Viztore to others?</h3>
+          <h3 className="text-sm font-bold text-[#192168] mb-4">Would you recommend {branding.appName} to others?</h3>
           <div className="flex justify-between items-center overflow-x-auto gap-2 pb-2 scrollbar-hide">
             {[0,1,2,3,4,5,6,7,8,9,10].map((score) => (
               <button

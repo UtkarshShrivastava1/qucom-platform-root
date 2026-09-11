@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Shield, Database, Eye, Share2, Lock, FileText } from 'lucide-react';
+import { branding } from '@repo/shared-types';
 
 export default function PrivacyPolicyPage() {
   return (
@@ -28,7 +29,7 @@ export default function PrivacyPolicyPage() {
           <div>
             <h4 className="font-bold text-blue-900 text-sm mb-1">We respect your privacy</h4>
             <p className="text-[11px] text-blue-800/80 leading-relaxed">
-              Viztore is committed to protecting your personal data. This privacy policy explains how we collect, use, and share your information when you use our services.
+              {branding.appName} is committed to protecting your personal data. This privacy policy explains how we collect, use, and share your information when you use our services.
             </p>
           </div>
         </div>
@@ -53,7 +54,7 @@ export default function PrivacyPolicyPage() {
           </PolicySection>
 
           <PolicySection title="2. How We Use Your Information" icon={<FileText className="h-5 w-5 text-[#192168]" />}>
-            <p className="text-gray-600 mb-3 leading-relaxed">Viztore uses the collected data for various purposes:</p>
+            <p className="text-gray-600 mb-3 leading-relaxed">{branding.appName} uses the collected data for various purposes:</p>
             <ul className="list-disc pl-5 space-y-2 text-gray-600">
               <li>To provide and maintain our Service.</li>
               <li>To notify you about changes to our Service.</li>
