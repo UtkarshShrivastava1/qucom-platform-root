@@ -2,9 +2,9 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Header } from '@/components/ui/Header';
-import { Footer } from '@/components/ui/Footer';
-import { ProductCard } from '@/components/ui/ProductCard';
+import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
+import { ProductCard } from '@/features/products/components/ProductCard';
 import { ProductGridSkeleton } from '@/components/ui/Skeleton';
 import { useProducts } from '@/hooks/useProducts';
 import { useLocationStore } from '@/stores/location.store';
@@ -42,19 +42,17 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
   const total = data?.meta?.total || 0;
 
   return (
-    <div className="min-h-screen bg-surface-950">
-      <Header address={address} />
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+    <div className="min-h-screen bg-transparent">
+      <main className="max-w-[1920px] mx-auto px-4 sm:px-6 py-6 space-y-6">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-xs text-surface-500">
-          <Link href="/" className="hover:text-surface-300 transition-colors">Home</Link>
+        <nav className="flex items-center gap-2 text-xs text-surface-500 font-medium">
+          <Link href="/" className="hover:text-surface-900 transition-colors">Home</Link>
           <ChevronRight className="w-3 h-3" />
-          <span className="text-surface-300">{meta.title}</span>
+          <span className="text-surface-900 font-bold">{meta.title}</span>
         </nav>
 
         {/* Category Header */}
-        <div className="glass-card p-6 rounded-2xl gradient-brand relative overflow-hidden">
+        <div className="p-6 rounded-2xl bg-gradient-to-br from-[#192168] to-[#1668F6] shadow-sm relative overflow-hidden">
           <div className="relative z-10">
             <span className="text-4xl">{meta.emoji}</span>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white mt-2">{meta.title}</h1>
@@ -74,10 +72,10 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
             ))}
           </div>
         ) : (
-          <div className="py-20 text-center glass-card rounded-2xl">
-            <Package className="w-10 h-10 mx-auto text-surface-600 mb-3" />
-            <p className="text-surface-400 text-sm">No products in this category yet.</p>
-            <Link href="/products" className="inline-block mt-4 px-5 py-2 rounded-xl bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 transition-colors">
+          <div className="py-20 text-center bg-white border border-surface-200 shadow-sm rounded-2xl">
+            <Package className="w-10 h-10 mx-auto text-surface-300 mb-3" />
+            <p className="text-surface-600 text-sm font-medium">No products in this category yet.</p>
+            <Link href="/products" className="inline-block mt-4 px-5 py-2 rounded-xl bg-[#1668F6] text-white text-sm font-bold hover:bg-[#1155cc] transition-colors shadow-sm">
               Browse All Products
             </Link>
           </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { fetchFeaturedProducts } from '@/lib/api/catalog';
+import { fetchFeaturedProducts  } from '@/lib/api/catalog';
 
 export function useFeaturedProducts(limit = 12) {
   return useQuery({
