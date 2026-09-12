@@ -13,10 +13,10 @@ export function StoreCard({ store }: StoreCardProps) {
   return (
     <Link
       href={`/stores/${store.slug}`}
-      className="group flex-shrink-0 w-64 glass-card overflow-hidden hover:border-brand-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-500/5"
+      className="group flex-shrink-0 w-[200px] sm:w-[280px] bg-white overflow-hidden hover:border-brand-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-500/5 border rounded-2xl"
     >
       {/* Banner Image */}
-      <div className="relative h-32 overflow-hidden bg-surface-900">
+      <div className="relative h-32 overflow-hidden bg-surface-100">
         {store.bannerUrl ? (
           <img
             src={store.bannerUrl}
@@ -27,12 +27,11 @@ export function StoreCard({ store }: StoreCardProps) {
         ) : (
           <div className="w-full h-full gradient-brand opacity-40" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-surface-950/80 to-transparent" />
 
         {/* ETA Badge */}
-        <div className="absolute bottom-2 left-2 flex items-center gap-1 px-2 py-1 rounded-lg bg-surface-950/70 backdrop-blur-sm">
-          <Clock className="w-3 h-3 text-brand-400" />
-          <span className="text-xs font-medium text-surface-200">
+        <div className="absolute top-2 left-2 flex items-center gap-1 px-2 py-1 rounded-lg bg-white backdrop-blur-sm">
+          <Clock className="w-3 h-3 text-emerald-400" />
+          <span className="text-xs font-medium text-surface-500">
             {store.distanceKm ? `${store.distanceKm.toFixed(1)} km` : '~2 km'}
           </span>
         </div>
@@ -40,7 +39,7 @@ export function StoreCard({ store }: StoreCardProps) {
 
       {/* Content */}
       <div className="p-3 space-y-2">
-        <h3 className="text-sm font-semibold text-surface-200 truncate group-hover:text-surface-50 transition-colors">
+        <h3 className="text-sm font-semibold text-[#192168] truncate group-hover:text-surface-500 transition-colors">
           {store.name}
         </h3>
 
