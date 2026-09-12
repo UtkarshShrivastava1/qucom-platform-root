@@ -126,6 +126,7 @@ graph TB
   - [ ] **Task 4 (Seller Registration & Onboarding)**: Assigned with 9-screen specification mapped to Harish's `1.png`–`8.png` (`abhay_seller_registration_mockup_task.md`).
 - **Vinay (Customer Web Storefront `apps/web`)**:
   - [x] **Task 1 (Mobile App Mockup ➔ Responsive Customer Web & Account Hub)**: MERGED to `main` (`e52bc45`). Full responsive storefront: Cart (`/cart`), Checkout (`/checkout`), Category browse (`/category`, `/category/[slug]`), and 11 Account Hub screens (`/account`, `/orders`, `/orders/[id]`, `/wishlist`, `/addresses`, `/coupons`, `/edit-profile`, `/feedback`, `/sell`, `/support`, `/privacy`, `/terms`). Zero brand violations, 100% white-label compliant.
+  - [ ] **Task 2 (Hyperlocal Discovery, Catalog PLP, Product PDP & Storefronts)**: Assigned with 6-screen specification mapped to mockups `2.0`–`3.1` (`vinay_catalog_pdp_task.md`). Category Hub (`/category`), Faceted PLP (`/products`), Comprehensive PDP (`/products/[slug]`), Stores Near Me (`/stores`), and Storefront (`/stores/[slug]`).
 
 - [x] Customer Web Storefront Cart & Checkout UI (`apps/web`) — Merged via PR #4
 - [ ] Merchant Panel Live Orders Pipeline Kanban Board (`apps/merchant`)
