@@ -125,9 +125,10 @@ graph TB
   - [x] **Task 3 (Product Catalog & Add Product Wizard)**: MERGED to `main` (`cbed558`). Full 6-screen system: 5 KPI summary cards, filter toolbar, products table, 7-action popup menu, 3-step creation wizard (Category, Images, Pricing/Inventory/Storage), Preview & Submit with actual-size barcode label preview.
   - [ ] **Task 4 (Seller Registration & Onboarding)**: Assigned with 9-screen specification mapped to Harish's `1.png`–`8.png` (`abhay_seller_registration_mockup_task.md`).
 - **Vinay (Customer Web Storefront `apps/web`)**:
-  - [ ] **Task 1 (Mobile App Mockup ➔ Responsive Customer Web)**: Briefing & contributor guide assigned (`vinay_web_mockup_task.md`).
+  - [x] **Task 1 (Mobile App Mockup ➔ Responsive Customer Web & Account Hub)**: MERGED to `main` (`e52bc45`). Full responsive storefront: Cart (`/cart`), Checkout (`/checkout`), Category browse (`/category`, `/category/[slug]`), and 11 Account Hub screens (`/account`, `/orders`, `/orders/[id]`, `/wishlist`, `/addresses`, `/coupons`, `/edit-profile`, `/feedback`, `/sell`, `/support`, `/privacy`, `/terms`). Zero brand violations, 100% white-label compliant.
+  - [ ] **Task 2 (Hyperlocal Discovery, Catalog PLP, Product PDP & Storefronts)**: Assigned with 6-screen specification mapped to mockups `2.0`–`3.1` (`vinay_catalog_pdp_task.md`). Category Hub (`/category`), Faceted PLP (`/products`), Comprehensive PDP (`/products/[slug]`), Stores Near Me (`/stores`), and Storefront (`/stores/[slug]`).
 
-- [ ] Customer Web Storefront Cart Drawer & 4-step Checkout UI (`apps/web`)
+- [x] Customer Web Storefront Cart & Checkout UI (`apps/web`) — Merged via PR #4
 - [ ] Merchant Panel Live Orders Pipeline Kanban Board (`apps/merchant`)
 (Pending → Confirmed → Packed → Out for Delivery → Delivered / Cancelled)
 - [ ] Secure 4-digit Delivery OTP verification for order handoff

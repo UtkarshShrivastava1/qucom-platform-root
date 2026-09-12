@@ -92,9 +92,9 @@
   - [x] Single-store cart invariant enforcement at service layer
   - [x] ESR compound indexing (`{ storeId: 1, status: 1, createdAt: -1 }`, `{ userId: 1, createdAt: -1 }`)
   - [x] 3-tier testing pyramid: Service unit tests, Supertest route integration tests, Repository unit tests (13 tests, 39 total tests passing)
-- [ ] **Customer Storefront Cart & Checkout UI (`apps/web`)**
-  - [ ] Flyout Cart Drawer with item stepper & single-store conflict modal
-  - [ ] 4-Step Checkout flow (Address, Fulfillment Mode, Payment Method, Order Summary)
+- [x] **Customer Storefront Cart & Checkout UI (`apps/web`)**
+  - [x] Cart page with single-store check & item quantity steppers (`/cart`)
+  - [x] Checkout page with address, fulfillment mode, and payment summary (`/checkout`)
 - [ ] **Merchant Panel Live Orders Pipeline (`apps/merchant`)**
   - [ ] Kanban Pipeline Board (New, Preparing, Ready, Out for Delivery, Completed)
   - [ ] Delivery OTP modal verification for merchant/rider handoff
@@ -120,7 +120,8 @@
 ---
 
 ## 🟣 Phase 6: Customer Account, Store Ratings & Polish
-- [ ] Customer account dashboard: saved addresses CRUD, order history, wishlist
+- [x] Customer account frontend UI screens (Profile hub, Orders list & detail, Wishlist, Addresses, Coupons, Feedback, Sell CTA) — Merged via PR #4
+- [ ] Customer account backend APIs: saved addresses CRUD, order history query, wishlist with price-drop alerts
 - [ ] Simple Store/Merchant rating system (1–5 stars per delivered order, aggregated store rating score/count; no per-item reviews)
 - [ ] Customer platform NPS & experience feedback submission
 - [ ] Merchant marketing suite: discount voucher & banner campaign manager (standard non-AI)
