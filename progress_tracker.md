@@ -24,7 +24,20 @@
 
 ---
 
-## 3. System Topology
+## 3. Active Release Milestone: Staging Deployment & QA Release Gate
+> **Target Release Date:** September 22, 2026  
+> **Objective:** Deliver fully integrated, data-seeded staging environments to the QA team for end-to-end regression and exploratory testing.
+
+| Sprint Window | Track & Focus Area | Macro Phase Link | Deliverables & Exit Criteria | Status |
+|---|---|:---:|---|:---:|
+| **Sept 15 – 16** | **Core Backend Completion** | Phase 6 | • Customer Address CRUD (`/api/v1/users/addresses`)<br/>• Order History API (`/api/v1/orders/my-orders`)<br/>• Store Rating & Aggregate Score (`/api/v1/stores/:id/rating`) | ⏳ In Progress |
+| **Sept 17 – 18** | **Frontend Integration & PR Merges** | Phase 4 & 5 | • Merge Task 5: Inventory Management Suite (Abhay)<br/>• Merge Task 2: Catalog Discovery PLP/PDP (Vinay)<br/>• Wire TanStack Query hooks to live endpoints | ⏳ Scheduled |
+| **Sept 19 – 20** | **Cloud Staging Deployment** | DevOps | • Deploy `apps/backend` + Redis to Railway/Render<br/>• Deploy `apps/web` & `apps/merchant` to Vercel<br/>• Execute `pnpm seed:staging` (4 stores, 60+ products, test personas) | ⏳ Scheduled |
+| **Sept 21 – 22** | **Smoke Testing & QA Handoff** | Quality Gate | • Execute full end-to-end purchase & OTP delivery handshake<br/>• Publish `QA_TESTING_GUIDE.md` with credentials & test scenarios<br/>• Formal release gate handover to the QA testing team | ⏳ Scheduled |
+
+---
+
+## 4. System Topology
 
 ```mermaid
 graph TB
@@ -50,7 +63,7 @@ graph TB
 
 ---
 
-## 4. Current Monorepo Status
+## 5. Current Monorepo Status
 
 | Layer | Technology | Status | Details |
 |---|---|---|---|
@@ -69,7 +82,7 @@ graph TB
 
 ---
 
-## 5. Phase-by-Phase Roadmap & Progress
+## 6. Phase-by-Phase Roadmap & Progress
 
 ### 🔵 Phase 1 — Foundation & Core Backend (COMPLETED ✅)
 > *Modular monolith architecture with authentication and spatial store queries*
