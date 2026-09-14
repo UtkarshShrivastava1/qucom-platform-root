@@ -6,9 +6,25 @@
 
 > *"Built for Local Businesses. Made for India."*
 
+## 2. Global Project Completion Status
+
+### 🚀 Production Launch Scope (Phases 1–6: Backend + Merchant + Web + Ops)
+`[██████████████████████████████░░░░░░░░░░░░] 72% Complete`
+
+| Scope Dimension | Weight | Progress Bar | % Complete | Status | Target Milestone |
+|---|:---:|---|:---:|:---:|---|
+| **Overall Production Launch** (Phases 1–6) | **100%** | `[██████████████░░░░░░]` | **72%** | 🟡 Active Engineering | Staging & Production Go-Live |
+| ↳ **Backend Architecture & APIs** | 30% | `[██████████████████░░]` | **88%** | 🟢 Complete / Hardened | 56/56 Tests Passing, Facades Live |
+| ↳ **Merchant & Admin Panel** | 25% | `[███████████████░░░░░]` | **75%** | 🟡 Feature In-Flight | Inventory Management Suite (Task 5) |
+| ↳ **Customer Web Storefront** | 25% | `[█████████████░░░░░░░]` | **65%** | 🟡 Feature In-Flight | Faceted PLP & PDP Discovery (Task 2) |
+| ↳ **Production Readiness & DevOps** | 20% | `[███████████░░░░░░░░░]` | **55%** | 🟡 Infrastructure Ready | Cloud Secrets & Gateway Setup |
+| **Total Full-Platform Scope** (Phases 1–7) | — | `[████████████░░░░░░░░]` | **59%** | ⚪ Roadmap Reserved | Customer Mobile App (Phase 7) |
+
+> **Auto-Update Invariant**: This progress bar is recalculated and updated dynamically on every task assignment, milestone delivery, and PR merge per `.agents/rules/progress-tracking.md`.
+
 ---
 
-## 2. System Topology
+## 3. System Topology
 
 ```mermaid
 graph TB
@@ -34,7 +50,7 @@ graph TB
 
 ---
 
-## 3. Current Monorepo Status
+## 4. Current Monorepo Status
 
 | Layer | Technology | Status | Details |
 |---|---|---|---|
@@ -53,7 +69,7 @@ graph TB
 
 ---
 
-## 4. Phase-by-Phase Roadmap & Progress
+## 5. Phase-by-Phase Roadmap & Progress
 
 ### 🔵 Phase 1 — Foundation & Core Backend (COMPLETED ✅)
 > *Modular monolith architecture with authentication and spatial store queries*
