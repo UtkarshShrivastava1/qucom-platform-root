@@ -31,7 +31,7 @@ export const SellerLandingPage: React.FC<SellerLandingPageProps> = ({
         {/* Background Graphic: The full scene anchored to the right */}
         <div className="absolute right-0 top-0 bottom-0 w-full lg:w-[62%] xl:w-[58%] pointer-events-none overflow-hidden flex items-center justify-end [mask-image:linear-gradient(to_right,transparent_0%,black_15%)]">
           <img
-            src="/Gemini_Generated_Image_lc6hbflc6hbflc6h.png"
+            src="/seller-hero-scene.png"
             alt={`${branding.appName} Seller Portal 3D Artwork`}
             className="h-full w-auto max-w-none object-contain object-right select-none pointer-events-none"
           />

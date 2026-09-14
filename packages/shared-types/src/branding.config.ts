@@ -7,12 +7,12 @@ const getEnv = (key: string): string | undefined => {
 };
 
 export const branding = {
-  appName: getEnv('NEXT_PUBLIC_APP_NAME') || 'Viztore',
-  tagline: getEnv('NEXT_PUBLIC_APP_TAGLINE') || 'Making Local Stores Viable.',
-  domain: getEnv('NEXT_PUBLIC_APP_DOMAIN') || 'seller.viztore.com',
-  supportEmail: getEnv('NEXT_PUBLIC_SUPPORT_EMAIL') || 'support@viztore.com',
+  appName: getEnv('NEXT_PUBLIC_APP_NAME') || 'LocalStore',
+  tagline: getEnv('NEXT_PUBLIC_APP_TAGLINE') || 'Shop Local. Shop Smart.',
+  domain: getEnv('NEXT_PUBLIC_APP_DOMAIN') || 'localhost',
+  supportEmail: getEnv('NEXT_PUBLIC_SUPPORT_EMAIL') || 'support@example.com',
   logoUrl: getEnv('NEXT_PUBLIC_LOGO_URL') || '/logo.svg',
-  themeColor: getEnv('NEXT_PUBLIC_THEME_COLOR') || '#0038ed',
+  themeColor: getEnv('NEXT_PUBLIC_THEME_COLOR') || '#6366f1',
 } as const;
 
 export type BrandingConfig = typeof branding;
