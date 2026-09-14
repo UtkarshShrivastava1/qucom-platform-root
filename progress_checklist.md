@@ -56,6 +56,14 @@
     - [x] ❓ `HelpSupportDrawer` with search input, 9 expandable accordion FAQ items, and contact support card
     - [x] 👤 `SellerProfileDrawer` with verified badge, seller ID, GSTIN, store performance analytics (`4.7 ★`, `98%`, `1,245 orders`, `₹3.2L+`), and logout button
     - [x] 📝 `ProfileInformationDrawer` with basic info, bank details, store description, category tags, and store logo editor
+  - [x] **9-Screen Seller Registration & Onboarding Pipeline (PR #5 Merged ✅)**:
+    - [x] Public Seller Landing Page (`SellerLandingPage.tsx`) with 3D artwork hero, value pillars, and trust cards
+    - [x] Floating Seller Login Modal (`SellerLoginPage.tsx`) with OTP tab switcher
+    - [x] Interactive Leaflet Map Pin-drop (`MapPicker.tsx`) for pickup address coordinates
+    - [x] Dual-mode E-Signature component (`Step2Signature.tsx`) with HTML5 Canvas drawing & cursive font generator
+    - [x] 4-Step Registration Wizard (`Step1MobileEmail.tsx`, `Step2IdVerification.tsx`, `Step3StoreDetails.tsx`, `Step4BankAccount.tsx`)
+    - [x] Seller Review & Verification Waiting Room (`ReviewWaitingRoom.tsx`)
+    - [x] Dynamic brand-agnostic configuration (`branding.ts`)
 
 ---
 
