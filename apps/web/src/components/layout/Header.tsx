@@ -8,6 +8,7 @@ import CategoryIcons from '@/features/home/components/CategoryIcons';
 import Logo from '@/components/layout/Logo';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from "next/link";
+import { useAuthStore } from '@/stores/auth.store';
 
 export interface HeaderProps {
   userName?: string;
@@ -21,7 +22,7 @@ export interface HeaderProps {
 }
 
 export function Header({
-  userName = "Harish Kumar",
+  userName,
   address = "Q No- 6/B, Street -13, Sector -2, Bhilai",
   wishlistCount = 0,
   cartCount = 3,
@@ -32,6 +33,7 @@ export function Header({
 }: HeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const { user, isAuthenticated, openAuthModal } = useAuthStore();
   const isSimpleHeader = pathname === '/checkout' || pathname === '/account/orders' || pathname === '/account/wishlist' || pathname === '/account/addresses' || pathname === '/account/edit-profile' || pathname === '/account/coupons' || pathname === '/account/support' || pathname === '/account/sell' || pathname === '/account/privacy' || pathname === '/account/feedback' || pathname === '/account/terms' || pathname === '/account/logout' || pathname === '/account/logged-out' || pathname?.startsWith('/account/orders/');
   const isAccountPage = pathname?.startsWith('/account') && !isSimpleHeader;
 
@@ -174,9 +176,25 @@ export function Header({
                   )}
                 </button>
 
-                {/* Profile */}
-                <button type="button" className="text-white hover:opacity-85 transition-opacity" onClick={() => router.push('/account')}>
+                {/* Profile / Auth Button */}
+                <button
+                  type="button"
+                  className="text-white hover:opacity-85 transition-opacity cursor-pointer flex items-center gap-1.5"
+                  onClick={() => {
+                    if (isAuthenticated) {
+                      router.push('/account');
+                    } else {
+                      openAuthModal('login');
+                    }
+                  }}
+                  aria-label={isAuthenticated ? "Go to Account" : "Sign In"}
+                >
                   <CircleUserRound className="h-[25px] w-[25px]" strokeWidth={1.6} />
+                  {!isAuthenticated && (
+                    <span className="hidden xl:inline text-xs font-semibold bg-white/15 px-2 py-0.5 rounded-full border border-white/20">
+                      Sign In
+                    </span>
+                  )}
                 </button>
               </div>
             </div>

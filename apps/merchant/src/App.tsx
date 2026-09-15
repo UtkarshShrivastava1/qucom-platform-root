@@ -21,11 +21,18 @@ export const App: React.FC = () => {
   const { isAuthenticated, initialize } = useAuthStore();
   const { isUnderReview } = useOnboardingStore();
 
-  // Determine initial view from URL path if applicable
+  // Determine initial view from URL path or subdomain (e.g. register.<domain>)
   const getInitialView = (): AppView => {
     if (typeof window !== 'undefined') {
       const path = window.location.pathname.toLowerCase();
+      const host = window.location.hostname.toLowerCase();
       const params = new URLSearchParams(window.location.search);
+
+      // Dedicated subdomain routing (e.g. register.viztore.com / register.localhost) or path (/register)
+      if (host.startsWith('register.') || path.startsWith('/register')) {
+        return 'onboarding';
+      }
+
       if (params.get('view') === 'login' || path.endsWith('/login')) return 'login';
       if (params.get('view') === 'signup' || params.get('view') === 'onboarding' || path.endsWith('/signup') || path.endsWith('/onboarding')) {
         return 'onboarding';
