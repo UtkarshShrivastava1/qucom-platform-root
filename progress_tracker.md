@@ -9,16 +9,16 @@
 ## 2. Global Project Completion Status
 
 ### 🚀 Production Launch Scope (Phases 1–6: Backend + Merchant + Web + Ops)
-`[████████████████████████████████░░░░░░░░░░] 81% Complete`
+`[█████████████████████████████████░░░░░░░░░] 82% Complete`
 
 | Scope Dimension | Weight | Progress Bar | % Complete | Status | Target Milestone |
 |---|:---:|---|:---:|:---:|---|
-| **Overall Production Launch** (Phases 1–6) | **100%** | `[████████████████░░░░]` | **81%** | 🟡 Active Engineering | Staging & Production Go-Live |
+| **Overall Production Launch** (Phases 1–6) | **100%** | `[████████████████░░░░]` | **82%** | 🟡 Active Engineering | Staging & Production Go-Live |
 | ↳ **Backend Architecture & APIs** | 30% | `[██████████████████░░]` | **92%** | 🟢 Complete / Hardened | 62/62 Tests Passing, Facades Live |
-| ↳ **Merchant & Admin Panel** | 25% | `[██████████████████░░]` | **90%** | 🟢 Suite Complete | Inventory Suite & Onboarding Delivered |
-| ↳ **Customer Web Storefront** | 25% | `[███████████████░░░░░]` | **75%** | 🟡 Live Wired | Address Book & Orders API Connected |
+| ↳ **Merchant & Admin Panel** | 25% | `[██████████████████░░]` | **90%** | 🟢 Suite Complete | Subdomain Routing & Onboarding Live |
+| ↳ **Customer Web Storefront** | 25% | `[████████████████░░░░]` | **80%** | 🟢 Auth & Discovery Live | Customer Auth Pipeline, Modal & Orders Live |
 | ↳ **Production Readiness & DevOps** | 20% | `[████████████░░░░░░░░]` | **60%** | 🟡 Infrastructure Ready | Verified Atlas & Cloudinary Live |
-| **Total Full-Platform Scope** (Phases 1–7) | — | `[██████████████░░░░░░]` | **69%** | ⚪ Roadmap Reserved | Customer Mobile App (Phase 7) |
+| **Total Full-Platform Scope** (Phases 1–7) | — | `[██████████████░░░░░░]` | **70%** | ⚪ Roadmap Reserved | Customer Mobile App (Phase 7) |
 
 > **Auto-Update Invariant**: This progress bar is recalculated and updated dynamically on every task assignment, milestone delivery, and PR merge per `.agents/rules/progress-tracking.md`.
 
