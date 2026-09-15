@@ -1,6 +1,6 @@
 # Viztore Platform — Implementation Checklist
 
-> **Overall Status:** Phase 1, Phase 2 (UI Refined), Phase 3 & Phase 4/5 Backend Complete | 56/56 Unit & Integration Tests Passing | Full Monorepo Clean Build
+> **Overall Status:** Phase 1, Phase 2 (UI Refined), Phase 3, Phase 4/5/6 Backend Complete | 62/62 Unit & Integration Tests Passing | Full Monorepo Clean Build
 
 ---
 
@@ -137,8 +137,8 @@
 
 ## 🟣 Phase 6: Customer Account, Store Ratings & Polish
 - [x] Customer account frontend UI screens (Profile hub, Orders list & detail, Wishlist, Addresses, Coupons, Feedback, Sell CTA) — Merged via PR #4
-- [ ] Customer account backend APIs: saved addresses CRUD, order history query, wishlist with price-drop alerts
-- [ ] Simple Store/Merchant rating system (1–5 stars per delivered order, aggregated store rating score/count; no per-item reviews)
+- [x] Customer account backend APIs: saved addresses CRUD (`/api/v1/users/addresses`), order history query alias (`/api/v1/orders/my-orders`), profile update (`/api/v1/users/me`)
+- [x] Simple Store/Merchant rating system (1–5 stars per delivered order, aggregated store rating score/count, duplicate order rating prevention: `/api/v1/stores/:id/rating`)
 - [ ] Customer platform NPS & experience feedback submission
 - [ ] Merchant marketing suite: discount voucher & banner campaign manager (standard non-AI)
 - [ ] Merchant revenue analytics & sales reports

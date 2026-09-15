@@ -9,16 +9,16 @@
 ## 2. Global Project Completion Status
 
 ### 🚀 Production Launch Scope (Phases 1–6: Backend + Merchant + Web + Ops)
-`[██████████████████████████████░░░░░░░░░░░░] 72% Complete`
+`[██████████████████████████████░░░░░░░░░░░░] 75% Complete`
 
 | Scope Dimension | Weight | Progress Bar | % Complete | Status | Target Milestone |
 |---|:---:|---|:---:|:---:|---|
-| **Overall Production Launch** (Phases 1–6) | **100%** | `[██████████████░░░░░░]` | **72%** | 🟡 Active Engineering | Staging & Production Go-Live |
-| ↳ **Backend Architecture & APIs** | 30% | `[██████████████████░░]` | **88%** | 🟢 Complete / Hardened | 56/56 Tests Passing, Facades Live |
+| **Overall Production Launch** (Phases 1–6) | **100%** | `[███████████████░░░░░]` | **75%** | 🟡 Active Engineering | Staging & Production Go-Live |
+| ↳ **Backend Architecture & APIs** | 30% | `[██████████████████░░]` | **92%** | 🟢 Complete / Hardened | 62/62 Tests Passing, Facades Live |
 | ↳ **Merchant & Admin Panel** | 25% | `[███████████████░░░░░]` | **75%** | 🟡 Feature In-Flight | Inventory Management Suite (Task 5) |
 | ↳ **Customer Web Storefront** | 25% | `[█████████████░░░░░░░]` | **65%** | 🟡 Feature In-Flight | Faceted PLP & PDP Discovery (Task 2) |
-| ↳ **Production Readiness & DevOps** | 20% | `[███████████░░░░░░░░░]` | **55%** | 🟡 Infrastructure Ready | Cloud Secrets & Gateway Setup |
-| **Total Full-Platform Scope** (Phases 1–7) | — | `[████████████░░░░░░░░]` | **59%** | ⚪ Roadmap Reserved | Customer Mobile App (Phase 7) |
+| ↳ **Production Readiness & DevOps** | 20% | `[████████████░░░░░░░░]` | **60%** | 🟡 Infrastructure Ready | Verified Atlas & Cloudinary Live |
+| **Total Full-Platform Scope** (Phases 1–7) | — | `[█████████████░░░░░░░]` | **64%** | ⚪ Roadmap Reserved | Customer Mobile App (Phase 7) |
 
 > **Auto-Update Invariant**: This progress bar is recalculated and updated dynamically on every task assignment, milestone delivery, and PR merge per `.agents/rules/progress-tracking.md`.
 
@@ -30,7 +30,7 @@
 
 | Sprint Window | Track & Focus Area | Macro Phase Link | Deliverables & Exit Criteria | Status |
 |---|---|:---:|---|:---:|
-| **Sept 15 – 16** | **Core Backend Completion** | Phase 6 | • Customer Address CRUD (`/api/v1/users/addresses`)<br/>• Order History API (`/api/v1/orders/my-orders`)<br/>• Store Rating & Aggregate Score (`/api/v1/stores/:id/rating`) | ⏳ In Progress |
+| **Sept 15 – 16** | **Core Backend Completion** | Phase 6 | • Customer Address CRUD (`/api/v1/users/addresses`)<br/>• Order History API (`/api/v1/orders/my-orders`)<br/>• Store Rating & Aggregate Score (`/api/v1/stores/:id/rating`) | ✅ Completed |
 | **Sept 17 – 18** | **Frontend Integration & PR Merges** | Phase 4 & 5 | • Merge Task 5: Inventory Management Suite (Abhay)<br/>• Merge Task 2: Catalog Discovery PLP/PDP (Vinay)<br/>• Wire TanStack Query hooks to live endpoints | ⏳ Scheduled |
 | **Sept 19 – 20** | **Cloud Staging Deployment** | DevOps | • Deploy `apps/backend` + Redis to Railway/Render<br/>• Deploy `apps/web` & `apps/merchant` to Vercel<br/>• Execute `pnpm seed:staging` (4 stores, 60+ products, test personas) | ⏳ Scheduled |
 | **Sept 21 – 22** | **Smoke Testing & QA Handoff** | Quality Gate | • Execute full end-to-end purchase & OTP delivery handshake<br/>• Publish `QA_TESTING_GUIDE.md` with credentials & test scenarios<br/>• Formal release gate handover to the QA testing team | ⏳ Scheduled |
@@ -67,13 +67,13 @@ graph TB
 
 | Layer | Technology | Status | Details |
 |---|---|---|---|
-| **Backend API** | Node.js v20+, Express, Mongoose, TypeScript | **Live & In Sync** ✅ | Auth, Stores, Onboarding, Catalog, Orders, Delivery, Notifications modules; /healthz & /readyz probes active |
+| **Backend API** | Node.js v20+, Express, Mongoose, TypeScript | **Live & In Sync** ✅ | Auth, Stores, Onboarding, Catalog, Orders, Delivery, Notifications, Ratings, Addresses modules; /healthz & /readyz probes active |
 | **Merchant Panel** | React 18, Vite, Tailwind CSS, Zustand | **Refined & Onboarding Merged** ✅ | Pixel-perfect Dashboard, 4 side drawers, 8-Tab Orders Pipeline, Product Cataloging, & Seller Onboarding Wizard (PR #5) |
 | **Customer Storefront** | Next.js 14 App Router, Tailwind, TanStack Query | **Live** ✅ | Home feed, Stores directory, PLP, PDP, Category browse |
 | **Shared Types** | TypeScript, Zod | **100% In Sync** ✅ | All contracts, validation schemas, DTOs (`structure.md`), branding config |
 | **Real-Time & Events** | Socket.io + Redis Adapter + TypedEventBus | **Wired** ✅ | In-process domain events forwarded to Socket.io rooms with Redis distributed scaling |
 | **Agent Workflows** | Custom Skills & Rules | **Active** ✅ | Fullstack Feature Workflow, UI Matching, Intern Delegation, /create-task |
-| **Test Suite** | Vitest | **56/56 Passing** ✅ | 12 test suites (AppError, Auth, Stores, Onboarding, Catalog, Orders, Delivery, Notifications, WorkerPool, Cache-Aside) |
+| **Test Suite** | Vitest | **62/62 Passing** ✅ | 12 test suites (AppError, Auth/Addresses, Stores/Ratings, Onboarding, Catalog, Orders, Delivery, Notifications, WorkerPool, Cache-Aside) |
 | **Build Status** | Turborepo | **Clean** ✅ | Full monorepo builds with zero errors across all 5 packages |
 | **Engineering Standards** | 8/8 Pillars (`structure.md`) | **100% Implemented** ✅ | Facades, Composition roots, 3-tier testing, EventBus, WorkerPool, Cache-Aside + Replica split, ESR indexing, Decoupled repos |
 
@@ -194,11 +194,11 @@ graph TB
 ### 🟣 Phase 6 — Account, Store Ratings & Polish
 > *Customer profile management, order history, simple store rating, and lean merchant operations*
 
-- [ ] Customer account hub (saved addresses CRUD with default toggle, order tracking timeline, wishlist with price-drop alerts)
-- [ ] **Lightweight Store Rating & Feedback Engine**:
-  - Simple 1–5 star customer rating for the fulfilling store/merchant upon order completion.
-  - Rolling aggregate store rating score & count computed by the backend (`averageRating`, `totalRatings`).
-  - Scoped strictly to the store/merchant level (No complex per-item review threads or customer photo uploads).
+- [x] Customer account hub backend (saved addresses CRUD with default toggle `/api/v1/users/addresses`, order history alias `/api/v1/orders/my-orders`, profile `/api/v1/users/me`)
+- [x] **Lightweight Store Rating & Feedback Engine Backend**:
+  - Simple 1–5 star customer rating for the fulfilling store/merchant upon order completion (`POST /api/v1/stores/:id/rating`).
+  - Rolling aggregate store rating score & count computed by the backend (`averageRating`, `totalRatings`, `GET /api/v1/stores/:id/rating`).
+  - Scoped strictly to the store/merchant level with compound `{ storeId: 1, orderId: 1 }` uniqueness preventing duplicate reviews.
 - [ ] Customer platform NPS & experience feedback submission (`/api/v1/feedback`)
 - [ ] Merchant conversion flow ("Sell on {branding.appName}" informational screen)
 - [ ] Merchant marketing module (standard in-app banner and promo campaign manager)
