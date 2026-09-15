@@ -4,6 +4,22 @@
 
 ---
 
+## 🎯 Tier 1 vs. Tier 2 Delivery Precision Matrix
+
+| Functional Flow | Tier 1 (Core Launch — Target: Sept 22) | Tier 2 (Enterprise Ops — Post-Vacation / Sept 23+) |
+|---|---|---|
+| **Merchant Registration** | `[x]` Dedicated `register.<domain>` subdomain & 6-step flow | `[ ]` Multi-outlet franchise registration |
+| **Merchant Store Setup** | `[x]` Basic store details, map pin, hours, categories | `[ ]` Multiple staff RBAC roles & shift scheduling |
+| **Product Cataloging** | `[x]` 3-step creation wizard, CSV upload, barcodes | `[ ]` AI automated catalog scrapers & sync |
+| **Inventory Management** | `[x]` Real-time stock counts, adjust drawers, bulk batch | `[ ]` Warehouse multi-bin inventory & supplier POs |
+| **Order Management** | `[x]` 8-tab pipeline, invoice print, manual order, OTP handoff | `[ ]` Offline POS billing terminal & barcode scanner |
+| **Financial Ledger** | `[x]` Basic order bill breakdown & delivery fee split | `[ ]` Automated wallet payout cycles & commission ledger |
+| **Customer Auth & Profile**| `[x]` Modal signup/login, Google OAuth, address book | `[ ]` Customer in-app wallet & loyalty cashbacks |
+| **Customer Discovery** | `[x]` Hyperlocal stores near me, faceted PLP, rich PDP | `[ ]` Native React Native / Expo Mobile App (iOS/Android) |
+| **Checkout & Delivery** | `[x]` Single-store cart rule, checkout, WhatsApp dispatch | `[ ]` Automated returns & RMA credit note settlements |
+
+---
+
 ## 🟢 Phase 1: Foundation & Core Backend (DONE)
 
 - [x] **Monorepo & Tooling Setup**
@@ -148,9 +164,13 @@
 
 ---
 
-## ⚫ Phase 7: Mobile App & Advanced Retail Ops
+## ⚫ Phase 7: Tier 2 Enterprise Retail Operations & Mobile App (POST-VACATION / ROADMAP RESERVED)
 
-- [ ] Customer Mobile App (React Native + Expo for iOS & Android)
-- [ ] Background GPS location services & push notifications
-- [ ] Merchant POS/Billing terminal mode & offline barcode scanner
-- [ ] Automated returns, exchange & refund settlement pipeline
+- [ ] Merchant Point-of-Sale (POS) counter billing terminal mode & barcode scanner integration
+- [ ] Merchant wallet financial ledger, payout triggers & automated bank settlements
+- [ ] Automated returns, exchange, RMA reverse logistics & refund credit note settlement
+- [ ] Merchant staff management & role-based access control (Manager, Cashier, Inventory Clerk)
+- [ ] Merchant marketing suite: promotional store banner manager & coupon builder
+- [ ] Customer Mobile App with React Native & Expo (iOS + Android)
+- [ ] Background GPS geolocation & mobile push notifications
+- [ ] Customer in-app returns/exchange request hub & digital wallet loyalty balance

@@ -24,7 +24,96 @@
 
 ---
 
-## 3. Active Release Milestone: Staging Deployment & QA Release Gate
+## 3. Precision Layering: Tier 1 (Core Launch) vs. Tier 2 (Enterprise Ops)
+
+To ensure razor-sharp clarity across engineering and business deliverables, all platform features are categorized into two operational tiers:
+
+### 🌟 Tier 1 — Core Hyperlocal Production Flow (Target: September 22, 2026 Release Gate)
+> **Goal:** Full end-to-end customer discovery, single-store checkout, WhatsApp dispatch, 4-digit Delivery OTP handshake, and merchant order fulfillment.
+
+#### Merchant Portal (`apps/merchant`) — Tier 1 Status: 95% Complete
+1. **Merchant Registration & Subdomain Isolation**:
+   - Dedicated portal routing on `register.<domain>` and `/register`.
+   - 6-step registration flow: Account credentials, GSTIN/PAN verification, dual-mode HTML5 Canvas e-signature, store operational profile with interactive Leaflet map pin-drop, business hours, and banking details.
+   - Seller review waiting room & super-admin approval state machine.
+   - Seamless transition to merchant login upon approval.
+2. **Initial Store Setup & Profile**:
+   - Store hours, delivery radius (3–4 km), contact info, pickup address coordinates, and category tagging.
+3. **Full-Scale Product Cataloging**:
+   - 3-step creation wizard (Category selection, Image upload with previews, Pricing/Inventory/Storage specs).
+   - Dynamic variant management (sizes, colors, custom attributes).
+   - Actual-size printable barcode label preview & bulk CSV upload capability.
+4. **Operational Inventory Management**:
+   - 5 KPI summary cards, filter toolbar, stock level badges, reserved stock popover.
+   - Single-product stock adjustment slide-out drawer (`− 50 +` stepper with reason selector).
+   - Bulk adjust batch grid with live recomputed stock counters and sticky action footer.
+   - Transaction audit history drawer and dedicated ledger table.
+5. **Order Processing Pipeline**:
+   - 8-tab status bar (All, Pending, Confirmed, Preparing, Ready, Out for Delivery, Delivered, Cancelled).
+   - Comprehensive order details modal with printable tax invoice preview and visual status stepper.
+   - Manual order creation flow (`CreateOrderPage.tsx`) for counter-assisted bookings.
+   - Physical 4-digit Delivery OTP verification dialog for merchant-to-rider handoff.
+
+#### Customer Storefront (`apps/web`) — Tier 1 Status: 85% Complete
+1. **Customer Registration & Profiling**:
+   - Floating authentication modal with Sign In / Create Account tabs.
+   - One-tap Google OAuth mock session connection.
+   - Dynamic user profile state in account hub (`/account`, `/account/edit-profile`).
+2. **Customer Login & Session Persistence**:
+   - Persistent Zustand auth store (`localStorage` backed).
+   - Global auto-bearer JWT injection on all outbound API calls (`client.ts`).
+   - Graceful offline/demo session handling and clean logout flow.
+3. **Hyperlocal Store Discovery**:
+   - Interactive location selector with pincode and coordinate capture.
+   - "Stores Near You" horizontal rail and explore stores directory (`/stores`) with open/closed indicators and delivery distance.
+4. **Catalog Browsing & PDP**:
+   - Faceted aggregation search by category, brand, color, size, and price range.
+   - Comprehensive Product Detail Page (`/products/[slug]`) with image gallery, variant swatches, quantity stepper, and live stock indicator.
+5. **Single-Store Cart Rule & Streamlined Checkout**:
+   - Single-store cart invariant strictly enforced on frontend and backend.
+   - Multi-address selector (`/account/addresses`), delivery slot choice, order note, and bill breakdown.
+6. **Order Placement, Real-Time Tracking & Delivery OTP**:
+   - Order history listing (`/account/orders`) and granular order detail timeline (`/account/orders/[id]`).
+   - Real-time Socket.io status synchronization with backend events.
+   - Automated WhatsApp dispatch message generator with Google Maps route constructor.
+   - Secure 4-digit physical Delivery OTP handshake to complete customer handoff.
+
+---
+
+### 🏢 Tier 2 — Enterprise Retail Operations & Advanced Tooling (Target: Post-Vacation / Phase 7, Sept 23+)
+> **Goal:** Enterprise brick-and-mortar retail operational depth, POS billing terminals, automated financial payouts, and native mobile applications.
+
+#### Merchant Portal (`apps/merchant`) — Tier 2 Roadmap:
+1. **Point-of-Sale (POS) Counter Billing**:
+   - High-speed barcode scanner input mode for instant counter checkout.
+   - Offline terminal mode with local storage synchronization.
+   - Sequential GST tax invoice series configuration and thermal printer support.
+2. **Merchant Wallet & Financial Ledger**:
+   - Live merchant wallet balance, payout request triggers, and automated bank settlements.
+   - Platform commission deduction ledger and transaction breakdown.
+3. **Returns, Exchanges & RMA Management**:
+   - Customer return request approval workflow and reverse pickup dispatch.
+   - Returned item quality inspection checklist and credit note generation.
+4. **Staff Management & Granular RBAC**:
+   - Multi-user merchant staff invitations (Manager, Cashier, Inventory Clerk).
+   - Permission guards restricting access to billing, wallet, or inventory.
+5. **Marketing Campaign & Promo Banner Manager**:
+   - Self-serve coupon code builder with minimum cart values and usage limits.
+   - In-app store banner campaign scheduler.
+
+#### Customer Ecosystem — Tier 2 Roadmap:
+1. **Customer React Native Mobile App (`apps/mobile`)**:
+   - Native iOS and Android application with Expo Router.
+   - Background GPS location updates and native device push notifications.
+2. **Customer Return & Exchange Request Hub**:
+   - In-app return initiation with photo upload of damaged items.
+   - Real-time return tracking and instant refund credit.
+3. **Customer Loyalty Points & Digital Wallet**:
+   - Cashback accumulation and one-tap checkout wallet balance.
+
+---
+
+## 4. Active Release Milestone: Staging Deployment & QA Release Gate
 > **Target Release Date:** September 22, 2026  
 > **Objective:** Deliver fully integrated, data-seeded staging environments to the QA team for end-to-end regression and exploratory testing.
 
@@ -37,7 +126,7 @@
 
 ---
 
-## 4. System Topology
+## 5. System Topology
 
 ```mermaid
 graph TB
@@ -63,7 +152,7 @@ graph TB
 
 ---
 
-## 5. Current Monorepo Status
+## 6. Current Monorepo Status
 
 | Layer | Technology | Status | Details |
 |---|---|---|---|
@@ -82,7 +171,7 @@ graph TB
 
 ---
 
-## 6. Phase-by-Phase Roadmap & Progress
+## 7. Phase-by-Phase Roadmap & Progress
 
 ### 🔵 Phase 1 — Foundation & Core Backend (COMPLETED ✅)
 > *Modular monolith architecture with authentication and spatial store queries*
@@ -209,10 +298,14 @@ graph TB
 
 ---
 
-### ⚫ Phase 7 — Mobile App & Advanced Operations
-> *Customer React Native mobile app and offline retail tooling*
+### ⚫ Phase 7 — Tier 2 Enterprise Retail Operations & Mobile App (POST-VACATION / ROADMAP RESERVED)
+> *Enterprise brick-and-mortar retail operational depth, POS billing, automated wallet settlements, and native mobile apps (Target: Sept 23+)*
 
+- [ ] Merchant Point-of-Sale (POS) counter billing terminal mode, barcode scanner integration & offline synchronization
+- [ ] Merchant wallet financial ledger, payout triggers & automated bank settlements
+- [ ] Automated returns, exchange, RMA reverse logistics, and refund settlement pipeline
+- [ ] Merchant staff management & role-based access control (Manager, Cashier, Inventory Clerk)
+- [ ] Merchant promotional banner campaigns & self-serve coupon builder
 - [ ] Customer Mobile App with React Native & Expo (iOS + Android)
-- [ ] Native GPS geolocation and background location updates
-- [ ] Merchant POS/Billing terminal mode, offline inventory scanner, and expense tracker
-- [ ] Automated returns, exchange, and refund settlement pipeline
+- [ ] Native GPS geolocation, background order tracking & mobile push notifications
+- [ ] Customer in-app return/refund request hub & loyalty wallet balance
