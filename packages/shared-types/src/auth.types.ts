@@ -15,9 +15,12 @@ export interface IUserAddress {
   city: string;
   state: string;
   pincode: string;
+  landmark?: string;
   isDefault?: boolean;
   coordinates?: [number, number]; // [lng, lat]
 }
+
+export type IAddress = IUserAddress;
 
 export interface IUser {
   _id: string;
@@ -99,6 +102,8 @@ export type RegisterUserDto = z.infer<typeof registerUserSchema>;
 export type LoginUserDto = z.infer<typeof loginUserSchema>;
 export type RefreshTokenDto = z.infer<typeof refreshTokenSchema>;
 export type UserAddressDto = z.infer<typeof userAddressSchema>;
+export type CreateAddressDto = UserAddressDto;
 export type UpdateAddressDto = z.infer<typeof updateAddressSchema>;
 export type UpdateProfileDto = z.infer<typeof updateProfileSchema>;
+export type IUserProfile = IUser;
 

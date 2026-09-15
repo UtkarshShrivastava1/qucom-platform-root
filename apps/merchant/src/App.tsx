@@ -8,6 +8,7 @@ import { DashboardOverviewPage } from './pages/DashboardOverviewPage.js';
 import { OrdersPage } from './pages/OrdersPage.js';
 import { CreateOrderPage } from './pages/CreateOrderPage.js';
 import { CatalogPage } from './pages/CatalogPage.js';
+import { InventoryPage } from './pages/InventoryPage.js';
 import { StoreSettingsPage } from './pages/StoreSettingsPage.js';
 import { Sidebar, DashboardTab } from './components/dashboard/Sidebar.js';
 import { Header } from './components/dashboard/Header.js';
@@ -137,10 +138,12 @@ export const App: React.FC = () => {
 
           {currentTab === 'catalog' && <CatalogPage />}
 
+          {currentTab === 'inventory' && <InventoryPage />}
+
           {currentTab === 'store' && <StoreSettingsPage />}
 
           {/* Fallback placeholder for other modules */}
-          {!['overview', 'orders', 'catalog', 'store'].includes(currentTab) && (
+          {!['overview', 'orders', 'catalog', 'inventory', 'store'].includes(currentTab) && (
             <div className="p-8 text-center bg-white rounded-2xl border border-slate-200/80 shadow-2xs max-w-xl mx-auto mt-8">
               <h3 className="text-base font-bold text-slate-800 capitalize">
                 {currentTab.replace(/_/g, ' ')} Module
