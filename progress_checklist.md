@@ -64,14 +64,14 @@
     - [x] 4-Step Registration Wizard (`Step1MobileEmail.tsx`, `Step2IdVerification.tsx`, `Step3StoreDetails.tsx`, `Step4BankAccount.tsx`)
     - [x] Seller Review & Verification Waiting Room (`ReviewWaitingRoom.tsx`)
     - [x] Dynamic brand-agnostic configuration (`branding.ts`)
-  - [ ] **Hyperlocal Retail Inventory Management Suite (TASK-ABH-05 Assigned ⏳)**:
-    - [ ] Screen 4.0: Main inventory overview table, 5 KPI summary cards, filter toolbar, reserved stock info popover
-    - [ ] Screen 4.1: Adjust stock slide-out drawer with quantity stepper (`− 50 +`), reason dropdown, dynamic alert
-    - [ ] Screen 4.2: 7-action row floating dropdown menu
-    - [ ] Screen 4.3: Clean inventory table base layout & column alignment
-    - [ ] Screen 4.4: Stock history single-product audit trail drawer with transaction filters and timeline cards
-    - [ ] Screen 4.5: Bulk adjust stock full-page batch grid with inline steppers, live recomputed new stock, and sticky footer
-    - [ ] Screen 4.6: Dedicated stock history ledger with 5 summary cards, date range picker, and transaction ledger
+  - [x] **Hyperlocal Retail Inventory Management Suite (TASK-ABH-05 Completed ✅)**:
+    - [x] Screen 4.0: Main inventory overview table, 5 KPI summary cards, filter toolbar, reserved stock info popover
+    - [x] Screen 4.1: Adjust stock slide-out drawer with quantity stepper (`− 50 +`), reason dropdown, dynamic alert
+    - [x] Screen 4.2: 7-action row floating dropdown menu
+    - [x] Screen 4.3: Clean inventory table base layout & column alignment
+    - [x] Screen 4.4: Stock history single-product audit trail drawer with transaction filters and timeline cards
+    - [x] Screen 4.5: Bulk adjust stock full-page batch grid with inline steppers, live recomputed new stock, and sticky footer
+    - [x] Screen 4.6: Dedicated stock history ledger with 5 summary cards, date range picker, and transaction ledger
 
 ---
 

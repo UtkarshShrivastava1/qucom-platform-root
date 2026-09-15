@@ -9,16 +9,16 @@
 ## 2. Global Project Completion Status
 
 ### 🚀 Production Launch Scope (Phases 1–6: Backend + Merchant + Web + Ops)
-`[██████████████████████████████░░░░░░░░░░░░] 75% Complete`
+`[████████████████████████████████░░░░░░░░░░] 81% Complete`
 
 | Scope Dimension | Weight | Progress Bar | % Complete | Status | Target Milestone |
 |---|:---:|---|:---:|:---:|---|
-| **Overall Production Launch** (Phases 1–6) | **100%** | `[███████████████░░░░░]` | **75%** | 🟡 Active Engineering | Staging & Production Go-Live |
+| **Overall Production Launch** (Phases 1–6) | **100%** | `[████████████████░░░░]` | **81%** | 🟡 Active Engineering | Staging & Production Go-Live |
 | ↳ **Backend Architecture & APIs** | 30% | `[██████████████████░░]` | **92%** | 🟢 Complete / Hardened | 62/62 Tests Passing, Facades Live |
-| ↳ **Merchant & Admin Panel** | 25% | `[███████████████░░░░░]` | **75%** | 🟡 Feature In-Flight | Inventory Management Suite (Task 5) |
-| ↳ **Customer Web Storefront** | 25% | `[█████████████░░░░░░░]` | **65%** | 🟡 Feature In-Flight | Faceted PLP & PDP Discovery (Task 2) |
+| ↳ **Merchant & Admin Panel** | 25% | `[██████████████████░░]` | **90%** | 🟢 Suite Complete | Inventory Suite & Onboarding Delivered |
+| ↳ **Customer Web Storefront** | 25% | `[███████████████░░░░░]` | **75%** | 🟡 Live Wired | Address Book & Orders API Connected |
 | ↳ **Production Readiness & DevOps** | 20% | `[████████████░░░░░░░░]` | **60%** | 🟡 Infrastructure Ready | Verified Atlas & Cloudinary Live |
-| **Total Full-Platform Scope** (Phases 1–7) | — | `[█████████████░░░░░░░]` | **64%** | ⚪ Roadmap Reserved | Customer Mobile App (Phase 7) |
+| **Total Full-Platform Scope** (Phases 1–7) | — | `[██████████████░░░░░░]` | **69%** | ⚪ Roadmap Reserved | Customer Mobile App (Phase 7) |
 
 > **Auto-Update Invariant**: This progress bar is recalculated and updated dynamically on every task assignment, milestone delivery, and PR merge per `.agents/rules/progress-tracking.md`.
 
@@ -31,8 +31,8 @@
 | Sprint Window | Track & Focus Area | Macro Phase Link | Deliverables & Exit Criteria | Status |
 |---|---|:---:|---|:---:|
 | **Sept 15 – 16** | **Core Backend Completion** | Phase 6 | • Customer Address CRUD (`/api/v1/users/addresses`)<br/>• Order History API (`/api/v1/orders/my-orders`)<br/>• Store Rating & Aggregate Score (`/api/v1/stores/:id/rating`) | ✅ Completed |
-| **Sept 17 – 18** | **Frontend Integration & PR Merges** | Phase 4 & 5 | • Merge Task 5: Inventory Management Suite (Abhay)<br/>• Merge Task 2: Catalog Discovery PLP/PDP (Vinay)<br/>• Wire TanStack Query hooks to live endpoints | ⏳ Scheduled |
-| **Sept 19 – 20** | **Cloud Staging Deployment** | DevOps | • Deploy `apps/backend` + Redis to Railway/Render<br/>• Deploy `apps/web` & `apps/merchant` to Vercel<br/>• Execute `pnpm seed:staging` (4 stores, 60+ products, test personas) | ⏳ Scheduled |
+| **Sept 17 – 18** | **Frontend Integration & Inventory Suite** | Phase 4 & 5 | • Inventory Management Suite (Mockups 4.0–4.6)<br/>• Wire Live Address Book & Orders APIs in Storefront<br/>• Full monorepo clean build & 62/62 unit tests passing | ✅ Completed Ahead of Schedule |
+| **Sept 19 – 20** | **Cloud Staging Deployment** | DevOps | • Deploy `apps/backend` + Redis to Railway/Render<br/>• Deploy `apps/web` & `apps/merchant` to Vercel<br/>• Execute `pnpm seed:staging` (4 stores, 60+ products, test personas) | ⏳ Scheduled Next |
 | **Sept 21 – 22** | **Smoke Testing & QA Handoff** | Quality Gate | • Execute full end-to-end purchase & OTP delivery handshake<br/>• Publish `QA_TESTING_GUIDE.md` with credentials & test scenarios<br/>• Formal release gate handover to the QA testing team | ⏳ Scheduled |
 
 ---
@@ -153,7 +153,7 @@ graph TB
   - [x] **Task 2 (8-Tab Orders Pipeline & Manual Create Order)**: MERGED to `main` (`297aad4`, `3f3dad4`). 8-tab status bar, order table, detail modal with printable invoice, order stepper, and manual create order flow.
   - [x] **Task 3 (Product Catalog & Add Product Wizard)**: MERGED to `main` (`cbed558`). Full 6-screen system: 5 KPI summary cards, filter toolbar, products table, 7-action popup menu, 3-step creation wizard (Category, Images, Pricing/Inventory/Storage), Preview & Submit with actual-size barcode label preview.
   - [x] **Task 4 (Seller Registration & Onboarding Pipeline)**: MERGED to `main` (`460c44a`). Public Seller Landing Page (`SellerLandingPage.tsx`) with 3D artwork hero & trust cards, floating login modal with OTP, interactive Leaflet map pin-drop (`MapPicker.tsx`), dual-mode HTML5 Canvas e-signature (`Step2Signature.tsx`), 4-step registration wizard, review waiting room, and dynamic white-label branding.
-  - [ ] **Task 5 (Inventory Management Suite)**: Assigned with 7-screen specification mapped to mockups `4.0`–`4.6` (`abhay_inventory_mockup_task.md`). KPI overview, adjust stock drawer, product history drawer, bulk adjust stock grid, and dedicated transaction history ledger.
+  - [x] **Task 5 (Inventory Management Suite)**: COMPLETED (`eda0cca`). Full 7-screen system: 5 KPI summary cards, filter toolbar, clean table layout, reserved stock popover, 7-action row menu, single-product adjust stock drawer, single-product stock history timeline drawer, bulk adjust batch grid, and dedicated transaction audit ledger.
 - **Vinay (Customer Web Storefront `apps/web`)**:
   - [x] **Task 1 (Mobile App Mockup ➔ Responsive Customer Web & Account Hub)**: MERGED to `main` (`e52bc45`). Full responsive storefront: Cart (`/cart`), Checkout (`/checkout`), Category browse (`/category`, `/category/[slug]`), and 11 Account Hub screens (`/account`, `/orders`, `/orders/[id]`, `/wishlist`, `/addresses`, `/coupons`, `/edit-profile`, `/feedback`, `/sell`, `/support`, `/privacy`, `/terms`). Zero brand violations, 100% white-label compliant.
   - [ ] **Task 2 (Hyperlocal Discovery, Catalog PLP, Product PDP & Storefronts)**: Assigned with 6-screen specification mapped to mockups `2.0`–`3.1` (`vinay_catalog_pdp_task.md`). Category Hub (`/category`), Faceted PLP (`/products`), Comprehensive PDP (`/products/[slug]`), Stores Near Me (`/stores`), and Storefront (`/stores/[slug]`).
