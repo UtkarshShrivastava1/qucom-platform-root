@@ -64,10 +64,15 @@ export function createOrderService(
       }
     }
 
-    // 4. Pre-check catalog availability
+    // 4. Deadlock Prevention: Sort items alphabetically by SKU/productId before acquiring locks
+    const sortedItems = [...dto.items].sort((a, b) =>
+      (a.sku || a.productId).localeCompare(b.sku || b.productId),
+    );
+
+    // 4b. Pre-check catalog availability
     if (catalogFacade) {
       const stockCheck = await catalogFacade.checkStock(
-        dto.items.map((i) => ({ productId: i.productId, sku: i.sku, quantity: i.quantity })),
+        sortedItems.map((i) => ({ productId: i.productId, sku: i.sku, quantity: i.quantity })),
       );
       if (!stockCheck.available) {
         throw AppError.badRequest(
@@ -81,10 +86,10 @@ export function createOrderService(
     // 5. Execute atomic multi-document transaction (ACID Unit of Work)
     const normalizedShippingAddress = normalizeAddress(dto.shippingAddress);
     const order = await withTransaction(async (session) => {
-      // 5a. Deduct stock in catalog
+      // 5a. Deduct stock in catalog (sorted by SKU/ID for deadlock prevention)
       if (catalogFacade) {
         await catalogFacade.deductStock(
-          dto.items.map((i) => ({ productId: i.productId, sku: i.sku, quantity: i.quantity })),
+          sortedItems.map((i) => ({ productId: i.productId, sku: i.sku, quantity: i.quantity })),
         );
       }
 
