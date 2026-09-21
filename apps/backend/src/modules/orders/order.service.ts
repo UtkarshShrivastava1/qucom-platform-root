@@ -11,6 +11,9 @@ import { normalizeAddress } from './order.utils.js';
 import { IEventBus } from '../../shared/events/eventBus.js';
 import { EVENTS } from '../../shared/events/eventTypes.js';
 import { AppError } from '../../shared/utils/AppError.js';
+import { withTransaction } from '../../shared/database/transaction.js';
+import { appendOutboxEvent, processPendingOutboxEvents } from '../../shared/database/outbox.service.js';
+import { logger } from '../../shared/utils/logger.js';
 import type { IStoreFacade } from '../stores/index.js';
 import type { ICatalogFacade } from '../catalog/index.js';
 
@@ -61,7 +64,7 @@ export function createOrderService(
       }
     }
 
-    // 4. Verify catalog availability & deduct stock via Catalog facade
+    // 4. Pre-check catalog availability
     if (catalogFacade) {
       const stockCheck = await catalogFacade.checkStock(
         dto.items.map((i) => ({ productId: i.productId, sku: i.sku, quantity: i.quantity })),
@@ -73,20 +76,54 @@ export function createOrderService(
           stockCheck.unavailableItems,
         );
       }
-      await catalogFacade.deductStock(
-        dto.items.map((i) => ({ productId: i.productId, sku: i.sku, quantity: i.quantity })),
-      );
     }
 
-    // 5. Create order record
+    // 5. Execute atomic multi-document transaction (ACID Unit of Work)
     const normalizedShippingAddress = normalizeAddress(dto.shippingAddress);
-    const order = await repo.create({
-      ...dto,
-      userId,
-      shippingAddress: normalizedShippingAddress,
+    const order = await withTransaction(async (session) => {
+      // 5a. Deduct stock in catalog
+      if (catalogFacade) {
+        await catalogFacade.deductStock(
+          dto.items.map((i) => ({ productId: i.productId, sku: i.sku, quantity: i.quantity })),
+        );
+      }
+
+      // 5b. Persist order with active transaction session
+      const created = await repo.create(
+        {
+          ...dto,
+          userId,
+          shippingAddress: normalizedShippingAddress,
+        },
+        { session }
+      );
+
+      // 5c. Append event to Transactional Outbox inside the same ACID session (Zero Dual-Write)
+      await appendOutboxEvent({
+        eventType: 'ORDER_CREATED',
+        aggregateId: created.id,
+        aggregateType: 'Order',
+        payload: {
+          orderId: created.id,
+          orderNumber: created.orderNumber,
+          userId: created.userId,
+          storeId: created.storeId,
+          grandTotal: created.grandTotal,
+          itemsCount: created.items.length,
+          correlationId,
+        },
+        session,
+      });
+
+      return created;
     });
 
-    // 6. Emit asynchronous domain event
+    // 6. Post-commit: background outbox dispatcher to persistent BullMQ queue
+    processPendingOutboxEvents().catch((err) => {
+      logger.warn(`Failed to process outbox events immediately: ${err.message}`);
+    });
+
+    // 7. Emit in-memory event for local subscribers
     if (bus) {
       bus.emit(EVENTS.ORDER_PLACED, {
         orderId: order.id,
@@ -239,7 +276,28 @@ export function createOrderService(
       }
     }
 
-    const updated = await repo.updateStatus(id, status);
+    const updated = await withTransaction(async (session) => {
+      const res = await repo.updateStatus(id, status, { session });
+      if (res) {
+        await appendOutboxEvent({
+          eventType: 'ORDER_STATUS_UPDATED',
+          aggregateId: res.id,
+          aggregateType: 'Order',
+          payload: {
+            orderId: res.id,
+            orderNumber: res.orderNumber,
+            previousStatus: current.status,
+            newStatus: status,
+            actorUserId,
+          },
+          session,
+        });
+      }
+      return res;
+    });
+
+    // Background outbox dispatcher
+    processPendingOutboxEvents().catch(() => {});
 
     // Emit domain events
     if (bus && updated) {

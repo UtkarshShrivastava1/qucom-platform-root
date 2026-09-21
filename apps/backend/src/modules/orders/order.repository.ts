@@ -1,4 +1,4 @@
-import type { Model } from 'mongoose';
+import type { Model, ClientSession } from 'mongoose';
 import {
   calculateGrandTotal,
   calculateShippingFee,
@@ -43,41 +43,63 @@ export function createOrderRepository(
 
   async function create(
     dto: CreateOrderDTO & { userId: string },
+    options?: { session?: ClientSession },
   ): Promise<OrderResponse> {
     const subtotal = calculateSubtotal(dto.items);
     const tax = calculateTax(subtotal);
     const shippingFee = calculateShippingFee(subtotal);
     const grandTotal = calculateGrandTotal(subtotal, tax, shippingFee);
 
-    const order = await model.create({
-      ...dto,
-      orderNumber: generateOrderNumber(),
-      deliveryOtp: generateDeliveryOtp(),
-      subtotal,
-      tax,
-      shippingFee,
-      grandTotal,
-      status: OrderStatus.PENDING,
-    });
+    const docs = await model.create(
+      [
+        {
+          ...dto,
+          orderNumber: generateOrderNumber(),
+          deliveryOtp: generateDeliveryOtp(),
+          subtotal,
+          tax,
+          shippingFee,
+          grandTotal,
+          status: OrderStatus.PENDING,
+        },
+      ],
+      { session: options?.session }
+    );
 
-    return toResponse(order);
+    return toResponse(docs[0]!);
   }
 
-  async function findById(id: string): Promise<OrderResponse | null> {
+  async function findById(
+    id: string,
+    options?: { session?: ClientSession },
+  ): Promise<OrderResponse | null> {
     if (isValidObjectId(id)) {
-      const order = await model.findById(id).read('secondaryPreferred');
+      const query = model.findById(id);
+      if (options?.session) {
+        query.session(options.session);
+      } else {
+        query.read('secondaryPreferred');
+      }
+      const order = await query.exec();
       if (order) return toResponse(order);
     }
-    return findByOrderNumber(id);
+    return findByOrderNumber(id, options);
   }
 
-  async function findByOrderNumber(orderNumber: string): Promise<OrderResponse | null> {
+  async function findByOrderNumber(
+    orderNumber: string,
+    options?: { session?: ClientSession },
+  ): Promise<OrderResponse | null> {
     const cleanNumber = orderNumber.replace(/^#+/, '');
-    const order = await model
-      .findOne({
-        $or: [{ orderNumber: cleanNumber }, { orderNumber: `#${cleanNumber}` }],
-      })
-      .read('secondaryPreferred');
+    const query = model.findOne({
+      $or: [{ orderNumber: cleanNumber }, { orderNumber: `#${cleanNumber}` }],
+    });
+    if (options?.session) {
+      query.session(options.session);
+    } else {
+      query.read('secondaryPreferred');
+    }
+    const order = await query.exec();
     return order ? toResponse(order) : null;
   }
 
@@ -171,6 +193,7 @@ export function createOrderRepository(
   async function updateStatus(
     id: string,
     status: OrderStatus,
+    options?: { session?: ClientSession },
   ): Promise<OrderResponse | null> {
     if (!isValidObjectId(id)) return null;
     const update: Partial<OrderDocument> = { status };
@@ -180,7 +203,7 @@ export function createOrderRepository(
     const order = await model.findByIdAndUpdate(
       id,
       { $set: update },
-      { new: true },
+      { new: true, session: options?.session },
     );
     return order ? toResponse(order) : null;
   }

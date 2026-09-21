@@ -1,8 +1,6 @@
-import type { Document } from 'mongoose';
+import type { Document, ClientSession } from 'mongoose';
 import { OrderStatus } from '@repo/shared-types';
 export { OrderStatus };
-
-
 
 export interface OrderItemDTO {
   productId: string;
@@ -80,13 +78,13 @@ export interface Page<T> {
 }
 
 export interface IOrderRepository {
-  create(dto: CreateOrderDTO & { userId: string }): Promise<OrderResponse>;
-  findById(id: string): Promise<OrderResponse | null>;
-  findByOrderNumber(orderNumber: string): Promise<OrderResponse | null>;
+  create(dto: CreateOrderDTO & { userId: string }, options?: { session?: ClientSession }): Promise<OrderResponse>;
+  findById(id: string, options?: { session?: ClientSession }): Promise<OrderResponse | null>;
+  findByOrderNumber(orderNumber: string, options?: { session?: ClientSession }): Promise<OrderResponse | null>;
   findByUserId(userId: string, page: number, limit: number): Promise<Page<OrderResponse>>;
   findByStoreId(storeId: string, page: number, limit: number): Promise<Page<OrderResponse>>;
   findAll(page: number, limit: number): Promise<Page<OrderResponse>>;
-  updateStatus(id: string, status: OrderStatus): Promise<OrderResponse | null>;
+  updateStatus(id: string, status: OrderStatus, options?: { session?: ClientSession }): Promise<OrderResponse | null>;
 }
 
 export interface OrderInvoiceData {

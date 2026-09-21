@@ -153,7 +153,7 @@ describe('OrderService (Enterprise Clean Architecture Unit Tests)', () => {
 
     const delivered = await service.updateOrderStatus('order-123', OrderStatus.DELIVERED, 'rider-1', '4821');
     expect(delivered?.status).toBe(OrderStatus.DELIVERED);
-    expect(repo.updateStatus).toHaveBeenCalledWith('order-123', OrderStatus.DELIVERED);
+    expect(repo.updateStatus).toHaveBeenCalledWith('order-123', OrderStatus.DELIVERED, expect.anything());
   });
 
   it('allows order owner to cancel a pending order', async () => {
@@ -168,7 +168,7 @@ describe('OrderService (Enterprise Clean Architecture Unit Tests)', () => {
     const result = await service.cancelOrder('order-123', 'user-123', false);
 
     expect(result?.status).toBe(OrderStatus.CANCELLED);
-    expect(repo.updateStatus).toHaveBeenCalledWith('order-123', OrderStatus.CANCELLED);
+    expect(repo.updateStatus).toHaveBeenCalledWith('order-123', OrderStatus.CANCELLED, expect.anything());
   });
 
   it('rejects access when an unrelated user attempts to view an order', async () => {
