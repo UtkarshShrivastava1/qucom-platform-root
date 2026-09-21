@@ -9,8 +9,10 @@ describe('Tier 2 Enterprise Hardening Suite (Orders & Distributed Primitives)', 
     it('appends outbound domain events with correct metadata and PENDING state', async () => {
       const event = await appendOutboxEvent({
         eventType: 'ORDER_CREATED',
+        schemaVersion: 1,
         aggregateId: 'ord-ent-999',
         aggregateType: 'Order',
+        correlationId: 'trace-corr-999',
         payload: {
           grandTotal: 1499,
           itemsCount: 3,
@@ -19,8 +21,23 @@ describe('Tier 2 Enterprise Hardening Suite (Orders & Distributed Primitives)', 
 
       expect(event).toBeDefined();
       expect(event.eventType).toBe('ORDER_CREATED');
+      expect(event.schemaVersion).toBe(1);
+      expect(event.correlationId).toBe('trace-corr-999');
       expect(event.aggregateId).toBe('ord-ent-999');
       expect(event.status).toBe('PENDING');
+    });
+
+    it('enforces schemaVersion and correlationId propagation', async () => {
+      const event = await appendOutboxEvent({
+        eventType: 'ORDER_STATUS_UPDATED',
+        schemaVersion: 2,
+        aggregateId: 'ord-ent-888',
+        correlationId: 'trace-v2-abc',
+        payload: { previousStatus: 'PENDING', newStatus: 'CONFIRMED' },
+      });
+
+      expect(event.schemaVersion).toBe(2);
+      expect(event.correlationId).toBe('trace-v2-abc');
     });
   });
 
@@ -91,6 +108,40 @@ describe('Tier 2 Enterprise Hardening Suite (Orders & Distributed Primitives)', 
 
       expect(job).toBeDefined();
       expect(job.name).toBe('ORDER_CREATED');
+    });
+  });
+
+  describe('Atomic Compare-and-Swap (CAS) State Guard & Audit Ledger', () => {
+    it('appends audit log entries and prevents concurrent state transitions when state changes', async () => {
+      const { OrderStatus } = await import('../order.types.js');
+      const mockRepo: any = {
+        findById: vi.fn().mockResolvedValue({
+          id: 'ord-cas-1',
+          status: OrderStatus.PENDING,
+          deliveryOtp: '1234',
+        }),
+        updateStatus: vi.fn().mockResolvedValue(null), // Simulates CAS condition failure (concurrent write won)
+      };
+
+      const { createOrderService } = await import('../order.service.js');
+      const service = createOrderService(mockRepo);
+
+      await expect(
+        service.updateOrderStatus('ord-cas-1', OrderStatus.CONFIRMED, 'user-admin-1', undefined, 'trace-cas-1'),
+      ).rejects.toThrow(/Order status was modified concurrently/);
+
+      expect(mockRepo.updateStatus).toHaveBeenCalledWith(
+        'ord-cas-1',
+        OrderStatus.CONFIRMED,
+        expect.objectContaining({
+          expectedCurrentStatus: OrderStatus.PENDING,
+          auditEntry: expect.objectContaining({
+            fromStatus: OrderStatus.PENDING,
+            toStatus: OrderStatus.CONFIRMED,
+            changedBy: 'user-admin-1',
+          }),
+        }),
+      );
     });
   });
 });

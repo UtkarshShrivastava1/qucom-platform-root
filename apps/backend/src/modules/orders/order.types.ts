@@ -32,6 +32,14 @@ export interface UpdateOrderStatusDTO {
   deliveryOtp?: string; // Required when transitioning to DELIVERED
 }
 
+export interface IOrderStatusHistoryEntry {
+  fromStatus: OrderStatus;
+  toStatus: OrderStatus;
+  changedBy: string;
+  timestamp: Date;
+  note?: string;
+}
+
 export interface OrderResponse {
   id: string;
   orderNumber: string;
@@ -44,6 +52,7 @@ export interface OrderResponse {
   shippingFee: number;
   grandTotal: number;
   status: OrderStatus;
+  statusHistory?: IOrderStatusHistoryEntry[];
   deliveryOtp?: string;
   deliveredAt?: Date;
   createdAt: Date;
@@ -61,6 +70,7 @@ export interface OrderDocument extends Document {
   shippingFee: number;
   grandTotal: number;
   status: OrderStatus;
+  statusHistory?: IOrderStatusHistoryEntry[];
   deliveryOtp: string;
   deliveredAt?: Date;
   createdAt: Date;
@@ -84,7 +94,15 @@ export interface IOrderRepository {
   findByUserId(userId: string, page: number, limit: number): Promise<Page<OrderResponse>>;
   findByStoreId(storeId: string, page: number, limit: number): Promise<Page<OrderResponse>>;
   findAll(page: number, limit: number): Promise<Page<OrderResponse>>;
-  updateStatus(id: string, status: OrderStatus, options?: { session?: ClientSession }): Promise<OrderResponse | null>;
+  updateStatus(
+    id: string,
+    status: OrderStatus,
+    options?: {
+      session?: ClientSession;
+      expectedCurrentStatus?: OrderStatus;
+      auditEntry?: IOrderStatusHistoryEntry;
+    },
+  ): Promise<OrderResponse | null>;
 }
 
 export interface OrderInvoiceData {
@@ -134,7 +152,8 @@ export interface IOrderService {
     id: string,
     status: OrderStatus,
     actorUserId: string,
-    otp?: string
+    otp?: string,
+    correlationId?: string,
   ): Promise<OrderResponse | null>;
   verifyDeliveryOtp(id: string, otp: string): Promise<boolean>;
   cancelOrder(id: string, userId: string, isAdmin: boolean): Promise<OrderResponse | null>;

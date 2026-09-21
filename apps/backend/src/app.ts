@@ -11,6 +11,7 @@ import { ApiResponse } from './shared/utils/ApiResponse.js';
 import { logger } from './shared/utils/logger.js';
 import { isOriginAllowed } from './shared/utils/cors.js';
 
+import { randomUUID } from 'node:crypto';
 import mongoose from 'mongoose';
 import { checkRedisHealth } from './shared/redis/client.js';
 
@@ -22,10 +23,19 @@ import { orderRouter } from './modules/orders/index.js';
 import { deliveryRouter } from './modules/delivery/index.js';
 import { notificationRouter } from './modules/notifications/index.js';
 
-
-
 export function createApp(): Express {
   const app: Express = express();
+
+  // Distributed Tracing: Extract or generate correlation ID on every request
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    const correlationId =
+      (req.headers['x-correlation-id'] as string) ||
+      (req.headers['x-request-id'] as string) ||
+      randomUUID();
+    req.correlationId = correlationId;
+    res.setHeader('x-correlation-id', correlationId);
+    next();
+  });
 
   // Security Headers
   app.use(helmet());
@@ -41,7 +51,7 @@ export function createApp(): Express {
       },
       credentials: true,
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-      allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+      allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'x-correlation-id', 'x-idempotency-key'],
     }),
   );
 

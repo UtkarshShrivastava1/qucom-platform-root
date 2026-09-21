@@ -87,7 +87,7 @@ export function createOrderController(service: IOrderService) {
     const orderId = req.params.id as string;
 
     const { status, deliveryOtp } = updateOrderStatusSchema.parse(req.body);
-    const order = await service.updateOrderStatus(orderId, status, actorId, deliveryOtp);
+    const order = await service.updateOrderStatus(orderId, status, actorId, deliveryOtp, req.correlationId);
 
     if (!order) {
       throw AppError.notFound('Order not found', 'ORDER_NOT_FOUND');

@@ -106,8 +106,10 @@ export function createOrderService(
       // 5c. Append event to Transactional Outbox inside the same ACID session (Zero Dual-Write)
       await appendOutboxEvent({
         eventType: 'ORDER_CREATED',
+        schemaVersion: 1,
         aggregateId: created.id,
         aggregateType: 'Order',
+        correlationId,
         payload: {
           orderId: created.id,
           orderNumber: created.orderNumber,
@@ -258,6 +260,7 @@ export function createOrderService(
     status: OrderStatus,
     actorUserId: string,
     otp?: string,
+    correlationId?: string,
   ): Promise<OrderResponse | null> {
     const current = await repo.findById(id);
     if (!current) {
@@ -281,23 +284,46 @@ export function createOrderService(
       }
     }
 
+    const auditEntry = {
+      fromStatus: current.status,
+      toStatus: status,
+      changedBy: actorUserId,
+      timestamp: new Date(),
+      note: `Transitioned status from ${current.status} to ${status}`,
+    };
+
     const updated = await withTransaction(async (session) => {
-      const res = await repo.updateStatus(id, status, { session });
-      if (res) {
-        await appendOutboxEvent({
-          eventType: 'ORDER_STATUS_UPDATED',
-          aggregateId: res.id,
-          aggregateType: 'Order',
-          payload: {
-            orderId: res.id,
-            orderNumber: res.orderNumber,
-            previousStatus: current.status,
-            newStatus: status,
-            actorUserId,
-          },
-          session,
-        });
+      // Atomic Compare-and-Swap (CAS) guard against concurrent state overwrites
+      const res = await repo.updateStatus(id, status, {
+        session,
+        expectedCurrentStatus: current.status,
+        auditEntry,
+      });
+
+      if (!res) {
+        throw AppError.conflict(
+          'Order status was modified concurrently by another process. Please re-fetch.',
+          'CONCURRENT_STATE_MODIFICATION',
+        );
       }
+
+      await appendOutboxEvent({
+        eventType: 'ORDER_STATUS_UPDATED',
+        schemaVersion: 1,
+        aggregateId: res.id,
+        aggregateType: 'Order',
+        correlationId,
+        payload: {
+          orderId: res.id,
+          orderNumber: res.orderNumber,
+          previousStatus: current.status,
+          newStatus: status,
+          actorUserId,
+          correlationId,
+        },
+        session,
+      });
+
       return res;
     });
 

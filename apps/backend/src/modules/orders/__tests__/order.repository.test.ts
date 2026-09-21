@@ -71,7 +71,7 @@ describe('OrderRepository (Clean Architecture Repository Unit Tests)', () => {
 
   it('updateStatus sets deliveredAt timestamp when status is DELIVERED', async () => {
     const fakeModel: any = {
-      findByIdAndUpdate: vi.fn().mockImplementation(async (_id, update) => ({
+      findOneAndUpdate: vi.fn().mockImplementation(async (_filter, update) => ({
         _id: '507f1f77bcf86cd799439011',
         orderNumber: 'ORD-12345678-ABCDEF',
         userId: 'user-999',
@@ -85,6 +85,7 @@ describe('OrderRepository (Clean Architecture Repository Unit Tests)', () => {
         status: update.$set.status,
         deliveredAt: update.$set.deliveredAt,
         deliveryOtp: '4821',
+        statusHistory: update.$push?.statusHistory ? [update.$push.statusHistory] : [],
         toObject() {
           return this;
         },

@@ -12,6 +12,7 @@ import {
   OrderStatus,
   type CreateOrderDTO,
   type IOrderRepository,
+  type IOrderStatusHistoryEntry,
   type OrderDocument,
   type OrderResponse,
   type Page,
@@ -34,6 +35,7 @@ export function createOrderRepository(
       shippingFee: raw.shippingFee,
       grandTotal: raw.grandTotal,
       status: raw.status,
+      statusHistory: (raw.statusHistory as unknown as IOrderStatusHistoryEntry[]) || [],
       deliveryOtp: raw.deliveryOtp,
       deliveredAt: raw.deliveredAt,
       createdAt: raw.createdAt,
@@ -50,6 +52,14 @@ export function createOrderRepository(
     const shippingFee = calculateShippingFee(subtotal);
     const grandTotal = calculateGrandTotal(subtotal, tax, shippingFee);
 
+    const initialAudit: IOrderStatusHistoryEntry = {
+      fromStatus: OrderStatus.PENDING,
+      toStatus: OrderStatus.PENDING,
+      changedBy: dto.userId,
+      timestamp: new Date(),
+      note: 'Initial order placement',
+    };
+
     const docs = await model.create(
       [
         {
@@ -61,6 +71,7 @@ export function createOrderRepository(
           shippingFee,
           grandTotal,
           status: OrderStatus.PENDING,
+          statusHistory: [initialAudit],
         },
       ],
       { session: options?.session }
@@ -193,16 +204,35 @@ export function createOrderRepository(
   async function updateStatus(
     id: string,
     status: OrderStatus,
-    options?: { session?: ClientSession },
+    options?: {
+      session?: ClientSession;
+      expectedCurrentStatus?: OrderStatus;
+      auditEntry?: IOrderStatusHistoryEntry;
+    },
   ): Promise<OrderResponse | null> {
     if (!isValidObjectId(id)) return null;
-    const update: Partial<OrderDocument> = { status };
-    if (status === OrderStatus.DELIVERED) {
-      update.deliveredAt = new Date();
+
+    const filter: Record<string, unknown> = { _id: id };
+    if (options?.expectedCurrentStatus) {
+      filter.status = options.expectedCurrentStatus;
     }
-    const order = await model.findByIdAndUpdate(
-      id,
-      { $set: update },
+
+    const updateDoc: Record<string, unknown> = {
+      $set: {
+        status,
+        ...(status === OrderStatus.DELIVERED ? { deliveredAt: new Date() } : {}),
+      },
+    };
+
+    if (options?.auditEntry) {
+      updateDoc.$push = {
+        statusHistory: options.auditEntry,
+      };
+    }
+
+    const order = await model.findOneAndUpdate(
+      filter,
+      updateDoc,
       { new: true, session: options?.session },
     );
     return order ? toResponse(order) : null;

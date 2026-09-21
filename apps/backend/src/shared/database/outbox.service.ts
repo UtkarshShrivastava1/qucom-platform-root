@@ -5,8 +5,10 @@ import { orderQueue } from '../queues/order.queue.js';
 
 export interface CreateOutboxEventParams {
   eventType: string;
+  schemaVersion?: number;
   aggregateId: string;
   aggregateType?: string;
+  correlationId?: string;
   payload: Record<string, unknown>;
   session?: ClientSession;
 }
@@ -16,14 +18,18 @@ export interface CreateOutboxEventParams {
  * When passed an active session, this write participates in the caller's atomic ACID transaction.
  */
 export async function appendOutboxEvent(params: CreateOutboxEventParams): Promise<IOutboxEvent> {
+  const schemaVersion = params.schemaVersion || 1;
+
   // If MongoDB is not connected (e.g. isolated unit tests with mock repositories), bypass DB insert
   if (mongoose.connection.readyState !== 1) {
     logger.debug(`📥 [Outbox:Mock] Skipping DB insert for ${params.eventType} (DB disconnected)`);
     return {
       _id: 'mock-outbox-id',
       eventType: params.eventType,
+      schemaVersion,
       aggregateId: params.aggregateId,
       aggregateType: params.aggregateType || 'Order',
+      correlationId: params.correlationId,
       payload: params.payload,
       status: OutboxEventStatus.PENDING,
       attempts: 0,
@@ -35,8 +41,10 @@ export async function appendOutboxEvent(params: CreateOutboxEventParams): Promis
     [
       {
         eventType: params.eventType,
+        schemaVersion,
         aggregateId: params.aggregateId,
         aggregateType: params.aggregateType || 'Order',
+        correlationId: params.correlationId,
         payload: params.payload,
         status: OutboxEventStatus.PENDING,
         attempts: 0,
@@ -46,7 +54,7 @@ export async function appendOutboxEvent(params: CreateOutboxEventParams): Promis
   );
 
   const event = createdDocs[0] as IOutboxEvent;
-  logger.debug(`📥 [Outbox] Appended ${params.eventType} for aggregate ${params.aggregateId}`);
+  logger.debug(`📥 [Outbox] Appended ${params.eventType} (v${schemaVersion}) for aggregate ${params.aggregateId}`);
   return event;
 }
 
@@ -70,6 +78,8 @@ export async function processPendingOutboxEvents(batchSize = 25): Promise<number
       // Forward to BullMQ persistent queue
       await orderQueue.add(event.eventType, {
         outboxId: event._id.toString(),
+        schemaVersion: event.schemaVersion || 1,
+        correlationId: event.correlationId,
         aggregateId: event.aggregateId,
         aggregateType: event.aggregateType,
         payload: event.payload,

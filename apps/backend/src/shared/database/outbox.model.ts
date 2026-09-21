@@ -8,8 +8,10 @@ export enum OutboxEventStatus {
 
 export interface IOutboxEvent extends Document {
   eventType: string;
+  schemaVersion: number;
   aggregateId: string;
   aggregateType: string;
+  correlationId?: string;
   payload: Record<string, unknown>;
   status: OutboxEventStatus;
   attempts: number;
@@ -21,8 +23,10 @@ export interface IOutboxEvent extends Document {
 const outboxSchema = new Schema<IOutboxEvent>(
   {
     eventType: { type: String, required: true, index: true },
+    schemaVersion: { type: Number, default: 1 },
     aggregateId: { type: String, required: true, index: true },
     aggregateType: { type: String, required: true, default: 'Order' },
+    correlationId: { type: String, index: true },
     payload: { type: Schema.Types.Mixed, required: true },
     status: {
       type: String,

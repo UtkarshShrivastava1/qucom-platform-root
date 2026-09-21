@@ -26,6 +26,17 @@ const shippingAddressSchema = new Schema(
   { _id: false },
 );
 
+const statusHistorySchema = new Schema(
+  {
+    fromStatus: { type: String, required: true },
+    toStatus: { type: String, required: true },
+    changedBy: { type: String, required: true },
+    timestamp: { type: Date, default: Date.now },
+    note: { type: String },
+  },
+  { _id: false },
+);
+
 const orderSchema = new Schema<OrderDocument>(
   {
     userId: { type: String, required: true, index: true },
@@ -43,10 +54,11 @@ const orderSchema = new Schema<OrderDocument>(
       default: OrderStatus.PENDING,
       index: true,
     },
+    statusHistory: { type: [statusHistorySchema], default: [] },
     deliveryOtp: { type: String, required: true },
     deliveredAt: { type: Date },
   },
-  { timestamps: true, versionKey: false },
+  { timestamps: true, versionKey: '__v' },
 );
 
 // Compound indexes strictly following the ESR Rule (Equality, Sort, Range)
