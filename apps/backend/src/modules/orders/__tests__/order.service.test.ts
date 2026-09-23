@@ -122,7 +122,7 @@ describe('OrderService (Enterprise Clean Architecture Unit Tests)', () => {
     const result = await service.updateOrderStatus('order-123', OrderStatus.PACKED, 'merchant-1');
 
     expect(result?.status).toBe(OrderStatus.PACKED);
-    expect(repo.updateStatus).toHaveBeenCalledWith('order-123', OrderStatus.PACKED);
+    expect(repo.updateStatus).toHaveBeenCalledWith('order-123', OrderStatus.PACKED, expect.anything());
     expect(bus.emit).toHaveBeenCalledWith('order.confirmed', expect.objectContaining({
       orderId: 'order-123',
       newStatus: OrderStatus.PACKED,
